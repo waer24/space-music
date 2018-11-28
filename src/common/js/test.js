@@ -1,0 +1,1 @@
+alert('hhhh,darcy, js file')

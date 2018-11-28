@@ -7,8 +7,6 @@ import App from './App'
  Vue.config.productionTip = false
 
 // 引入公共的样式
- import style from '@/common/style/test.css'
- import astyle from '@/common/style/test.scss'
 
  // 引用 router 配置
 import router from '@/router/index'

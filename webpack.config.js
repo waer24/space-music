@@ -37,11 +37,11 @@ var config = {
       //  编译解析vue 
       { test: /.vue$/, loader: 'vue-loader' },
       // 编译 css 并提取css 
-      { test: /\.css$/, use: [ MiniCssExtractPlugin.loader,'css-loader', ]},
+      { test: /\.css$/, use: [ MiniCssExtractPlugin.loader,'css-loader']},
       // 编译 scss
       { test: /\.scss$/,  loader: ['style-loader', 'css-loader','sass-loader' ]},
       // 编译图片
-      { test: /\.(png|gif|jpg|jpeg|bmp)$/i, loader:'url-loader?limit=5000' },
+      { test: /\.(png|gif|jpg|jpeg|bmp)$/i, loader:'url-loader', options: {name: 'images/[name].[hash:8].[ext]', limit: 5000} },
       // 编译字体文件
       { test: /\.(woff|woff2|svg|ttf|eot)($|\?)/i, loader:'url-loader?limit=5000'} 
       
