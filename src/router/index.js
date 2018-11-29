@@ -7,6 +7,7 @@ Vue.use(Router)
 import header from '@/components/header/header'
 
 const router = new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',

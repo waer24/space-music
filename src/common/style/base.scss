@@ -1,0 +1,46 @@
+@import '@/common/style/variable.scss';
+
+html, body {
+  padding:0;
+  margin:0;
+  font-size: 62.5%;
+  font-family: 'PingFang SC', 'STHeitiSC-Light', 'Helvetica-Light', arial, sans-serif, 'Droid Sans Fallback';
+  background-color: $color-background;
+}
+
+a {
+  text-decoration: none;
+  color: rgb(77, 85, 93);
+}
+p,h4,h5,h2, h3, {
+  padding:0;
+  margin: 0;
+}
+.clearFix {
+  display: inline-block;
+  &:after {
+    display: block;
+    content: '.';
+    height: 0;
+    line-height: 0;
+    clear:both;
+    visibility: hidden;
+  }
+}
+ul, li ,h2 {
+  margin:0;
+  padding:0;
+}
+li{
+  list-style-type: none;
+}
+
+.logo {
+  width: 4.5rem;
+  height: 4.5rem;
+}
+.icon {
+  width: 3rem;
+  height: 3rem;
+}
+

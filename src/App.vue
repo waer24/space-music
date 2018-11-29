@@ -1,6 +1,6 @@
 <template>
   <div id="App">
-   <div class='test'> hhhhh app</div>
+   <div></div>
    <router-view></router-view>
   </div>
 </template>
@@ -11,8 +11,5 @@
   }
 </script>
 
-<style >
-  .test {
-    font-size: 40px;
-  }
+<style>
 </style>
