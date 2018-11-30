@@ -1,15 +1,29 @@
 <template>
   <div id="App">
-   <div></div>
-   <router-view></router-view>
+    <m-header></m-header>
+    <tab></tab>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-  export default{
+  import mHeader from '@/components/m-header/m-header'
+  import tab from '@/components/tab/tab'
+  
+  
+  export default {
     name: "App",
+    methods: {
+  
+    },
+    components: {
+      mHeader,
+      tab
+    },
   }
 </script>
 
-<style>
+<style lang="sass">
+
 </style>
+

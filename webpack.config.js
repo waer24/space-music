@@ -17,7 +17,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 var config = { 
   resolve: {
     // 文件解析 + 别名
-    extensions: ['*', '.scss', '.js', '.vue'], 
+    extensions: ['*', '.sass', '.js', '.vue'], 
 	  alias: { 
     '@': __dirname + '/src',
     vue: 'vue/dist/vue.js' // 不写会报错You are using the runtime-only build of Vue 
@@ -69,11 +69,27 @@ var config = {
         
       },
 
-      { // 编译 scss
-        test: /\.scss$/,  
-        loader: ['vue-style-loader', 'css-loader','sass-loader' ]
+      { // 若编译 scss 不需要indentedSyntax
+        test: /\.sass$/,  
+        // sass =》 loader: ['vue-style-loader', 'css-loader','sass-loader' ],
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              indentedSyntax: true
+            },
+          },
+          { // 相对路径加载一个全局设置文件，避免每次都在style中引入相关的css文件
+            loader: 'sass-resources-loader',
+            options: {
+              resources: ['./src/common/style/variable.sass', './src/common/style/mixin.sass']
+            }
+          }
+        ]
       },
-
+      
       { // 编译图片
         test: /\.(png|gif|jpg|jpeg|bmp)$/i, 
         // loader: 'file-loader',
@@ -100,7 +116,6 @@ var config = {
     new HtmlWebPackPlugin({
       template: __dirname + '/src/index.html', // 引用的文件
        // filename: __dirname + '/dist/index.html', // 生产的文件
-     // filename: "./index.html"
     }),
     // css 打包分离 MiniCssExtract 仅支持webpack4.2.0以上版本
     new MiniCssExtractPlugin({
