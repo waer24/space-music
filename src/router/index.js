@@ -5,18 +5,18 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 
-import recommand from '@/components/recommand/recommand'
+import recommend from '@/components/recommend/recommend'
 
 // 按需加载
-// const recommand = resolve => require(['@/pages/Driver'], resolve)
+// const recommend = resolve => require(['@/pages/Driver'], resolve)
 
 const router = new Router({
   mode: 'history',
   routes: [
      {
       path: '/',
-      name: 'recommand',
-      component: recommand
+      name: 'recommend',
+      component: recommend
     }
   ]
 })

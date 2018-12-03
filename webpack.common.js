@@ -1,19 +1,17 @@
-
 /*
-webpack4 入口和出口0配置
-其他的配置包括resolve / module(loaders) / plugins / devServer
-
-modules: { loaders: [{
-  test: /\.js$/, //匹配希望处理文件的路径
-  loaders: 'xxx-loader?a=x&b=y' //此处xxx-loader 可以简写成xxx , ？后以query方式传递给loader参数
-  },...]}*/
+modules中test: /\.js$/, //匹配希望处理文件的路径， ？是参数简写，也可以 以query方式传递给loader参数
+webpack.common.js === webpack.config.js
+通过merge插件可以使common和各个环境搭配起来，不会造成DRY(重复写配置)
+*/
 
 // 引入开发环境需要的模块
 const webpack = require('webpack')
 const HtmlWebPackPlugin = require("html-webpack-plugin")
-const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+var OpenBrowserPlugin = require('open-browser-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin') 
 
+// webpack4 入口和出口可以0配置
+// 基础配置包括resolve / module(loaders) / plugins / devServer
 var config = { 
   resolve: {
     // 文件解析 + 别名
@@ -39,36 +37,14 @@ var config = {
         options: { minimize: true }
         }]},
 
-      { //  编译解析vue ,并提取css
+      { //  编译解析vue ,dev module增加option提取css
         test: /.vue$/, 
         loader: 'vue-loader',
         options: {
           extractCSS: true
         } 
       }, 
-
-      
-      { // 编译 css 并提取css (只在生产环境使用css提取，便于开发环境下的热重载)
-        /*  use: [
-          process.env.NODE_ENV !== 'production'
-            ? 'vue-style-loader'
-            : MiniCssExtractPlugin.loader,
-          'css-loader'
-        ]  */
-        test: /\.css$/, 
-        // exclude: /(node_modules|bower_components)/,
-        use: [  // 应用到
-          MiniCssExtractPlugin.loader,
-         { // loader加载的顺序很重要
-          loader: 'style-loader', 
-          loader: 'css-loader',
-          /* options: {
-             modules: true //开启 CSS Modules
-          } */
-        }]
-        
-      },
-
+  
       { // 若编译 scss 不需要indentedSyntax
         test: /\.sass$/,  
         // sass =》 loader: ['vue-style-loader', 'css-loader','sass-loader' ],
@@ -115,18 +91,25 @@ var config = {
     // html 分离  (index.html是一级入口，自动注入)
     new HtmlWebPackPlugin({
       template: __dirname + '/src/index.html', // 引用的文件
-       // filename: __dirname + '/dist/index.html', // 生产的文件
+       
     }),
-    // css 打包分离 MiniCssExtract 仅支持webpack4.2.0以上版本
-    new MiniCssExtractPlugin({
-      filename: "css/[name].[hash:8].css", // dist的存放路径和打包名称
-      chunkFilename: "[id].[hash:8].css"
+
+    new OpenBrowserPlugin({
+      url: 'http://localhost:8080'
     }),
+
     // 使用 HotModuleReplacementPlugin 插件 实时编译和刷新浏览器
     new webpack.HotModuleReplacementPlugin(),
 
     // 插件配置vue-loader 15版本以上需要的
     new VueLoaderPlugin(), 
+
+    
+
+    // 定义全局变量用于生产环境和开发环境的调优
+    new webpack.DefinePlugin({
+      __DEV__: JSON.stringify(JSON.parse((process.env.NODE_ENV == 'dev') || 'false'))
+    })
   ],
 
   devServer: {

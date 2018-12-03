@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack --mode development ./src/index.js --output ./dist/main.js",
-    "build": "rm -rf ./dist && webpack --mode production ./src/index.js --output ./dist/main.js",
-    "start": "webpack-dev-server --mode development --open"
+    "build": "webpack ./src/index.js --output ./dist/main.js --config webpack.prod.js",
+    "start": "webpack-dev-server --open ./src/index.js --output ./dist/main.js --config webpack.dev.js"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +17,7 @@
     "@babel/preset-env": "^7.1.6",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.4",
+    "clean-webpack-plugin": "^1.0.0",
     "css-loader": "^1.0.1",
     "file-loader": "^2.0.0",
     "html-loader": "^0.5.5",
@@ -25,6 +26,8 @@
     "install": "^0.12.2",
     "mini-css-extract-plugin": "^0.4.5",
     "node-sass": "^4.10.0",
+    "open-browser-webpack-plugin": "0.0.5",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
     "postcss-loader": "^3.0.0",
     "sass": "^1.15.1",
     "sass-loader": "^7.1.0",
@@ -38,11 +41,15 @@
     "vue-template-loader": "^1.0.0",
     "webpack": "^4.26.1",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.10"
+    "webpack-dev-server": "^3.1.10",
+    "webpack-merge": "^4.1.4"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
     "babel-runtime": "^6.26.0",
+    "better-scroll": "^1.13.2",
+    "jsonp": "^0.2.1",
     "vue": "^2.5.17",
     "vue-router": "^3.0.2"
   }

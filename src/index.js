@@ -23,4 +23,5 @@ import router from './router'
   router,
   components: { App },
   template: '<App/>',
+  
 }) 
