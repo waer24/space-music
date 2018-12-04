@@ -1,6 +1,6 @@
 <template>
   <div class='singer-wrap'>
-
+    singer 页面
   </div>
 </template>
 
@@ -11,5 +11,6 @@
 </script>
 
 <style lang="sass">
-  
+  .singer-wrap
+    color: $color-theme
 </style>
