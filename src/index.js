@@ -16,6 +16,10 @@ import '@/common/style/mixin.sass'
 import router from './router'
 
 // 引入页面公共js
+import fastClick from 'fastclick'
+
+// 取消300ms的延迟
+fastClick.attach(document.body)
 
 
  new Vue({

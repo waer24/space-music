@@ -1,6 +1,6 @@
 <template>
   <div class='rank-wrap'>
-
+    rank 页面
   </div>
 </template>
 
@@ -11,5 +11,6 @@
 </script>
 
 <style lang="sass">
-  
+  .rank-wrap
+    color: $color-theme
 </style>

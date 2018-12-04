@@ -1,15 +1,15 @@
 <template>
   <div class='link-wrap'>
-    <router-link class="link-items" to="{name: 'recommend'}">
+    <router-link class="link-items" to="/recommend">
       <span class="tab-link">推荐</span>
     </router-link>
-    <router-link class="link-items" to="{name: 'singer'}">
+    <router-link class="link-items" to="/singer">
       <span class="tab-link">歌手</span>
     </router-link>
-    <router-link class="link-items" to="{name: 'rank'}">
+    <router-link class="link-items" to="/rank">
       <span class="tab-link">排行</span>
     </router-link>
-    <router-link class="link-items" to="{name: 'search'}">
+    <router-link class="link-items" to="/search">
       <span class="tab-link">搜索</span>
     </router-link>
   </div>
@@ -31,7 +31,7 @@
       text-align: center
 
       .tab-link
-        color: $color-text-l
+        color: $color-text-ll
         @include pb(0.5rem)
       
       /* 路由点击时文字高亮 */
