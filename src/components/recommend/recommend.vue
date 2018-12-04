@@ -5,7 +5,6 @@
         <img :src="recommend.picUrl" alt="">
       </li>
     </ul>
-    </div>
   </div>
 </template>
 
