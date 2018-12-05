@@ -21,7 +21,6 @@ import fastClick from 'fastclick'
 // 取消300ms的延迟
 fastClick.attach(document.body)
 
-
  new Vue({
   el: '#root', // index.html
   router,

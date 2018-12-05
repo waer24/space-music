@@ -7,7 +7,8 @@
       <slot></slot>
     </div>
     <div class='dots'>
-      <span class='dot' v-for="(dot, index) in dots" :key="index"></span>
+      <span class='dot' v-for="(dot, index) in dots" :key="index"
+      :class="{active: currentPageIndex === index}"> </span>
     </div>
   </div>
 </template>
@@ -23,35 +24,41 @@ better-scroll的文档：https://ustbhuangyi.github.io/better-scroll/doc/zh-hans
   import BScroll from 'better-scroll'
 
   export default {
+    name: 'slider',
     data() {
       return {
-        props: [ // 用于外部组件能控制的3个元素
-        {
-          loop: Boolean,
-          default: true,
-        },
-        {
-          autoLoop: Boolean,
-          default: true,
-        },
-        {
-          internal: Number,
-          default: 4000
-        }
-      ]
+        dots: [], // 轮播图的点
+        currentPageIndex: 0  
       }
     }, 
-    created() {
-
+    props: { // 用于外部组件能控制的3个元素
+       loop: {
+          type: Boolean,
+          default: true,
+        },
+       autoPlay: {
+          type: Boolean,
+          default: true,
+        },
+        interval:{
+          type: Number,
+          default: 4000
+        }
     },
 
     mounted() {
+
       // 定时器延时，保证dom都被渲染 浏览器渲染成html 最低是17ms的延迟，20ms的设定是比较科学的
       setTimeout(() => {
         this._setSliderWidth()
+        this._setDots()
         this._initSlider()
-      }, 20)
 
+             // 自动轮播
+        if (this.autoPlay) {
+          this._play()
+        }
+      }, 20)
     },
 
     methods: {
@@ -66,13 +73,27 @@ better-scroll的文档：https://ustbhuangyi.github.io/better-scroll/doc/zh-hans
           let child = this.children[i]
           addClass(child, 'slider-item')
          child.style.width = sliderWidth + 'px' // 获取每个slider-item的宽度样式
+         console.log(child.style.width)
          width += sliderWidth
+         
+        }
+
+        // 2倍的宽度才能保证bscroll的无缝滚动
+        if ( this.loop ) {
+          width += 2 * sliderWidth
+          
         }
         this.$refs.sliderGroup.style.width = width + 'px' // 获得所有slider总宽度样式
-        console.log(this.$refs.sliderGroup.style.width)
+        // console.log(this.$refs.sliderGroup.style.width)
+      },
+
+      // 即便设置了数组长度，也是可以改变的，给dot设定数组长度5，主要是考虑到后期代码内存的优化问题
+      _setDots() {
+        this.dots = new Array(this.children.length)
       },
 
       _initSlider() {
+        // this.slider => 7个滚动的div
         this.slider = new BScroll(this.$refs.slider, {
           scrollX: true,
           scrollY: false,
@@ -81,13 +102,26 @@ better-scroll的文档：https://ustbhuangyi.github.io/better-scroll/doc/zh-hans
           // 一个轮播元素无效，bscroll会重复添加第一个和最后一个滚动元素，才能无缝滚动，本例中，bscroll渲染的dom有7个，但dom的length实则只有5个
           snap: { 
             loop: this.loop, // 引用props的loop属性
-            threshold: 0.5,
+            threshold: 400, // 400ms 的间隔
           }, 
-            
           click: true // 默认false，默认阻止浏览器的原生点击事件
         })
+      },
+
+      
+      _play(){
+      let _this = this
+      
+        let pageIndex = this.currentPageIndex
+        if (this.loop ) {
+         pageIndex += 1
+        }
+        clearTimeout(this.timer)
+        this.timer = setTimeout(() => {
+          this.slider.next()
+        }, this.interval)
       }
-    },
+    }
   }
 </script>
 
@@ -108,14 +142,25 @@ better-scroll的文档：https://ustbhuangyi.github.io/better-scroll/doc/zh-hans
         display: block
         width: 100%
         overflow: hidden
+
+  /* 有了text-align和绝对定位0的配合，
+    兼容任意分辨率的位置保持不变 */
   .dots
     position: absolute
+    bottom: 0.6rem
+    left: 0
+    right: 0
+    text-align: center
     .dot
       display: inline-block
-      width: 0.4rem
-      height: 0.4rem
-      // color: $color-text-ll
-      color: orange
+      width: 0.6rem
+      height: 0.6rem
+      margin: 0 0.4rem
+      background-color: $color-dot
       border-radius: 50%
+      &.active /* 同级添加其他class */
+        width: 2rem
+        border-radius: 0.5rem
+        background-color: #fff
 
 </style>

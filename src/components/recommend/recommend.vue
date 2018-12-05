@@ -18,7 +18,7 @@
 // import BScroll from 'better-scroll'
   import { getWallSwiper, getDiscList } from '@/api/recommend.js'
   import { ERR_OK } from '@/api/config'
-  import slider from '@/base/slider/slider'
+  import slider from '@/base/slider/aaa'
 
 
   export default {
