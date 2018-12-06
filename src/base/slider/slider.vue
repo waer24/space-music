@@ -54,7 +54,7 @@ better-scroll的文档：https://ustbhuangyi.github.io/better-scroll/doc/zh-hans
         this._setDots()
         this._initSlider()
 
-             // 自动轮播
+        // 自动轮播
         if (this.autoPlay) {
           this._play()
         }
@@ -64,7 +64,6 @@ better-scroll的文档：https://ustbhuangyi.github.io/better-scroll/doc/zh-hans
     methods: {
       // 分别设置父级和子级的宽度，并为每个子级添加class
       // this 是在单独指明哪个时才写 
-      
       _setSliderWidth(){
         let width = 0;
         this.children = this.$refs.sliderGroup.children
@@ -73,9 +72,7 @@ better-scroll的文档：https://ustbhuangyi.github.io/better-scroll/doc/zh-hans
           let child = this.children[i]
           addClass(child, 'slider-item')
          child.style.width = sliderWidth + 'px' // 获取每个slider-item的宽度样式
-         console.log(child.style.width)
          width += sliderWidth
-         
         }
 
         // 2倍的宽度才能保证bscroll的无缝滚动
@@ -110,8 +107,6 @@ better-scroll的文档：https://ustbhuangyi.github.io/better-scroll/doc/zh-hans
 
       
       _play(){
-      let _this = this
-      
         let pageIndex = this.currentPageIndex
         if (this.loop ) {
          pageIndex += 1
