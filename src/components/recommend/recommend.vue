@@ -1,7 +1,8 @@
 <template>
 <div class='recommend-wrap'>
   <!-- 不加length 会造成事件先于渲染的dom，无法获取所有slider-item的宽度 -->
-    <div v-if='recommends.length' class='slider-wrap'> 
+    <div class='bg-hide'></div>
+      <div v-if='recommends.length' class='slider-wrap'> 
       <slider>
         <!-- vfor是slot中的轮播图展示 -->
           <div v-for="item in recommends" :key='item.id' >
@@ -11,6 +12,7 @@
         </div>
       </slider>
     </div>
+    
   </div>
 </template>
 
@@ -67,6 +69,10 @@
   width: 100%
   top: 8.8rem
   bottom: 0
+  .bg-hide
+    position: fixed
+    width: 100%
+    overflow: hidden
   .slider-wrap
     position: relative
     width: 100%

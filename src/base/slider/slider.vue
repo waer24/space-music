@@ -6,7 +6,7 @@
       <!-- 轮播图展示在slot中 -->
       <slot></slot>
     </div>
-    <div class='dots' v-if="showDot">
+    <div v-show="showDot"  class='dots'>
       <span class='dot' v-for="(dot, index) in dots" :key="index"
       :class="{active: currentPageIndex === index}"> </span>
     </div>
@@ -25,12 +25,7 @@ better-scroll的文档：https://ustbhuangyi.github.io/better-scroll/doc/zh-hans
 
   export default {
     name: 'slider',
-    data() {
-      return {
-        dots: [], // 轮播图的点
-        currentPageIndex: 0  
-      }
-    }, 
+    
     props: { // 用于外部组件能控制的3个元素
        loop: {
           type: Boolean,
@@ -61,14 +56,83 @@ better-scroll的文档：https://ustbhuangyi.github.io/better-scroll/doc/zh-hans
           default: 0.3
         }
     },
-
-    mounted() {
-      
-      
+    data() {
+      return {
+        dots: [], // 轮播图的点
+        currentPageIndex: 0  
+      }
     }, 
 
+    
+    mounted() {
+      this.update()
+
+      window.addEventListener('resize', () => {
+        if(!this.slider || !this.slider.enable) {
+          return
+        }
+        clearTimeout(this.resizeTimer)
+        this.resizeTimer = setTimeout(() => {
+          if(this.slider.isInTransition) {
+            this._onScrollEnd()
+          } else {
+            if(this.autoPlay) {
+              this._play()
+            }
+          }
+          this.refresh()
+        }, 60)
+      })
+    }, 
+
+    activated() { // keep-alive 组件激活时使用
+      if(!this.slider) {
+        return
+      }
+      this.slider.enable()
+      let pageIndex = this.slider.getCurrentPage().pageX
+      this.slider.goToPage(pageIndex, 0, 0)
+      this.currentPageIndex = pageIndex
+      if (this.autoPlay) {
+        this._play()
+      }
+    },
+
+    deactivated() {
+      this.slider.disable()
+      clearTimeout(this.timer)
+    },
+
+    beforeDestroy(){
+      this.slider.disable()
+      clearTimeout(this.timer)
+    },
+
+
     methods: {
-      // 浏览器渲染成html 最低是17ms的延迟，20ms的设定是比较科学的
+      update() {
+        if(this.slider) {
+          this.slider.destroy()
+        }
+        this.$nextTick(() => {
+          clearTimeout(this.timer)
+          this.init()
+        })
+      },
+
+      refresh() {
+        this._setSliderWidth(true)
+        this.slider.refresh()
+      },
+
+      prev() {
+        this.slider.prev()
+      },
+
+      next() {
+        this.slider.next()
+      },
+
       init() {
         clearTimeout(this.timer) 
         this.currentPageIndex = 0
@@ -76,16 +140,18 @@ better-scroll的文档：https://ustbhuangyi.github.io/better-scroll/doc/zh-hans
         if(this.showDot) {
          this. _setDots()
         }
+
         this._initSlider()
 
-
-
+        if(this.autoPlay) {
+          this._play()
+        }
       },
       
       // 分别设置父级和子级的宽度，并为每个子级添加class.this 是在单独指明哪个时才写 
-      _setSliderWidth(){
-        let width = 0;
+      _setSliderWidth(isResize){
         this.children = this.$refs.sliderGroup.children
+        let width = 0;
         let sliderWidth = this.$refs.slider.clientWidth // 父级元素的宽度
         for (let i = 0; i < this.children.length; i++) {
           let child = this.children[i]
@@ -94,16 +160,11 @@ better-scroll的文档：https://ustbhuangyi.github.io/better-scroll/doc/zh-hans
          width += sliderWidth
         }
         // 2倍的宽度才能保证bscroll的无缝滚动
-        if ( this.loop ) {
+        if ( this.loop && !isResize ) {
           width += 2 * sliderWidth
         }
         this.$refs.sliderGroup.style.width = width + 'px' // 获得所有slider总宽度样式
         // console.log(this.$refs.sliderGroup.style.width)
-      },
-
-      // 即便设置了数组长度，也是可以改变的，给dot设定数组长度5，主要是考虑到后期代码内存的优化问题
-      _setDots() {
-        this.dots = new Array(this.children.length)
       },
 
       _initSlider() {
@@ -111,29 +172,49 @@ better-scroll的文档：https://ustbhuangyi.github.io/better-scroll/doc/zh-hans
         this.slider = new BScroll(this.$refs.slider, {
           scrollX: true,
           scrollY: false,
-          momentum: true, // 快递滑动时，开启动画
+          momentum: true, // 快递滑动时，开启动画,css用了translation
           // 一个轮播元素无效，bscroll会重复添加第一个和最后一个滚动元素，才能无缝滚动，本例中，bscroll渲染的dom有7个，但dom的length实则只有5个
           snap: { 
             loop: this.loop, 
             threshold: this.threshold, 
             speed: this.speed,
           }, 
-          bounce: false,
-          stopPropagation: true, // 组织冒泡
+          bounce: true,
+          stopPropagation: true, // 阻止冒泡
           click: this.click,
         })
-        if (this.loop) {
-          // 监听 一张 滚动结束
-          this.slider.on('scrollEnd', this._onScrollEnd())
-        }
+        // 监听 一张 滚动结束,这里是事件名，不用_onScrollEnd()
+        this.slider.on('scrollEnd', this._onScrollEnd)
+
+        this.slider.on('touchEnd', () => {
+          if(this.antoPlay) {
+            this._play()
+            
+          }
+        })
+
+        this.slider.on('beforeScrollStart', () => {
+          if(this.autoPlay) {
+            clearTimeout(this.timer)
+          }
+        })
+       
+
       },
 
       _onScrollEnd() {
-        let pageIndex = this.slider.getCurrentPage().pageIndex
+        
+        let pageIndex = this.slider.getCurrentPage().pageX
         this.currentPageIndex = pageIndex
         if ( this.autoPlay ) {
           this._play()
         }
+      },
+
+            // 即便设置了数组长度，也是可以改变的，给dot设定数组长度5，主要是考虑到后期代码内存的优化问题
+      _setDots() {
+        this.dots = new Array(this.children.length)
+
       },
       
       _play(){
@@ -143,7 +224,24 @@ better-scroll的文档：https://ustbhuangyi.github.io/better-scroll/doc/zh-hans
           this.slider.next()
         }, this.interval)
       }
-    }
+    },
+
+    watch: {
+      loop() {
+
+        this.update()
+        
+      },
+      autoPlay() {
+        this.update()
+      },
+      speed() {
+        this.update()
+      },
+      threshold() {
+        this.update()
+      }
+    },
   }
 </script>
 
@@ -164,12 +262,16 @@ better-scroll的文档：https://ustbhuangyi.github.io/better-scroll/doc/zh-hans
         display: block
         width: 100%
         overflow: hidden
+      img
+      display: block
+      width: 100% 
 
   /* 有了text-align和绝对定位0的配合，
     兼容任意分辨率的位置保持不变 */
   .dots
     position: absolute
     bottom: 0.6rem
+    transform: translateZ(0.1rem)
     left: 0
     right: 0
     text-align: center
