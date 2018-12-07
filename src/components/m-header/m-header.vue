@@ -11,32 +11,34 @@
 </template>
 
 
-<style lang='sass'>
-  @import '../../common/style/fonts.css'
-  
-  .wrap
-    .header
-      padding-top: 0.5rem
-      text-align: center
-      position: relative
-      .logo
-        width: 4rem
-        height: 4rem
-        @include ib
-        @include bg-img('./logo')
-        background-size: 100% 100%
-        margin-right: 1rem
-      .fc
-        @include ib
-        @include fs(2.3rem)
-        padding-top: 0.5rem
-        color: $color-theme
-        vertical-align: top
-        font-weight: 400
-      .mine-wrap
-        right: 1.5rem
-        top: 1rem
-      
-    
-  
+<style lang='scss'>
+  @import '../../common/style/fonts.css';
+  .wrap {
+    .header {
+      padding-top: 0.5rem;
+      text-align: center;
+      position: relative;
+      .logo {
+        width: 4rem;
+        height: 4rem;
+        @include ib;
+        @include bg-img('./logo');
+        background-size: 100% 100%;
+        ;
+        margin-right: 1rem;
+      }
+      .fc {
+        @include ib;
+        @include fs(2.3rem);
+        padding-top: 0.5rem;
+        color: $color-theme;
+        vertical-align: top;
+        font-weight: 400;
+      }
+      .mine-wrap {
+        right: 1.5rem;
+        top: 1rem;
+      }
+    }
+  }
 </style>

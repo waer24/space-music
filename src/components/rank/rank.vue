@@ -10,7 +10,9 @@
   }
 </script>
 
-<style lang="sass">
-  .rank-wrap
+<style lang="scss">
+  .rank-wrap {
     color: $color-theme
+  }
+    
 </style>

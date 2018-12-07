@@ -10,7 +10,9 @@
   }
 </script>
 
-<style lang="sass">
-  .singer-wrap
-    color: $color-theme
+<style lang="scss">
+  .singer-wrap {
+     color: $color-theme;
+  }
+   
 </style>

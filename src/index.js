@@ -7,9 +7,9 @@ import App from './App'
  Vue.config.productionTip = false
 
 // 引入公共的样式
-import '@/common/style/base.sass'
-import '@/common/style/variable.sass'
-import '@/common/style/mixin.sass'
+import '@/common/style/base.scss'
+import '@/common/style/variable.scss'
+import '@/common/style/mixin.scss'
 
 
  // 引用 router 配置

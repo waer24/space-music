@@ -19,6 +19,7 @@ export const musicAddress = {
   // 封面轮播图
   musicWall: 'https://c.y.qq.com/musichall/fcgi-bin/fcg_yqqhomepagerecommend.fcg',
   // 歌单
-  discList: 'http://ustbhuangyi.com/music/api/getDiscList',
+  discList: 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg',
+  // 'http://ustbhuangyi.com/music/api/getDiscList',
    
 }

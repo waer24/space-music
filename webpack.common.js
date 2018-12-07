@@ -15,7 +15,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 var config = { 
   resolve: {
     // 文件解析 + 别名
-    extensions: ['*', '.sass', '.js', '.vue'], 
+    extensions: ['*', '.scss', '.js', '.vue'], 
 	  alias: { 
     '@': __dirname + '/src',
     vue: 'vue/dist/vue.js' // 不写会报错You are using the runtime-only build of Vue 
@@ -45,22 +45,22 @@ var config = {
         } 
       }, 
   
-      { // 若编译 scss 不需要indentedSyntax
-        test: /\.sass$/,  
-        // sass =》 loader: ['vue-style-loader', 'css-loader','sass-loader' ],
+      { // 若编译 sass  test为.sass 
+        test: /\.scss$/,  
         use: [
           'vue-style-loader',
           'css-loader',
           {
             loader: 'sass-loader',
-            options: {
+            // 编译sass需要indentedSyntax
+            /* options: {
               indentedSyntax: true
-            },
+            }, */
           },
           { // 相对路径加载一个全局设置文件，避免每次都在style中引入相关的css文件
             loader: 'sass-resources-loader',
             options: {
-              resources: ['./src/common/style/variable.sass', './src/common/style/mixin.sass']
+              resources: ['./src/common/style/variable.scss', './src/common/style/mixin.scss']
             }
           }
         ]

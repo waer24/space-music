@@ -19,28 +19,26 @@
   
 </script>
 
-<style lang="sass">
-  .link-wrap
-    padding-top: 1rem
-    display: flex
-    justify-content: space-around
-    @include fs($font-size-medium)
-
-    .link-items
-      flex: 1
-      text-align: center
-
-      .tab-link
-        color: $color-text-ll
-        @include pb(0.5rem)
-      
+<style lang="scss">
+  .link-wrap {
+    padding-top: 1rem;
+    display: flex;
+    justify-content: space-around;
+    @include fs($font-size-medium);
+    .link-items {
+      flex: 1;
+      text-align: center;
+      .tab-link {
+        color: $color-text-ll;
+        @include pb(0.5rem);
+      }
       /* 路由点击时文字高亮 */
-      &.router-link-active 
-        .tab-link
-          color: $color-theme
-          border-bottom: 0.2rem solid $color-theme
-          
-
-        
-
+      &.router-link-active {
+        .tab-link {
+          color: $color-theme;
+          border-bottom: 0.2rem solid $color-theme;
+        }
+      }
+    }
+  }
 </style>
