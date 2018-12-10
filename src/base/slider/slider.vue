@@ -204,9 +204,9 @@
       },
   
       _onScrollEnd() {
-  
         let pageIndex = this.slider.getCurrentPage().pageX
         this.currentPageIndex = pageIndex
+        console.log(this.currentPageIndex)
         if (this.autoPlay) {
           this._play()
         }
@@ -286,14 +286,14 @@
       height: 0.6rem;
       margin: 0 0.4rem;
       background-color: $color-dot;
-      ;
       border-radius: 50%;
-    }
-    &.active {
+      &.active {
       /* 同级添加其他class */
       width: 2rem;
       border-radius: 0.5rem;
       background-color: #fff;
     }
+    }
+    
   }
 </style>

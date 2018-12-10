@@ -64,14 +64,11 @@ module.exports = merge(common, {
       app.get('/api/getDiscList', (req, res) => {
         let url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
         /* 这里的路径是给前端发送请求的url
-        使用过的地址: http://ustbhuangyi.com/music/#/recommend
-                    https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg
-                    http://ustbhuangyi.com/music/api/getDiscList */
-        
-        // axios发送get请求，可以自己配置config
+
+         axios发送get请求，可以自己配置config*/
         axios.get(url, {
             headers: {
-              /* 伪造referer，直接打开上面的url会失效 */
+              // 伪造referer，直接打开上面的url会失效 
             referer: 'https://c.y.qq.com/',
             host: 'c.y.qq.com',
           }, 

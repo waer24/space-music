@@ -21,5 +21,8 @@ export const musicAddress = {
   // 歌单
   discList: 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg',
   // 'http://ustbhuangyi.com/music/api/getDiscList',
+
+  // 歌手
+  singer: 'https://szc.y.qq.com/v8/fcg-bin/v8.fcg'
    
 }

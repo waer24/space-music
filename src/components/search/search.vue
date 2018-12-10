@@ -10,7 +10,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .search-wrap {
     color: $color-theme;
   }

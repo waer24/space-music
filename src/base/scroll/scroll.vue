@@ -23,13 +23,19 @@ import Bscroll from 'better-scroll'
       },
     },
 
+    mounted() { 
+      this.$nextTick(() => { // 在新的dom更新之后初始化scroll
+        this._initScroll()
+      })
+    },
+
     methods: {
     _initScroll() {
-      if(!this.scroll) {
+      if(!this.$refs.wrapper) {
         return
       }
       // 初始化第二个值传入参数
-      this.scroll = new Bscroll(this.$refs.scroll, {
+      this.scroll = new Bscroll(this.$refs.wrapper, {
         scrollX: false,
         scrollY: true,
         bounce: true,
@@ -42,6 +48,4 @@ import Bscroll from 'better-scroll'
   } 
 </script>
 
-<style lang="scss" scoped>
-  
-</style>
+<style lang="scss" scoped></style>

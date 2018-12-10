@@ -1,11 +1,11 @@
 <template>
   <div class="recommend-wrap">
-    <!-- scroll放在这里是因为滚动事件会覆盖到整个屏幕 -->
+    <!-- scroll放在这里是因为滚动事件会覆盖到整个屏幕,content是父级，slider-wrap是子级 -->
     <scroll ref="commend-content" class="recomment-content" :scroll-data="discList">
       <div>
         <div class="bg-hide"></div>
         <!-- 不加length 会造成事件先于渲染的dom，无法获取所有slider-item的宽度 -->
-        <div v-if="recommends.length" class="slider-wrap">
+        <div v-if="recommends.length" class="slider-wrap" ref="sliderWrapper">
           <slider>
             <!-- vfor是slot中的轮播图展示 -->
             <div v-for="item in recommends" :key="item.id">
@@ -18,7 +18,7 @@
         <div class="recommend-list">
           <h1 class="list-title">热门歌单推荐</h1>
           <ul class="list-wrap">
-            <li v-for="(item,index) in discList" :key="index" class="list-item">
+            <li v-for="(item,index) in discList" :key="index" @click="selectItem(item)" class="list-item">
               <div class="list-img"><img :src="item.imgurl" width="60" height="60" alt=""></div>
               <div class="list-txt">
                 <h2 class="list-tlt"> {{ item.creator.name }}</h2>
@@ -29,6 +29,12 @@
         </div>
       </div>
     </scroll>
+    <!-- loading icon -->
+    <div class='loading' v-show="!discList.length">
+      <loading></loading>
+    </div>
+    <!-- 不加这个会导致不会渲染music-list -->
+    <router-view></router-view>
   </div>
 </template>
 
@@ -43,6 +49,7 @@
   } from '@/api/config'
   import scroll from '@/base/scroll/scroll'
   import slider from '@/base/slider/slider'
+  import loading from '@/base/loading/loading'
   
   
   export default {
@@ -59,29 +66,36 @@
     },
   
     methods: {
-      // 渲染歌单
-      _getDiscList() {
-        getDiscList().then((res) => {
-          this.discList = res.data.list // 真正的数据源，用一个变量代进去
-          console.log(this.discList)
-        })
-      },
-  
       // 渲染推荐的swiper
       _getWallSwiper() {
         getWallSwiper().then((res) => {
           if (res.code === ERR_OK) {
-  
             this.recommends = res.data.slider
-            // console.log(recommend)
           }
         })
-      }
+      },
+
+      // 渲染歌单
+      _getDiscList() {
+        getDiscList().then((res) => {
+          if (res.code === ERR_OK){
+            //  console.log(res.data.list)
+            this.discList = res.data.list // 真正的数据源，用一个变量代进去
+          }
+        })
+      },
+  
+     selectItem(item) {
+       this.$router.push({
+        path: `recommend/${item.dissid}`,
+       })
+     }
     },
   
     components: {
       scroll,
       slider,
+      loading,
     }
   }
 </script>
@@ -90,13 +104,12 @@
   .recommend-wrap {
     margin-top: 1rem;
     position: fixed;
-    ;
     width: 100%;
-    ;
     top: 8.8rem;
     bottom: 0;
     .recomment-content {
       overflow: hidden;
+      height: 100%;
       .bg-hide {
         position: fixed;
         width: 100%;
@@ -150,6 +163,12 @@
           }
         }
       }
+    }
+    .loading {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 22rem;
     }
   }
 </style>

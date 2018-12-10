@@ -19,7 +19,7 @@
   
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .link-wrap {
     padding-top: 1rem;
     display: flex;

@@ -4,15 +4,47 @@ import Router from 'vue-router'
 // 使用 Router
 Vue.use(Router)
 
+/* 
+每一个vue单页面都是使用import引用进来的，它不会进行页面懒加载的，
+所以在打包的时候都会打包到bundle.js文件内，
+因此文件会变得越来越大。因此我们需要使用 require.ensure()实现按需加载。
+ */
 
-import recommend from '@/components/recommend/recommend'
-import singer from '@/components/singer/singer'
-import rank from '@/components/rank/rank'
-import search from '@/components/search/search'
-
-
-// 按需加载
+ // 按需加载简写
 // const recommend = resolve => require(['@/pages/Driver'], resolve)
+
+ //  按需加载
+const recommend = (resolve) => {
+  import ('@/components/recommend/recommend').then((module) => {
+    resolve(module)
+  })
+}
+
+const disc = (resolve) => {
+  import ('@/components/disc/disc').then((module) => {
+    resolve(module)
+  })
+}
+
+const singer = (resolve) => {
+  import ('@/components/singer/singer').then((module) => {
+    resolve(module)
+  })
+}
+
+
+const rank = (resolve) => {
+  import ('@/components/rank/rank').then((module) => {
+    resolve(module)
+  })
+}
+
+const search = (resolve) => {
+  import ('@/components/search/search').then((module) => {
+    resolve(module)
+  })
+}
+
 
 const router = new Router({
   mode: 'hash',
@@ -23,8 +55,13 @@ const router = new Router({
     },
      {
       path: '/recommend',
-      name: 'recommend',
-      component: recommend
+      component: recommend,
+      children: [
+        {
+          path: ':id', 
+          component: disc,
+        }
+      ]
     },
     {
       path: '/singer',

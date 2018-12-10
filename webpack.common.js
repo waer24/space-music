@@ -2,10 +2,14 @@
 modules中test: /\.js$/, //匹配希望处理文件的路径， ？是参数简写，也可以 以query方式传递给loader参数
 webpack.common.js === webpack.config.js
 通过merge插件可以使common和各个环境搭配起来，不会造成DRY(重复写配置)
+
+CommonsChunkPlugin 已经从 webpack v4（代号 legato）中移除,最新的是SplitChunksPlugin
+pord模式自动开启
 */
 
 // 引入开发环境需要的模块
-const webpack = require('webpack')
+const path = require('path');
+const webpack = require('webpack');
 const HtmlWebPackPlugin = require("html-webpack-plugin")
 var OpenBrowserPlugin = require('open-browser-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin') 
@@ -13,6 +17,12 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 // webpack4 入口和出口可以0配置
 // 基础配置包括resolve / module(loaders) / plugins / devServer
 var config = { 
+  output: {
+    // 将输出的文件都放在dist目录下， 自定义配置按需加载放在chunk下
+  path: path.resolve(__dirname, 'dist'),
+  chunkFilename: 'chunks/[name].chunk.js', 
+  },
+
   resolve: {
     // 文件解析 + 别名
     extensions: ['*', '.scss', '.js', '.vue'], 
@@ -60,7 +70,7 @@ var config = {
           { // 相对路径加载一个全局设置文件，避免每次都在style中引入相关的css文件
             loader: 'sass-resources-loader',
             options: {
-              resources: ['./src/common/style/variable.scss', './src/common/style/mixin.scss']
+              resources: ['./src/common/style/variable.scss', './src/common/style/mixin.scss',]
             }
           }
         ]
