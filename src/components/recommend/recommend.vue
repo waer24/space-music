@@ -50,6 +50,7 @@
   import scroll from '@/base/scroll/scroll'
   import slider from '@/base/slider/slider'
   import loading from '@/base/loading/loading'
+  import { mapMutations } from 'vuex'
   
   
   export default {
@@ -69,9 +70,10 @@
       // 渲染推荐的swiper
       _getWallSwiper() {
         getWallSwiper().then((res) => {
-          if (res.code === ERR_OK) {
+          // if (res.code === ERR_OK) {
+            console.log(res.data)
             this.recommends = res.data.slider
-          }
+          // }
         })
       },
 
@@ -79,7 +81,7 @@
       _getDiscList() {
         getDiscList().then((res) => {
           if (res.code === ERR_OK){
-            //  console.log(res.data.list)
+              // console.log(res.data)
             this.discList = res.data.list // 真正的数据源，用一个变量代进去
           }
         })
@@ -89,7 +91,12 @@
        this.$router.push({
         path: `recommend/${item.dissid}`,
        })
-     }
+       this.setDisc(item) // 触发每个歌单item的歌单详情页面
+     },
+
+     ...mapMutations({
+       setDisc: 'SET_DISC'
+     })
     },
   
     components: {
