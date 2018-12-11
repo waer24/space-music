@@ -1,6 +1,6 @@
 <template>
  <transition name='slide'>
-   <music-list>desdd</music-list>
+   <music-list >desdd</music-list>
  </transition>
 </template>
 
@@ -8,6 +8,12 @@
 import musicList from '@/components/music-list/music-list'
 
   export default {
+    computed: {
+      title() {
+        console.log(this.disc);
+         return this.disc.dissname;
+      }
+    },
 
     components: {
       musicList,

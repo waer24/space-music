@@ -79,7 +79,7 @@
       _getDiscList() {
         getDiscList().then((res) => {
           if (res.code === ERR_OK){
-            //  console.log(res.data.list)
+            console.log(res.data.list)
             this.discList = res.data.list // 真正的数据源，用一个变量代进去
           }
         })

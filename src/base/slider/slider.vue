@@ -206,7 +206,6 @@
       _onScrollEnd() {
         let pageIndex = this.slider.getCurrentPage().pageX
         this.currentPageIndex = pageIndex
-        console.log(this.currentPageIndex)
         if (this.autoPlay) {
           this._play()
         }
