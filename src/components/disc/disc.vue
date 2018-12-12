@@ -9,8 +9,13 @@
 <script>
 import musicList from '@/components/music-list/music-list'
 import { mapGetters } from 'vuex'
+import { getSongList } from '@/api/recommend'
 
   export default {
+    created() {
+      this._getSongList()
+    },
+
     computed: {
       title() {
        
@@ -22,6 +27,17 @@ import { mapGetters } from 'vuex'
       },
       ...mapGetters(['disc'])
     }, 
+    methods: {
+      // 渲染歌单曲目
+      _getSongList() {
+        if(!this.disc.dissid) {
+          this.$router.push(`/recommend`)
+        }
+        getSongList(this.disc.dissid).then((res) => {
+            console.log(res.data)
+        })
+      },
+    },
 
     components: {
       musicList,

@@ -42,7 +42,8 @@
   // import BScroll from 'better-scroll'
   import {
     getWallSwiper,
-    getDiscList
+    getDiscList,
+    getSongList
   } from '@/api/recommend.js'
   import {
     ERR_OK
@@ -65,15 +66,15 @@
       this._getWallSwiper()
       this._getDiscList()
     },
-  
+
     methods: {
       // 渲染推荐的swiper
       _getWallSwiper() {
         getWallSwiper().then((res) => {
-          // if (res.code === ERR_OK) {
-            console.log(res.data)
+           if (res.code === ERR_OK) {
+            // console.log(res.data)
             this.recommends = res.data.slider
-          // }
+           }
         })
       },
 
@@ -81,7 +82,7 @@
       _getDiscList() {
         getDiscList().then((res) => {
           if (res.code === ERR_OK){
-              // console.log(res.data)
+              // console.log(res.data.list)
             this.discList = res.data.list // 真正的数据源，用一个变量代进去
           }
         })
