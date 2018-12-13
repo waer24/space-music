@@ -1,6 +1,6 @@
 <template>
   <div class="recommend-wrap">
-    <!-- scroll放在这里是因为滚动事件会覆盖到整个屏幕,content是父级，slider-wrap是子级 -->
+    <!-- scroll放在这里是因为滚动事件会覆盖到整个屏幕,content是父级，slider-wrap是子级 只有传入数据了才能撑起变化 -->
     <scroll ref="commend-content" class="recomment-content" :scroll-data="discList">
       <div>
         <div class="bg-hide"></div>
@@ -10,7 +10,7 @@
             <!-- vfor是slot中的轮播图展示 -->
             <div v-for="item in recommends" :key="item.id">
               <a :href="item.linkUrl">
-                <img :src="item.picUrl" alt="" class="slider-img">
+                <img :src="item.picUrl" alt="" class="slider-img" >
               </a>
             </div>
           </slider>
@@ -19,7 +19,7 @@
           <h1 class="list-title">热门歌单推荐</h1>
           <ul class="list-wrap">
             <li v-for="(item,index) in discList" :key="index" @click="selectItem(item)" class="list-item">
-              <div class="list-img"><img :src="item.imgurl" width="60" height="60" alt=""></div>
+              <div class="list-img"><img v-lazy="item.imgurl" width="60" height="60" alt=""></div>
               <div class="list-txt">
                 <h2 class="list-tlt"> {{ item.creator.name }}</h2>
                 <p class="list-subtlt">{{ item.dissname }}</p>
@@ -70,7 +70,7 @@
     methods: {
       // 渲染推荐的swiper
       _getWallSwiper() {
-        getWallSwiper().then((res) => {
+          getWallSwiper().then((res) => {
            if (res.code === ERR_OK) {
             // console.log(res.data)
             this.recommends = res.data.slider
@@ -93,6 +93,10 @@
         path: `recommend/${item.dissid}`,
        })
        this.setDisc(item) // 触发每个歌单item的歌单详情页面
+     },
+
+     loadImg(){
+       this.$refs.commendContent.refresh()
      },
 
      ...mapMutations({

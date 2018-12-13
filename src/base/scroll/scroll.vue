@@ -43,7 +43,12 @@ import Bscroll from 'better-scroll'
         probeType: this.probeType,
         click: this.click,
       })
-    }
+    },
+
+    },
+
+    watch:{
+
     }
   } 
 </script>

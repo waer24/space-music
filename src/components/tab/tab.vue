@@ -21,7 +21,7 @@
 
 <style lang="scss" scoped>
   .link-wrap {
-    padding-top: 1rem;
+    padding: 1.2rem 0;
     display: flex;
     justify-content: space-around;
     @include fs($font-size-medium);
