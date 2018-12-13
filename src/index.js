@@ -3,6 +3,9 @@
 // import 'babel-polyfill' // es6语法补丁
 import Vue from 'vue' 
 import App from './App'
+import store from './store'
+import router from './router' // 引用 router 配置
+import fastClick from 'fastclick'  // 引入页面公共js
 
  Vue.config.productionTip = false
 
@@ -12,19 +15,13 @@ import '@/common/style/variable.scss'
 import '@/common/style/mixin.scss'
 
 
- // 引用 router 配置
-import router from './router'
-
-// 引入页面公共js
-import fastClick from 'fastclick'
-
 // 取消300ms的延迟
 fastClick.attach(document.body)
 
  new Vue({
   el: '#root', // index.html
   router,
-  components: { App },
-  template: '<App/>',
+  store,
+  render: h => h(App)
   
 }) 

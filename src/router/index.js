@@ -61,7 +61,10 @@ const router = new Router({
           path: ':id', 
           component: disc,
         }
-      ]
+      ],
+      meta: {
+        keepAlive: true
+      }
     },
     {
       path: '/singer',

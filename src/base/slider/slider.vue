@@ -9,7 +9,7 @@
     <div v-show="showDot" class='dots'>
       <span class='dot' v-for="(dot, index) in dots" :key="index" :class="{active: currentPageIndex === index}"> </span>
     </div>
-  </div>
+  </div> 
 </template>
 
 <script>

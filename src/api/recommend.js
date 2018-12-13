@@ -29,13 +29,15 @@ export function getDiscList() {
     rnd: Math.random(),
     format: 'json'
   })
+  // 不用这个是因为返回的格式不是jsonp的格式，是一个对象
+  // return jsonp(url, data, options) 
   //使用ajax请求，这里用axios
-  return axios.get(url, {
-    params: data
-  }).then((res) => {
-    //  成功返回一个Promise对象
-    return Promise.resolve(res.data)
-  }).catch((error) => {
-    console.log(error)
-  })
+return axios.get(url,{
+  params: data
+}).then ((res) => {
+   //  成功返回一个Promise对象
+  return Promise.resolve(res.data)
+}).catch((e) => {
+  console.log
+}) 
 }

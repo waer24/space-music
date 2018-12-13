@@ -6,14 +6,16 @@
         <div class="bg-hide"></div>
         <!-- 不加length 会造成事件先于渲染的dom，无法获取所有slider-item的宽度 -->
         <div v-if="recommends.length" class="slider-wrap" ref="sliderWrapper">
-          <slider>
-            <!-- vfor是slot中的轮播图展示 -->
-            <div v-for="item in recommends" :key="item.id">
-              <a :href="item.linkUrl">
-                <img :src="item.picUrl" alt="" class="slider-img">
-              </a>
-            </div>
-          </slider>
+          <keep-alive>
+            <slider>
+              <!-- vfor是slot中的轮播图展示 -->
+              <div v-for="item in recommends" :key="item.id">
+                <a :href="item.linkUrl">
+                  <img :src="item.picUrl" alt="" class="slider-img">
+                </a>
+              </div>
+            </slider>
+          </keep-alive>
         </div>
         <div class="recommend-list">
           <h1 class="list-title">热门歌单推荐</h1>
@@ -50,6 +52,9 @@
   import scroll from '@/base/scroll/scroll'
   import slider from '@/base/slider/slider'
   import loading from '@/base/loading/loading'
+  import {
+    mapMutations
+  } from 'vuex'
   
   
   export default {
@@ -69,27 +74,33 @@
       // 渲染推荐的swiper
       _getWallSwiper() {
         getWallSwiper().then((res) => {
-          if (res.code === ERR_OK) {
-            this.recommends = res.data.slider
-          }
+          // if (res.code === ERR_OK) {
+          console.log(res.data)
+          this.recommends = res.data.slider
+          // }
         })
       },
-
+  
       // 渲染歌单
       _getDiscList() {
         getDiscList().then((res) => {
-          if (res.code === ERR_OK){
-            console.log(res.data.list)
+          if (res.code === ERR_OK) {
+            // console.log(res.data)
             this.discList = res.data.list // 真正的数据源，用一个变量代进去
           }
         })
       },
   
-     selectItem(item) {
-       this.$router.push({
-        path: `recommend/${item.dissid}`,
-       })
-     }
+      selectItem(item) {
+        this.$router.push({
+          path: `recommend/${item.dissid}`,
+        })
+        this.setDisc(item) // 触发每个歌单item的歌单详情页面
+      },
+  
+      ...mapMutations({
+        setDisc: 'SET_DISC'
+      })
     },
   
     components: {
