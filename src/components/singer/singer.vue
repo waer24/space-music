@@ -36,7 +36,7 @@ const HOT_NAME = '热门'
          if (res.code === ERR_OK) {
            // console.log(res.data) Fsinger_mid Fsinger_name
             this.singerData = this._normalizeSinger(res.data.list)
-             console.log(this.singerData)
+              // console.log(this.singerData)
            }
         })
       },
@@ -74,7 +74,7 @@ const HOT_NAME = '热门'
           // console.log(map) // yes!
       }) 
       
-      // 得到有序列表，处理map
+      // 得到有序列表，处理map 一维数组，{title: 'XXX', items: {["XXX", "XXX"]} }
       let ret = []
       let hot = []
        for (let key in map) {
@@ -87,9 +87,9 @@ const HOT_NAME = '热门'
        }
        // console.log(hot)
         ret.sort((a, b) => {
-          return (a.title.chartCodeAt(0) - b.title.chartCodeAt(0))
+          return (a.title.charCodeAt(0) - b.title.charCodeAt(0))
         })
-        console.log(  hot.concat(ret) )
+       //  console.log(  hot.concat(ret) )
         return hot.concat(ret)
       },
       ...mapMutations({
@@ -106,7 +106,12 @@ const HOT_NAME = '热门'
 
 <style lang="scss">
   .singer-wrap {
-     color: $color-theme;
+    /* wrap作为父元素，需要有固定的高度，子元素的scroll才能滚动 */
+    position: fixed;
+    top: 90px;
+    bottom: 0;
+    width: 100%;
+    color: $color-theme;
   }
    
 </style>

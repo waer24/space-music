@@ -5,8 +5,30 @@
 </template>
 
 <script>
-  export default {
+import { getMusicList } from '@/api/rank.js'
+import { ERR_OK } from '@/api/config'
 
+  export default {
+    created() {
+      this._getMusicList()
+    },
+
+    methods: {
+      _getMusicList() {
+        getMusicList().then((res) => {
+          
+          if (res.code === ERR_OK) {
+            console.log(22  )
+            console.log(res.data)
+          }
+        })
+      },
+
+      
+    },
+
+    
+  
   }
 </script>
 
