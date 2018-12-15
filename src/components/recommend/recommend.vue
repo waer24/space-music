@@ -1,6 +1,6 @@
 <template>
   <div class="recommend-wrap">
-    <!-- scroll放在这里是因为滚动事件会覆盖到整个屏幕,content是父级，slider-wrap是子级 -->
+    <!-- scroll放在这里是因为滚动事件会覆盖到整个屏幕,content是父级，slider-wrap是子级 只有传入数据了才能撑起变化 -->
     <scroll ref="commend-content" class="recomment-content" :scroll-data="discList">
       <div>
         <div class="bg-hide"></div>
@@ -16,12 +16,13 @@
               </div>
             </slider>
           </keep-alive>
+
         </div>
         <div class="recommend-list">
           <h1 class="list-title">热门歌单推荐</h1>
           <ul class="list-wrap">
             <li v-for="(item,index) in discList" :key="index" @click="selectItem(item)" class="list-item">
-              <div class="list-img"><img :src="item.imgurl" width="60" height="60" alt=""></div>
+              <div class="list-img"><img v-lazy="item.imgurl" width="60" height="60" alt=""></div>
               <div class="list-txt">
                 <h2 class="list-tlt"> {{ item.creator.name }}</h2>
                 <p class="list-subtlt">{{ item.dissname }}</p>
@@ -44,7 +45,8 @@
   // import BScroll from 'better-scroll'
   import {
     getWallSwiper,
-    getDiscList
+    getDiscList,
+    getSongList
   } from '@/api/recommend.js'
   import {
     ERR_OK
@@ -69,7 +71,7 @@
       this._getWallSwiper()
       this._getDiscList()
     },
-  
+
     methods: {
       // 渲染推荐的swiper
       _getWallSwiper() {
@@ -84,23 +86,27 @@
       // 渲染歌单
       _getDiscList() {
         getDiscList().then((res) => {
-          if (res.code === ERR_OK) {
-            // console.log(res.data)
+          if (res.code === ERR_OK){
+              // console.log(res.data.list)
             this.discList = res.data.list // 真正的数据源，用一个变量代进去
           }
         })
       },
-  
-      selectItem(item) {
-        this.$router.push({
-          path: `recommend/${item.dissid}`,
-        })
-        this.setDisc(item) // 触发每个歌单item的歌单详情页面
-      },
-  
-      ...mapMutations({
-        setDisc: 'SET_DISC'
-      })
+
+     selectItem(item) {
+       this.$router.push({
+        path: `recommend/${item.dissid}`,
+       })
+       this.setDisc(item) // 触发每个歌单item的歌单详情页面
+     },
+
+     loadImg(){
+       this.$refs.commendContent.refresh()
+     },
+
+     ...mapMutations({
+       setDisc: 'SET_DISC'
+     })
     },
   
     components: {

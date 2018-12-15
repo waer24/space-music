@@ -81,6 +81,29 @@ module.exports = merge(common, {
           console.log(error)
         })
       })
+
+      //在node层做转发层 获取歌单的所有曲目，用axios获取
+      app.get('/api/getSongList', (req, res) => {
+        let url ='https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
+        axios.get(url, {
+          headers: {
+            referer: 'https://c.y.qq.com/',
+            host: 'c.y.qq.com'
+          },
+          params: req.query
+        }).then((response) => {
+          if (typeof response.data  === 'String') {
+            var reg = /{.*}/
+            var matches = response.data.match(reg)
+            if (matches) {
+              response.data = JSON.parse(matches[0])
+            }
+          }
+          res.json(response.data)
+        }).catch((e) => {
+          console.log(e)
+        })
+      })
     },
   }
 });
