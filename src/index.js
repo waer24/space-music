@@ -17,10 +17,9 @@ import '@/common/style/mixin.scss'
 
 Vue.use(VueLazyload, {
   loading: require('@/common/images/default.png'), // 懒加载的显示的图片
-  listenEvents: [ 'scroll' ]
+  // listenEvents: [ 'scroll' ]  // 只有监听有滚动事件发生才开始懒加载
 
 })
-  // loading: require('@/common/images/default.png')
 
 // 取消300ms的延迟
 fastClick.attach(document.body)
