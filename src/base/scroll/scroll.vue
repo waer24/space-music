@@ -75,7 +75,7 @@ import Bscroll from 'better-scroll'
       this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments)
     },
 
-    scrollToElement() {
+    scrollToElement() { // 后续别的组件要用到这些组件，所以需要对外提供方法，否则报错： scrollToElement is not a function
       this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
     },
     

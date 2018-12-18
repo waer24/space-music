@@ -34,9 +34,9 @@ const HOT_NAME = '热门'
       _getSingerList () {
         getSingerList().then((res) => {
          if (res.code === ERR_OK) {
-           // console.log(res.data) Fsinger_mid Fsinger_name
-            this.singerData = this._normalizeSinger(this.singerData)
-            //  console.log(this._normalizeSinger(this.singerData))
+           // console.log(res.data) // Fsinger_mid Fsinger_name
+            this.singerData = this._normalizeSinger(res.data.list)
+            // console.log(this.singerData)
            }
         })
       },
@@ -71,10 +71,10 @@ const HOT_NAME = '热门'
           name: item.Fsinger_name,
           id: item.Fsinger_mid
         }))
-           // console.log(map) // yes!
+            // console.log(map) // yes!
       }) 
       
-      // 得到有序列表，处理map 一维数组，{title: 'XXX', items: {["XXX", "XXX"]} }
+      // 得到有序列表，处理map 一维数组，{title: 'XXX', items: {["XXX", "XXX"]} } 对象的遍历是无序的
       let ret = []
       let hot = []
        for (let key in map) {
@@ -90,7 +90,7 @@ const HOT_NAME = '热门'
           return a.title.charCodeAt(0) - b.title.charCodeAt(0) // 这里报错，chartCodeAt 不是一个funcion！，是自己多加了一个t
 
         })
-        // console.log(  hot.concat(ret) )
+         // console.log(  hot.concat(ret) )
         return hot.concat(ret) 
       },
       ...mapMutations({

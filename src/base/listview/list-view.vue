@@ -62,38 +62,32 @@
       this.probeType = 3 // 不仅滚动屏幕，同时触发scroll 事件 ?为什么不妨在data（）中
       this.listHeight = []
       this.listenScroll = true
-      this.touch = {}
+      this.touch = {} // 
     },
   
     methods: {
-
-      onShortcutTouchStart(e){
-        let anchorIndex = getData(e.target, 'index') // 设置锚点
+      onShortcutTouchStart(e) {
+        let anchorIndex = getData(e.target, 'index')
         let firstTouch = e.touches[0]
-        this.touch.y1 = firstTouch.pageY // pageY是touch事件的属性
+        this.touch.y1 = firstTouch.pageY
         this.touch.anchorIndex = anchorIndex
-
-        this._scrollTo(anchorIndex) // start滚动的index
-       // console.log(this.$refs.listItem[anchorIndex])
+        this._scrollTo(anchorIndex)
       },
-
 
       onShortcutTouchMove(e) {
         let firstTouch = e.touches[0]
-       // console.log(firstTouch)
         this.touch.y2 = firstTouch.pageY
-       //  console.log(`y2是： ${ this.touch.y2}`)
-        let delta = (this.touch.y2 - this.touch.y1) / ANCHOR_HEIGHT | 0
         
-        let anchorIndex = parseInt(this.touch.anchorIndex) + delta
-        //  console.log(anchorIndex)
-         this._scrollTo(anchorIndex)  // start move滚动的index
-          
+        const delta = (this.touch.y2 - this.touch.y1) / ANCHOR_HEIGHT | 0 // 快读入口移动终结点 = (y2 - y1 ) / 每个快速入口item自身的高度，有0.xxx的小数取0
+        let anchorIndex2 = firstTouch + delta
+        let anchorIndex = parseInt(this.touch.anchorIndex) + delta // 
+        this._scrollTo(anchorIndex) // start move滚动的index
       },
+
       refresh() {
         this.$refs.listview.refresh()
       },
-      scroll(pos) {
+      scroll(pos) { // 实时获取滚动到y轴的位置
         this.scrollY = pos.y
       },
 
@@ -112,7 +106,7 @@
 
 
       _scrollTo(index){
-        if (!index && index !== 0 ) {
+       /*  if (!index && index !== 0 ) {
           return
         }
         if (index < 0) {
@@ -121,10 +115,10 @@
         } else if (index > this.listHeight.length - 2 ) {
           
           index = this.listHeight.length - 2
-        } else {
-          this.scrollY = -this.listHeight[index] // 为什么是负的？
+        }  
+          this.scrollY = -this.listHeight[index] // 为什么是负的？*/
         this.$refs.listview.scrollToElement(this.$refs.listItem[index], 0) // 0表示不需要动画
-        }
+        
          
       },
     },
