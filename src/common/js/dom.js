@@ -14,3 +14,11 @@ export function hasClass(el, className) {
  /* test: 检索字符串中指定的值。返回 true 或 false。 */
   return reg.test(el.className)
 }
+
+export function getData(el, name, val) {
+  const prefix = 'data-'
+  if (val ) {
+    return el.setAttribute(prefix + name , val) // setAttribute() 方法添加指定的属性，并为其赋指定的值。
+  }
+  return el.getAttribute(prefix + name)
+}

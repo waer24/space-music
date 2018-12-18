@@ -15,7 +15,11 @@ import '@/common/style/mixin.scss'
 
  Vue.config.productionTip = false
 
-Vue.use(VueLazyload)
+Vue.use(VueLazyload, {
+  loading: require('@/common/images/default.png'), // 懒加载的显示的图片
+  listenEvents: [ 'scroll' ]
+
+})
   // loading: require('@/common/images/default.png')
 
 // 取消300ms的延迟

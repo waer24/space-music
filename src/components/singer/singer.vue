@@ -74,7 +74,7 @@ const HOT_NAME = '热门'
            // console.log(map) // yes!
       }) 
       
-      // 得到有序列表，处理map
+      // 得到有序列表，处理map 一维数组，{title: 'XXX', items: {["XXX", "XXX"]} }
       let ret = []
       let hot = []
        for (let key in map) {
@@ -90,7 +90,7 @@ const HOT_NAME = '热门'
           return a.title.charCodeAt(0) - b.title.charCodeAt(0) // 这里报错，chartCodeAt 不是一个funcion！，是自己多加了一个t
 
         })
-        console.log(  hot.concat(ret) )
+        // console.log(  hot.concat(ret) )
         return hot.concat(ret) 
       },
       ...mapMutations({
@@ -107,7 +107,12 @@ const HOT_NAME = '热门'
 
 <style lang="scss">
   .singer-wrap {
-     color: $color-theme;
+    /* wrap作为父元素，需要有固定的高度，子元素的scroll才能滚动 */
+    position: fixed;
+    top: 90px;
+    bottom: 0;
+    width: 100%;
+    color: $color-theme;
   }
    
 </style>
