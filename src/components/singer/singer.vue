@@ -108,7 +108,7 @@ const HOT_NAME = '热门'
   .singer-wrap {
     /* wrap作为父元素，需要有固定的高度，子元素的scroll才能滚动 */
     position: fixed;
-    top: 90px;
+    top: 88px;
     bottom: 0;
     width: 100%;
     color: $color-theme;
