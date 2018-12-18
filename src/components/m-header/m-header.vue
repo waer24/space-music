@@ -10,7 +10,6 @@
   </div>
 </template>
 
-
 <style lang='scss'>
   @import '../../common/style/fonts.css';
   .wrap {

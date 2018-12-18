@@ -17,13 +17,22 @@ import Bscroll from 'better-scroll'
         type: Number,
         default: 1
       },
-      click: {
-        type: Boolean,
-        default: true
-      },
+     
       listenScroll: {
         type: Boolean,
         default: false
+      },
+      click: {
+        type: Boolean,
+        default: true,
+      },
+      beforeScroll: {
+        type: Boolean,
+        default: false
+      },
+      refreshDelay: {
+        type: Number,
+        default: 20,
       }
     },
 
@@ -40,18 +49,24 @@ import Bscroll from 'better-scroll'
       }
       // 初始化第二个值传入参数
       this.scroll = new Bscroll(this.$refs.wrapper, {
-        scrollX: false,
-        scrollY: true,
+       //  scrollX: false,
+       //  scrollY: true,
         bounce: true,
         momentum: true,
-        probeType: this.probeType,
         click: this.click,
+        probeType: this.probeType,
       })
 
       if(this.listenScroll) {
         let me = this
         this.scroll.on('scroll', (pos) => {
           me.$emit('scroll', pos)
+        })
+      }
+
+      if(this.beforeScroll) {
+        this.scroll.on('beforeScrollStart', () => {
+          this.$emit('beforeScroll')
         })
       }
     },
@@ -62,12 +77,20 @@ import Bscroll from 'better-scroll'
 
     scrollToElement() {
       this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
+    },
+    
+    refresh() {
+      this.scroll && this.scroll.refresh()
     }
 
     },
 
     watch:{
-
+      data() {
+        setTimeout(() => {
+          this.refresh()
+        }, this.refreshDelay)
+      }
     }
   } 
 </script>
