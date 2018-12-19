@@ -93,9 +93,9 @@ const HOT_NAME = '热门'
          // console.log(  hot.concat(ret) )
         return hot.concat(ret) 
       },
-      ...mapMutations({
+     /*  ...mapMutations({
         setSinger: 'SET_SINGER'
-      })
+      }) */
 
     },
 

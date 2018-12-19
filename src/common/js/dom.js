@@ -18,7 +18,7 @@ export function hasClass(el, className) {
 export function getData(el, name, val) { // 添加属性的，有属性就获取，没属性就添加
   const prefix = 'data-'  // "data-index data-length之类的"
   if (val ) {
-    return el.setAttribute(prefix + name , val) // setAttribute() 方法添加指定的属性，并为其赋指定的值。
+    return el.setAttribute(prefix + name, val) // setAttribute() 方法添加指定的属性，并为其赋指定的值。
   }
   return el.getAttribute(prefix + name)
 }

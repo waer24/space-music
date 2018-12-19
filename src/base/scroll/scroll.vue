@@ -57,18 +57,18 @@ import Bscroll from 'better-scroll'
         probeType: this.probeType,
       })
 
-      if(this.listenScroll) {
-        let me = this
-        this.scroll.on('scroll', (pos) => {
+      if(this.listenScroll) { // 是否需要监听滚动事件？ 需要的话绑定scroll事件，子组件触发它
+        let me = this // 因为scroll的this是
+        this.scroll.on('scroll', (pos) => { // pos是bscroll的对象， 包含x, y两个参数
           me.$emit('scroll', pos)
         })
       }
 
-      if(this.beforeScroll) {
+      /* if(this.beforeScroll) { 
         this.scroll.on('beforeScrollStart', () => {
           this.$emit('beforeScroll')
         })
-      }
+      } */
     },
 
     scrollTo() {
@@ -81,7 +81,7 @@ import Bscroll from 'better-scroll'
     
     refresh() {
       this.scroll && this.scroll.refresh()
-    }
+    },
 
     },
 
