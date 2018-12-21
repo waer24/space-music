@@ -24,5 +24,10 @@
   font-size: 1.4rem;
   color: hsla(0,0%,100%,.5); 
 }
+@mixin no-wrap(){
+  overflow: hidden;
+  text-overflow: ellipsis;
+ white-space: nowrap;
+}
   
   

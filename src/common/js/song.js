@@ -1,45 +1,36 @@
-import { getLyric, getSongsUrl } from '@/api/song'
+  export default class Song {
+  constructor(id, mid, name, singer, album,duration, image, url) {
+    this.id = id, // 实例化，变成vue的实例
+    this.mid = mid,
+    this.name = name,
+    this.singer = singer,
+    this.album = album,
+    this.duration = duration,
+    this.image = image,
+    this.url = url
+  }
+ } 
+ 
+  export function createSongs(musicData) {
+    return new Song({
+      id: musicData.songid, // songid等这些变量名都是从qq音乐 list中取的
+      mid: musicData.songmid,
+      name: musicData.songname,
+      singer:filterSinger(musicData.singer),
+      album: musicData.albumname,
+      duration: musicData.interval,
+      image: `https://y.gtimg.cn/music/photo_new/${musicData.albummid}.jpg?max_age=2592000`, // 专辑封面图，用于播放列表
+      url: `http://ws.stream.qqmusic.qq.com/${musicData.songid}.m4a?fromtag=46` // 播放
+    })
+}  
 
-export function createSong(musicData) {
-  return new Song({
-    id: musicData.songid,
-    mid: musicData.songmid,
-    singer: filterSinger(musicData.singer),
-    name: musicData.songname,
-    album: musicData.albumname,
-    duration: musicData.interval,
-    image: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${musicData.albummid}.jpg?max_age=2592000`,
-    url: musicData.url
-  })
-}
-
-function filterSinger(singer) {
+export function filterSinger(singer){
   let ret = []
-  if (!singer) {
+  if ( !singer ) {
     return ''
   }
-  singer.forEach((s) => {
+  Array.from(singer).forEach((s) => {
     ret.push(s.name)
   })
   return ret.join('/')
-}
-
-export function isValidMusic(musicData) {
-  return musicData.songid && musicData.albummid && (!musicData.pay || musicData.pay.payalbumprice === 0)
-}
-
-export function processSongsUrl(songs) {
-  if (!songs.length) {
-    return Promise.resolve(songs)
-  }
-  return getSongsUrl(songs).then((res) => {
-    if (res.code === ERR_OK) {
-      let midUrlInfo = res.url_mid.data.midurlinfo
-      midUrlInfo.forEach((info, index) => {
-        let song = songs[index]
-        song.url = `http://dl.stream.qqmusic.qq.com/${info.purl}`
-      })
-    }
-    return songs
-  })
 }

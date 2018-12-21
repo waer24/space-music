@@ -15,9 +15,7 @@
     getSongList
   } from '@/api/recommend'
   import {
-    createSong,
-    isValidMusic,
-    processSongsUrl
+    createSongs,
   } from '@/common/js/song'
   import {
     ERR_OK
@@ -62,7 +60,7 @@
         let ret = []
         Array.from(list).forEach((musicData) => {
           if (isValidMusic(musicData)) {
-            ret.push(createSong(musicData))
+            ret.push(createSongs(musicData))
           }
         })
         return ret

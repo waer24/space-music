@@ -1,6 +1,7 @@
 <template>
   <div class="singer-wrap">
-   <list-view :list-data="singerData"></list-view>
+   <list-view :list-data="singerData" @select="selectSinger"></list-view>
+  <router-view></router-view>
   </div>
 </template>
 
@@ -18,10 +19,6 @@ const HOT_NAME = '热门'
     data() {
       return {
         singerData: []
-        /* singerData: { // 就是这里导致 一直期望是个数组，但实际上却是对象
-          type: Array,
-          default :[]
-        } */
       }
     },
 
@@ -30,13 +27,20 @@ const HOT_NAME = '热门'
     },
 
     methods: {
+      selectSinger(singer) {
+        this.$router.push({
+          path: `/singer/${singer.id}`
+        })
+        this.setSinger(singer)
+      },
+
       // 获取歌手的显示数据
       _getSingerList () {
         getSingerList().then((res) => {
          if (res.code === ERR_OK) {
-           // console.log(res.data) // Fsinger_mid Fsinger_name
+            // console.log(res.data) // Fsinger_mid Fsinger_name
             this.singerData = this._normalizeSinger(res.data.list)
-            // console.log(this.singerData)
+             // console.log(this.singerData)
            }
         })
       },
@@ -93,9 +97,9 @@ const HOT_NAME = '热门'
          // console.log(  hot.concat(ret) )
         return hot.concat(ret) 
       },
-     /*  ...mapMutations({
+       ...mapMutations({
         setSinger: 'SET_SINGER'
-      }) */
+      }) 
 
     },
 
