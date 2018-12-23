@@ -1,10 +1,10 @@
 <template>
   <scroll @scroll="scroll" :scroll-data="listData" :probe-type="probeType" :listen-scroll="listenScroll" class="list-view" ref="listview">
     <ul>
-      <li class="list-stripe" v-for="(group,index) in listData" :key="index" ref="listItem">
+      <li class="list-stripe" v-for="(group,index) in listData" :key="index" v-show="listData.length" ref="listItem">
         <h2 class="list-title">{{ group.title }}</h2>
         <ul>
-          <li class="text-item" v-for="(item, index) in group.items" :key="index">
+          <li class="text-item" v-for="(item, index) in group.items" :key="index" @click="selectItem(item)">
             <img v-lazy="item.avatar" alt="" class="avatar">
             <span class="txt">{{ item.name }}</span>
           </li>
@@ -16,8 +16,8 @@
         <li v-for="(item,index) in shortcutList" :key="index" :data-index="index" class="side-item" :class="{'active': currentIndex === index}">{{ item }}</li>
       </ul>
     </div>
-    <div class="fixed-bar">
-  
+    <div class="fixed-bar" v-show="fixedTitle">
+      <h2 class="fixed-title" ref="fixedTitle">{{ fixedTitle }}</h2>
     </div>
     <div v-show="!listData.length" class="loading-container">
       <loading></loading>
@@ -32,7 +32,7 @@
     getData
   } from '@/common/js/dom'
   
-  const TITLE_HEIGHT = 30
+  const TITLE_HEIGHT = 20 //  fixed title的高度
   const ANCHOR_HEIGHT = 18 // 右侧快速到导航栏每个item的高度
   
   export default {
@@ -51,13 +51,22 @@
           // 这里不要用substring ，因为substr的start和end如果为负数，会返回NAN 坑！
         })
       },
+  
+      fixedTitle() { // 不必再用循环获取title
+        if (this.scrollY > 0) { // 顶部出现两个‘热门’的情况，【一个固定的title，一个是listitem的title】
+          return ''
+        }
+        return this.listData[this.currentIndex] ?  this.listData[this.currentIndex].title : '' // 异步加载，防止有时会来不及渲染，先蹦出一个title is undefined
+        // console.log(this.scrollY)
+        //  console.log(this.listData[this.currentIndex])
+      }
     },
   
     data() {
       return {
-        scrollY: -1, // itemslist起点，向下滚动是负数
+        scrollY: -1, // itemlist起点，向下滚动是负数
         currentIndex: 0,
-        // diff: -1
+        diff: -1 // 顶部固定title
       }
     },
   
@@ -69,6 +78,10 @@
     },
   
     methods: {
+      selectItem(item) { // 组件传递点击事件给父级
+        this.$emit('select', item)
+      },
+
       onShortcutTouchStart(e) {
         let anchorIndex = getData(e.target, 'index')
         let firstTouch = e.touches[0]
@@ -93,7 +106,6 @@
   
       scroll(pos) { // 实时获取滚动到y轴的位置，用户会不断触发scroll事件，因此需要监听scroll，同时也是回应scroll组件中子组件的绑定事件
         this.scrollY = pos.y // scroll.Y是watch的函数
-  
         // console.log(this.scrollY) // 往下拉是< 0，”热门“上面是>0的值，”热门“的起点是0（ 热门是listitem的起点）
       },
   
@@ -108,23 +120,18 @@
           this.listHeight.push(height)
         }
       },
-
       _scrollTo(index) {
-  
-        /*  if (!index && index !== 0 ) {
+        if (!index && index !== 0) { // 处理边界值，当点击’热门‘上面的时候
           return
         }
-        if (index <= 0) {
+        if (index < 0) {
           index = 0
-        } else if (index > this.listHeight.length -2 ) {
+        } else if (index > this.listHeight.length - 2) {
           index = this.listHeight.length - 2
-           console.log( index)
-        }   */
-  
+
+        }
         this.$refs.listview.scrollToElement(this.$refs.listItem[index], 0) // 0表示不需要动画
-  
-        this.scrollY = this.$refs.listview.scroll.y // 为什么是负的？ 向下滚动是负值  
-  
+        this.scrollY = this.$refs.listview.scroll.y // 为什么是负的？ 向下滚动是负值 
       },
     },
   
@@ -136,22 +143,26 @@
          }, 20)
          },
          deep: true
-       },
-       /*  setTimeout(() => { 原来的写法不能立即被调用，导致不能更新listitem的值，length一直为0
-          this._calculateHeight() 
-        }, 20) */
-  
-      data: {
+       }, */
+      /* data() {
+         setTimeout(() => {
+          this._calculateHeight()
+        }, 20) 
+      }, */
+      data: { // 为什么要监听data？ data中包含了3个属性，都是在scroll中触发，需要不断监听，便于后续scrolly事件
         handler: function() {
           setTimeout(() => {
             this._calculateHeight()
-          }, 20)
+          }, 200) // 时间设置的太短会导致页面还没渲染完，提示length is undefined
+  
         },
-        immediate: true
+        immediate: true,
       },
   
-      scrollY(newY) {
-  
+      scrollY: function(newY) {
+        /* setTimeout(() => {
+          this._calculateHeight()
+        }, 20) */
         const listHeight = this.listHeight
         // 从method的scrollY可知，scroll滚动的坐标，即newY 会有在item中间 ，>0, <0的三种情况，因此需要分别讨论
         // 在顶部的情况
@@ -165,6 +176,7 @@
           let height2 = listHeight[i + 1] // 22 + 1 = 23个 => such as：-1122px -500 + 200px
           if (-newY >= height1 && -newY < height2) { // newY<0 本身是负值， -newY 变成了正数
             this.currentIndex = i
+            this.diff = height2 + newY // 中间的listitem情况--》从下往上拉：下限高度- 滚动上限的高度 newy是负值
             return
           }
         }
@@ -172,14 +184,27 @@
         this.currentIndex = listHeight.length - 2
       },
   
-      /* diff(newVal) {
-          let fixedTop = (newVal > 0 && newVal > TITLE_HEIGHT) ? newVal - TITLE_HEIGHT : 0
-          if (this.fixedTop === fixedTop) {
-            return 
-          }
-        }  */
-    },
+      diff: function(newVal) {
+        let fixTop = (newVal > 0 && newVal < TITLE_HEIGHT) ? newVal - TITLE_HEIGHT : 0 // 从上往下拉
+        this.$refs.fixedTitle.style.transform = `translate3d(0 ,${fixTop}px, 0) `
+        /*  this.$refs.fixedTitle.style.color = `red`
+        console.log(newVal)
+        console.log(`this.diff:  ${this.diff}`)
+        console.log(`fixTop:   ${fixTop}`)
+        console.log(`this.fixTop---   ${this.fixTop}`) */
+      }
   
+      /*  source code
+        diff(newVal) {
+        let fixedTop = (newVal > 0 && newVal < TITLE_HEIGHT) ? newVal - TITLE_HEIGHT : 0
+        if (this.fixedTop === fixedTop) {
+          return
+        }
+        this.fixedTop = fixedTop
+        this.$refs.fixed.style.transform = `translate3d(0,${fixedTop}px,0)`
+      }
+      */
+    },
     components: {
       scroll,
       loading,
@@ -196,14 +221,6 @@
     background-color: darkred;
     .list-stripe {
       padding-bottom: 3rem;
-      .list-title {
-        @include fs-bg;
-        height: 2rem;
-        line-height: 2rem;
-        padding: 0.4rem 0;
-        text-indent: 1.6rem;
-        background-color: $bg-item-color;
-      }
       .text-item {
         display: flex;
         align-items: center;
@@ -218,6 +235,15 @@
           @include fs-bg;
         }
       }
+    }
+    .list-title,
+    .fixed-title {
+      @include fs-bg;
+      height: 2rem;
+      line-height: 2rem;
+      padding: 0.4rem 0;
+      text-indent: 1.6rem;
+      background-color: $bg-item-color;
     }
     .sidebar {
       position: absolute;
@@ -244,6 +270,9 @@
     }
     .fixed-bar {
       position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
     }
     .loading-container {
       position: absolute;

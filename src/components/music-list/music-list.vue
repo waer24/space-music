@@ -13,21 +13,36 @@
       </div>
     </div>
   </div>
-  <div class="list-wrap">
-    <div class="list-inner"></div>
+  <!-- 用于向上滚动的layer层 -->
+  <div class="bg-layer"></div>
+    <scroll :probe-type="probeType"
+          :scroll-data="isSongs" 
+          :listen-scroll="listenScroll"
+         class="list" ref="listScroll"
+        
+          >
+    <div class="song-list-wrap">
+    <song-list :is-songs="isSongs"></song-list>
   </div>
+  </scroll>
+  
+  
 </div>
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-       // dissname,
-      }
-    },
+import scroll from '@/base/scroll/scroll'
+import songList from '@/base/song-list/song-list'
 
+
+
+  export default {
+   
     props: {
+    isSongs: {
+      type: Array,
+      default() { [] }
+    },
      isTitle: {
         type: String,
         default: ''
@@ -36,24 +51,37 @@
         type: String,
         default: ''
       },
-      isSongs: {
-        type: Array,
-        // Object/Array must use a factory function to return the default value.
-        default(){
-          []
-        } 
-      }
+    },
+    // 为什么created和mounted在创建变量时要用this，用了this可以在整个组件中引用，用let只能在当前的钩子函数中引用
+    created() { 
+      this.probeType = 3,
+      this.listenScroll = true
+      
+    },
+  // 用于一开始就要执行的函数，函数放在created中会报错
+    mounted(){
+      /* 默认高度为0，展示的高度取决于背景图高度，背景图高多少，listscroll实际就偏离多少 */
+     // let imageHeight=  this.$refs.bgImg.clientHeight
+    console.log(this.$el)
+       this.$refs.listScroll.$el.style.top=  `${imageHeight}px`
     },
     computed: {
       bgStyle(){
         // this.$refs.bgImg.style.backgroundImage = `${isBgImg}`
         return `background-image: url(${this.isBgImg})`
-      }
+      },
     },
+
     methods: {
       back(){
+        
         return this.$router.back()
       }
+    },
+
+    components: {
+       songList,
+       scroll,
     }
   }
 </script>
@@ -74,7 +102,6 @@
     position: absolute;
     top: 1.2rem;
     left: 0.6rem;
-
     z-index: 1000;
     .icon-back {
       padding: 1rem;
@@ -135,11 +162,12 @@
       }
     }
   }
-  .list-wrap {
-    position: absolute;
-    bottom: 0;
-    top: 0;
-    .list-inner {
+  .list {
+   position: fixed;
+   top: 0;
+      bottom: 0;
+      width: 100%;
+    .song-list-wrap {
       padding: 2rem 3rem;
     }
   }

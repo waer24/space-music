@@ -45,6 +45,12 @@ const search = (resolve) => {
   })
 }
 
+const singerDetail = (resolve) => {
+  import ('@/components/singer-detail/singer-detail').then((module) => {
+    resolve(module)
+  })
+}
+
 
 const router = new Router({
   mode: 'hash',
@@ -69,7 +75,13 @@ const router = new Router({
     {
       path: '/singer',
       name: 'singer',
-      component: singer
+      component: singer,
+      children: [
+        {
+          path: ':id',
+          component: singerDetail
+        }
+      ]
     },
     {
       path: '/rank',

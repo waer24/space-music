@@ -1,0 +1,1 @@
+/* mapActins => this.$store.dispatch('functionName') */
