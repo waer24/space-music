@@ -22,3 +22,36 @@ export function getData(el, name, val) { // 添加属性的，有属性就获取
   }
   return el.getAttribute(prefix + name)
 }
+
+/* 函数自执行， 加上prefixStyle */
+ let elementStyle = document.createElement('div').style
+  var vendor = (() => {
+    let transformNames = {
+      webkit: 'webkitTransform', // key: webkit, value: 'webkitTransform'
+      moz: 'MozTransform',
+      O: 'OTransform',
+      ms: 'msTransform',
+      standard: 'transform'
+    }
+    for ( let key in transformNames) {
+      if ( elementStyle[transformNames[key]] !== undefined ) {
+        console.log(key)
+         return key // 不返回值就是没触发
+      }
+    }
+    return false
+  })()
+
+  export function prefixStyle(style) {
+    if ( vendor === false ) {
+      return false
+    }
+    if ( vendor === 'standard' ) {
+      return style
+    }
+   
+    let res = vendor + style.charAt(0).toUpperCase() + style.substr(1) // webkit + T + ransform
+    return res
+  }
+ 
+
