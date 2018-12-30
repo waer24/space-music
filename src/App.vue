@@ -6,6 +6,7 @@
       <router-view></router-view>
     </keep-alive>
     <player></player>
+    <!-- 不属于路由，是应用相关的页面，在任何路由下都可以播放 -->
   </div>
 </template>
 
