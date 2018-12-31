@@ -1,7 +1,7 @@
 <template>
   <div class="song-list-wrapper">
     <ul>
-      <li class="item" v-for="(song,index) in isSongs" :key="index">
+      <li class="item" @click="selectItem" v-for="(song,index) in isSongs" :key="index">
         <h2 class="text">{{song.id.name}}</h2>
         <p class="subtext">{{song.id.singer}}</p>
       </li>
@@ -17,6 +17,11 @@
          default() { [] }
       } 
     },
+    methods: {
+      selectItem(item, index) {
+        this.$emit('select', item, index)
+      }
+    }
 
    
   }

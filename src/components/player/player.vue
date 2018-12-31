@@ -1,8 +1,8 @@
 <template>
-  <div class="player-wrap">
-    <div class="normal-player">
+  <div class="player-wrap" v-show="playlist.length>0" >
+    <div class="normal-player" v-show="fullScreen">
       <div class="bg">
-        <img src="https://y.gtimg.cn/music/photo_new/T002R300x300M000002Neh8l0uciQZ.jpg?max_age=2592000" alt="" width="100%" height="100%">
+        <img src="" alt="" width="100%" height="100%">
       </div>
       <div class="top">
         <div class="back" @click="back">
@@ -12,12 +12,14 @@
         <h2 class="singer"></h2>
       </div>
       <div class="middle">
-        <div class="cd-wrap">
-          <img class="disc" src="https://y.gtimg.cn/music/photo_new/T002R300x300M000002Neh8l0uciQZ.jpg?max_age=2592000" alt="">
+       <div class="middle-lf">
+          <div class="cd-wrap">
+          <img class="disc" src="" alt="">
         </div>
         <div class="lyrics-wrap">
           <p class="lyrics"></p>
         </div>
+       </div>
       </div>
       <div class="bottom">
         <div class="disc-dot-wrap">
@@ -55,9 +57,9 @@
         </div>
       </div>
     </div>
-    <div class="mini-player" style="display:none">
+    <div class="mini-player" v-show="!fullScreen">
       <div class="mini-pic">
-        <img src="https://y.gtimg.cn/music/photo_new/T002R300x300M000002Neh8l0uciQZ.jpg?max_age=2592000" width="40" height="40" class="img" alt="">
+        <img src="" width="40" height="40" class="img" alt="">
       </div>
       <div class="text">
         <h2 class="name"></h2>
@@ -78,9 +80,17 @@
 import { mapGetters } from 'vuex'
 
   export default {
+    computed: {
+      ...mapGetters([
+        'fullScreen',
+        'playlist',
+      ])
+    },
+
+
     methods: {
       back() {
-        this.$router.back()
+        this.$route.back()
       }
     },
     compoennts: {}
@@ -138,17 +148,37 @@ import { mapGetters } from 'vuex'
         }
       }
       .middle {
-        position: fixed;
-        top: 8rem;
-        bottom: 17rem;
-        width: 100%;
-        .cd-wrap {
+            position: fixed;
+    top: 8rem;
+    bottom: 17rem;
+    width: 100%;
+    font-size: 0;
+    white-space: nowrap;
+        .middle-lf {
+             position: relative;
+    width: 100%;
+    display: inline-block;
+    padding-top: 80%;
+    height: 0; // 高度由paddingtop表示
+    vertical-align: top;
+
+          .cd-wrap {
+            position: absolute;
+            left: 10%;
+            top: 0;
           box-sizing: border-box;
-          width: 100%;
+          width: 80%;
+          height: 100%;
           text-align: center;
           margin: 0 auto;
           overflow: hidden;
           .disc {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
             border: 1rem solid $color-disc-border;
             border-radius: 50%;
           }
@@ -164,6 +194,8 @@ import { mapGetters } from 'vuex'
             color: $color-text-self;
           }
         }
+        }
+        
       }
       .bottom {
         position: absolute;

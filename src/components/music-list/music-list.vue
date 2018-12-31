@@ -18,7 +18,7 @@
     <scroll :probe-type="probeType" :scroll-data="isSongs" :listen-scroll="listenScroll" @scroll="scroll" class="list" ref="listScroll">
       <!-- 这个scroll事件来源于子组件传递的scroll -->
       <div class="song-list-wrap">
-        <song-list :is-songs="isSongs"></song-list>
+        <song-list @select="select" :is-songs="isSongs"></song-list>
       </div>
       <div>
         <loading class="loading-container" v-show="!isSongs.length"></loading>
@@ -32,10 +32,9 @@
 <script>
   import scroll from '@/base/scroll/scroll'
   import songList from '@/base/song-list/song-list'
-  import {
-    prefixStyle
-  } from '@/common/js/dom'
+  import { prefixStyle} from '@/common/js/dom'
   import loading from '@/base/loading/loading'
+  import { mapActions } from 'vuex'
   
   const RESERVED_HEIGHT = 40
   const transform = prefixStyle('transform')
@@ -92,7 +91,16 @@
   
       scroll(pos) {
         this.scrollY = pos.y
-      }
+      },
+      select(item, index) { // 点击播放到歌曲页面
+       this.selectItemPlay({
+         list: this.isSongs, // list 来源于actions.js中SET_PLAYLIST的list
+         index,
+       })
+      },
+      ...mapActions([
+        'selectItemPlay',
+      ]),
     },
   
     watch: {
