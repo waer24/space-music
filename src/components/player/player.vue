@@ -2,7 +2,7 @@
   <div class="player-wrap" v-show="playlist.length>0" >
     <div class="normal-player" v-show="fullScreen">
       <div class="bg">
-        <img src="" alt="" width="100%" height="100%">
+        <img  alt="" width="100%" height="100%" :src="currentSong.image">
       </div>
       <div class="top">
         <div class="back" @click="back">
@@ -14,7 +14,7 @@
       <div class="middle">
        <div class="middle-lf">
           <div class="cd-wrap">
-          <img class="disc" src="" alt="">
+          <img class="disc"  alt="" :src="currentSong.image">
         </div>
         <div class="lyrics-wrap">
           <p class="lyrics"></p>
@@ -77,21 +77,27 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 
   export default {
     computed: {
       ...mapGetters([
         'fullScreen',
         'playlist',
-      ])
+        'currentSong'
+      ]),
+      
     },
 
 
     methods: {
       back() {
-        this.$route.back()
-      }
+        this.setFullScreen(false); // 沿用mutation的flag状态
+       
+      },
+      ...mapMutations({ // 关闭全屏需要改变mutation的状态
+        setFullScreen: 'SET_FULL_SCREEN',
+      })
     },
     compoennts: {}
   }
@@ -99,14 +105,14 @@ import { mapGetters } from 'vuex'
 
 <style lang="scss" scoped>
   .player-wrap {
-    position: fixed;
+    .normal-player { /* 不放在player-wrap中是为了关闭全屏时，miniplay能显示出来 */
+      position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
     background-color: $color-background;
     color: $color-text;
-    .normal-player {
       overflow: hidden;
       height: 100%;
       .bg {
