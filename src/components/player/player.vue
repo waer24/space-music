@@ -1,5 +1,6 @@
 <template>
   <div class="player-wrap" v-show="playlist.length>0" >
+    <transition name="normal">
     <div class="normal-player" v-show="fullScreen">
       <div class="bg">
         <img  alt="" width="100%" height="100%" :src="currentSong.image">
@@ -8,8 +9,8 @@
         <div class="back" @click="back">
           <i class="icon-back"></i>
         </div>
-        <h1 class="title"></h1>
-        <h2 class="singer"></h2>
+        <h1 class="title" >{{currentSong.name}}</h1>
+        <h2 class="singer"> {{currentSong.singer}}</h2>
       </div>
       <div class="middle">
        <div class="middle-lf">
@@ -57,13 +58,15 @@
         </div>
       </div>
     </div>
-    <div class="mini-player" v-show="!fullScreen">
+    </transition>
+    <transition name="mini">
+    <div class="mini-player" v-show="!fullScreen" @click="open">
       <div class="mini-pic">
-        <img src="" width="40" height="40" class="img" alt="">
+        <img width="40" height="40" class="img" alt="" :src="currentSong.image">
       </div>
       <div class="text">
-        <h2 class="name"></h2>
-        <p class="desc"> </p>
+        <h2 class="name" >{{currentSong.name}}</h2>
+        <p class="desc">{{currentSong.singer}} </p>
       </div>
       <div class="circle">
         <div class="process-circle"></div>
@@ -73,6 +76,7 @@
         <i class="icon-playlist mini"></i>
       </div>
     </div>
+       </transition>
   </div>
 </template>
 
@@ -94,6 +98,9 @@ import { mapGetters, mapMutations } from 'vuex'
       back() {
         this.setFullScreen(false); // 沿用mutation的flag状态
        
+      },
+      open(){
+        this.setFullScreen(true);
       },
       ...mapMutations({ // 关闭全屏需要改变mutation的状态
         setFullScreen: 'SET_FULL_SCREEN',
@@ -146,7 +153,7 @@ import { mapGetters, mapMutations } from 'vuex'
           @include fs(1.8rem);
           font-weight: 400;
           text-align: center;
-          padding: 0.2rem 0;
+          padding: 0.8rem 0;
           @include no-wrap;
         }
         .singer {
@@ -276,7 +283,23 @@ import { mapGetters, mapMutations } from 'vuex'
           }
         }
       }
+      &.normal-enter-active, &.normal-leave-active {
+        transition: all 0.4s;
+        .top, .bottom {
+          transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+        } 
+      }
+      &.normal-enter, &.normal-leave-to {
+          opacity: 0;
+          .top {
+            transform: translate3d(0, -10rem ,0)
+          }
+           .bottom {
+            transform: translate3d(0, 10rem ,0)
+          }
+        }
     }
+    
     .mini-player {
       background-color: darkred;
       .mini {
@@ -302,6 +325,7 @@ import { mapGetters, mapMutations } from 'vuex'
         flex: 1;
         overflow: hidden;
         .name {
+          color: $color-text;
           @include fs(1.4rem);
           font-weight: 400;
           @include no-wrap;
@@ -326,6 +350,12 @@ import { mapGetters, mapMutations } from 'vuex'
           flex: 0 0 3rem;
           font-size: 3rem;
           margin: 0 2rem;
+        }
+        &.mini-enter-active, &.mini-leave-active {
+          transition: all 0.4s; 
+        }
+         &.mini-enter, &.mini-leave-to {
+          opacity: 0; 
         }
     }
   }
