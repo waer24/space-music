@@ -1,7 +1,7 @@
 <template>
   <div class="singer-wrap">
    <list-view :list-data="singerData" @select="selectSinger"></list-view>
-  <router-view></router-view>
+  <router-view></router-view> <!-- 挂载子路由，singer-details -->
   </div>
 </template>
 
@@ -31,16 +31,18 @@ const HOT_NAME = '热门'
         this.$router.push({
           path: `/singer/${singer.id}`
         })
-        this.setSinger(singer)
+        this.setSinger(singer) // store.commit()提交singer数据给vuex
+        // console.log(this.setSinger(singer))
+       
       },
 
       // 获取歌手的显示数据
       _getSingerList () {
         getSingerList().then((res) => {
          if (res.code === ERR_OK) {
-            // console.log(res.data) // Fsinger_mid Fsinger_name
+             // console.log(res.data) // Fsinger_mid Fsinger_name
             this.singerData = this._normalizeSinger(res.data.list)
-             // console.log(this.singerData)
+            // console.log(this.singerData)
            }
         })
       },

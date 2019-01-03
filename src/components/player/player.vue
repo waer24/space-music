@@ -1,7 +1,12 @@
 <template>
   <div class="player-wrap" v-show="playlist.length>0" >
-    <transition name="normal">
-    <div class="normal-player" v-show="fullScreen">
+    <transition name="normal" 
+    @enter="enter"
+    @after-enter="afterEnter"
+    @leave="leave"
+    @after-leave="afterLeave"
+    >
+    <div class="normal-player" v-show="fullScreen" >
       <div class="bg">
         <img  alt="" width="100%" height="100%" :src="currentSong.image">
       </div>
@@ -82,6 +87,7 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
+import animation from 'create-keyframe-animation'
 
   export default {
     computed: {
@@ -97,14 +103,46 @@ import { mapGetters, mapMutations } from 'vuex'
     methods: {
       back() {
         this.setFullScreen(false); // 沿用mutation的flag状态
+        console.log("back " + this.fullScreen ) // undefined
        
       },
       open(){
         this.setFullScreen(true);
+        console.log("open " + this.fullScreen) 
       },
-      ...mapMutations({ // 关闭全屏需要改变mutation的状态
-        setFullScreen: 'SET_FULL_SCREEN',
-      })
+
+      enter(el, done) {
+        const {x, y , scale} = this._getPosAndScale()
+
+      },
+      afterEnter(el) {
+
+      },
+      leave(el, done) {
+
+      },
+      afterLeave(el) {
+
+      },
+      _getPosAndScale() {
+        const targetWidth = 40
+        const paddingWidth = 30
+        const paddingTop = 80
+       // const paddingBottom = 
+        const width = window.innerWidth * 0.8
+        const scale = targetWidth / width
+        const x = -(width - paddingWidth ) / 2
+        const y = window.innerHeight - paddingTop - width / 2
+        console.log(x)
+        return {
+          x,
+          y,
+          scale
+        }
+      },
+            ...mapMutations({ // 关闭全屏需要改变mutation的状态
+        setFullScreen: 'SET_FULL_SCREEN'
+      }),
     },
     compoennts: {}
   }

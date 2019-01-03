@@ -1,6 +1,6 @@
 <template>
   <div class="music-list-wrap">
-    <div class="back" @click="back()">
+    <div class="back" @click="back">
       <i class="icon icon-back"></i>
     </div>
     <h1 class="title"> {{isTitle}}</h1>
@@ -86,7 +86,9 @@
   
     methods: {
       back() {
+        
         return this.$router.back()
+
       },
   
       scroll(pos) {
@@ -97,6 +99,7 @@
          list: this.isSongs, // list 来源于actions.js中SET_PLAYLIST的list
          index,
        })
+     //  console.log(this.isSongs) 
       },
       ...mapActions([
         'selectItemPlay',
@@ -178,6 +181,7 @@
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+          padding: 0.8rem 0;
     }
     .bg-img {
       position: relative;

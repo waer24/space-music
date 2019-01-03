@@ -38,6 +38,7 @@ export default {
   
   created() {
     this._getSingerDetail()
+    // console.log(this.singer)
   },
 
   methods: {
@@ -49,7 +50,7 @@ export default {
       getSingerDetail(this.singer.id).then((res) => {
         if ( res.code === ERR_OK ) {
       this.isSongs =  this._normalizeSong(res.data.list)
-           //console.log( this.isSongs) // 取到了数组
+           console.log(this.isSongs) // 取到了数组
         }
         
       })
@@ -59,12 +60,12 @@ export default {
       let ret = []
       Array.from(list).forEach((item) => {
         let { musicData } = item
-         if (musicData.songid && musicData.songmid ) {
+         if (musicData.songid && musicData.albummid ) {
            ret.push(createSongs(musicData))
            
          }
       })
-     // console.log(ret)
+      // console.log(ret)
       return ret
     }
   },

@@ -17,7 +17,7 @@ export const mode = state => state.mode
 export const currentIndex = state => state.currentIndex
 
 export const currentSong = (state) => { // 当前播放歌曲
-  // return state.playlist[currentIndex] // WRONG!
   return state.playlist[state.currentIndex] || {}
 }
+
 

@@ -74,7 +74,7 @@ const router = new Router({
     },
     {
       path: '/singer',
-      name: 'singer',
+     // name: 'singer',
       component: singer,
       children: [
         {

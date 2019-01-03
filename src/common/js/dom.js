@@ -35,7 +35,6 @@ export function getData(el, name, val) { // 添加属性的，有属性就获取
     }
     for ( let key in transformNames) {
       if ( elementStyle[transformNames[key]] !== undefined ) {
-        console.log(key)
          return key // 不返回值就是没触发
       }
     }
