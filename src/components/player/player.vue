@@ -8,13 +8,13 @@
     >
     <div class="normal-player" v-show="fullScreen" >
       <div class="bg">
-        <img  alt="" width="100%" height="100%" :src="currentSong.image">
+        <img  alt="" width="100%" height="100%" :src="currentSong.image" >
       </div>
       <div class="top">
         <div class="back" @click="back">
           <i class="icon-back"></i>
         </div>
-        <h1 class="title" >{{currentSong.name}}</h1>
+        <h1 class="title" @click="_getPosAndScale">{{currentSong.name}}</h1>
         <h2 class="singer"> {{currentSong.singer}}</h2>
       </div>
       <div class="middle">
@@ -90,12 +90,14 @@ import { mapGetters, mapMutations } from 'vuex'
 import animation from 'create-keyframe-animation'
 
   export default {
+
     computed: {
       ...mapGetters([
         'fullScreen',
         'playlist',
         'currentSong'
       ]),
+      
       
     },
 
@@ -110,39 +112,34 @@ import animation from 'create-keyframe-animation'
         this.setFullScreen(true);
         console.log("open " + this.fullScreen) 
       },
-
+      ...mapMutations({ // 关闭全屏需要改变mutation的状态
+        setFullScreen: 'SET_FULL_SCREEN',
+      }),
       enter(el, done) {
-        const {x, y , scale} = this._getPosAndScale()
 
       },
       afterEnter(el) {
 
       },
-      leave(el, done) {
+      leave(el) {
 
       },
-      afterLeave(el) {
+      afterLeave(el, done) {
 
       },
+  
+
       _getPosAndScale() {
         const targetWidth = 40
-        const paddingWidth = 30
+        const paddingWidth = 10
         const paddingTop = 80
-       // const paddingBottom = 
         const width = window.innerWidth * 0.8
+        const Height = window.innerHeight - paddingTop
         const scale = targetWidth / width
-        const x = -(width - paddingWidth ) / 2
-        const y = window.innerHeight - paddingTop - width / 2
-        console.log(x)
-        return {
-          x,
-          y,
-          scale
-        }
-      },
-            ...mapMutations({ // 关闭全屏需要改变mutation的状态
-        setFullScreen: 'SET_FULL_SCREEN'
-      }),
+        const x = width / 2
+        const y = Height / 2 
+       // console.log(scale)
+      }
     },
     compoennts: {}
   }

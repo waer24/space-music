@@ -159,16 +159,17 @@
     right: 0;
     background-color: $color-background;
     .back {
-      padding: 1rem;
+      padding: 1rem 0;
       position: absolute;
       top: 0;
       left: 0.6rem;
-      z-index: 1000;
+      z-index: 100;
       .icon-back {
         padding: 1rem;
       }
     }
     .title {
+<<<<<<< HEAD
       text-align: center;
       color: #fff;
       @include fs(1.6rem);
@@ -182,6 +183,21 @@
       white-space: nowrap;
       text-overflow: ellipsis;
           padding: 0.8rem 0;
+=======
+          text-align: center;
+    color: #fff;
+    font-size: 1.6rem;
+    font-weight: 400;
+    position: absolute;
+    right: 0;
+    left: 15%;
+    z-index: 40;
+    width: 79%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding-top: 1rem;
+>>>>>>> de3b80603e4471500ab64382a2b3d19d5c8befd9
     }
     .bg-img {
       position: relative;
