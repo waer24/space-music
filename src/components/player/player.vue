@@ -14,12 +14,12 @@
         <div class="back" @click="back">
           <i class="icon-back"></i>
         </div>
-        <h1 class="title" @click="_getPosAndScale">{{currentSong.name}}</h1>
+        <h1 class="title" >{{currentSong.name}}</h1>
         <h2 class="singer"> {{currentSong.singer}}</h2>
       </div>
       <div class="middle">
        <div class="middle-lf">
-          <div class="cd-wrap">
+          <div class="cd-wrap" ref="cdWrapper">
           <img class="disc"  alt="" :src="currentSong.image">
         </div>
         <div class="lyrics-wrap">
@@ -87,7 +87,10 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import animation from 'create-keyframe-animation'
+import animations from 'create-keyframe-animation'
+import { prefixStyle } from '@/common/js/dom'
+
+const transform = prefixStyle('transform')
 
   export default {
 
@@ -105,40 +108,75 @@ import animation from 'create-keyframe-animation'
     methods: {
       back() {
         this.setFullScreen(false); // 沿用mutation的flag状态
-        console.log("back " + this.fullScreen ) // undefined
-       
+        // console.log("back " + this.fullScreen ) // undefined
       },
       open(){
         this.setFullScreen(true);
-        console.log("open " + this.fullScreen) 
       },
       ...mapMutations({ // 关闭全屏需要改变mutation的状态
         setFullScreen: 'SET_FULL_SCREEN',
       }),
       enter(el, done) {
+        const { x, y, scale } = this._getPosAndScale()
+        // console.log('x ' +x)
+        // console.log('y ' +y)
+
+        let animation = {
+          0: {
+            transform: `translate3d(${x}px, ${y}px, 0) scale(${scale})`
+          },
+          60: {
+             transform: `translate3d(0, 0, 0) scale(1.1)`
+          },
+          100: {
+            transform: `translate3d(0, 0, 0) scale(1)`
+          }
+        }
+        animations.registerAnimation({
+          name: 'move',
+          animation,
+          preserts: {
+            duration: 8000,
+            easing: 'linear',
+          }
+        })
+       // animations.runAnimation(el, 'move', done之后的 )
+        animations.runAnimation(this.$refs.cdWrapper, 'move', done)
 
       },
       afterEnter(el) {
-
+        animations.unregisterAnimation('move')
+        this.$refs.cdWrapper.style.animation = ''
       },
       leave(el) {
+        this.$refs.cdWrapper.style.translation = 'all 0.4s' 
+        const {x, y, scale} = this._getPosAndScale()
+        this.$refs.cdWrapper.style[transform] = `translate3d(${x}px, ${y}px, 0) scale(${scale})`
 
       },
       afterLeave(el, done) {
-
+        this.$refs.cdWrapper.style.transition = ''
+        this.$refs.cdWrapper.style[transform] = ''
       },
   
 
       _getPosAndScale() {
         const targetWidth = 40
+        const paddingLeft = 40
         const paddingWidth = 10
         const paddingTop = 80
+        const paddingBottom = 30
         const width = window.innerWidth * 0.8
         const Height = window.innerHeight - paddingTop
         const scale = targetWidth / width
-        const x = width / 2
-        const y = Height / 2 
-       // console.log(scale)
+        const x = -(width / 2 - paddingLeft) // 大的播放器变为小的播放器，前左移动，是负值
+        const y = Height - width / 2 - paddingBottom
+          return {
+            x, 
+            y,
+            scale
+          }
+       
       }
     },
     compoennts: {}
