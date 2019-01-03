@@ -1,15 +1,20 @@
 <template>
   <div class="player-wrap" v-show="playlist.length>0" >
-    <transition name="normal">
+    <transition name="normal" 
+    @enter="enter"
+    @after-enter="afterEnter"
+    @leave="leave"
+    @after-leave="afterLeave"
+    >
     <div class="normal-player" v-show="fullScreen">
       <div class="bg">
-        <img  alt="" width="100%" height="100%" :src="currentSong.image">
+        <img  alt="" width="100%" height="100%" :src="currentSong.image" >
       </div>
       <div class="top">
         <div class="back" @click="back">
           <i class="icon-back"></i>
         </div>
-        <h1 class="title" >{{currentSong.name}}</h1>
+        <h1 class="title" @click="_getPosAndScale">{{currentSong.name}}</h1>
         <h2 class="singer"> {{currentSong.singer}}</h2>
       </div>
       <div class="middle">
@@ -82,14 +87,17 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
+import animation from 'create-keyframe-animation'
 
   export default {
+
     computed: {
       ...mapGetters([
         'fullScreen',
         'playlist',
         'currentSong'
       ]),
+      
       
     },
 
@@ -104,7 +112,32 @@ import { mapGetters, mapMutations } from 'vuex'
       },
       ...mapMutations({ // 关闭全屏需要改变mutation的状态
         setFullScreen: 'SET_FULL_SCREEN',
-      })
+      }),
+      enter(el, done) {
+
+      },
+      afterEnter(el) {
+
+      },
+      leave(el) {
+
+      },
+      afterLeave(el, done) {
+
+      },
+  
+
+      _getPosAndScale() {
+        const targetWidth = 40
+        const paddingWidth = 10
+        const paddingTop = 80
+        const width = window.innerWidth * 0.8
+        const Height = window.innerHeight - paddingTop
+        const scale = targetWidth / width
+        const x = width / 2
+        const y = Height / 2 
+       // console.log(scale)
+      }
     },
     compoennts: {}
   }

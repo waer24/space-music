@@ -1,9 +1,9 @@
 <template>
   <div class="song-list-wrapper">
     <ul>
-      <li class="item" @click="selectItem" v-for="(song,index) in isSongs" :key="index">
-        <h2 class="text">{{song.id.name}}</h2>
-        <p class="subtext">{{song.id.singer}}</p>
+      <li class="item" @click="selectItem(song, index)" v-for="(song,index) in isSongs" :key="index">
+        <h2 class="text">{{song.name}}</h2>
+        <p class="subtext">{{song.singer}}</p>
       </li>
     </ul>
   </div>
