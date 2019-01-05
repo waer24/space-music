@@ -5,7 +5,7 @@
     <keep-alive>
       <router-view></router-view>
     </keep-alive>
-   <!--  <player></player> -->
+    <player></player>
     <a target="_blank" @click="jumpMonitor" style="cursor: pointer;color:#fff">201711078226927</a>
     <!-- 不属于路由，是应用相关的页面，在任何路由下都可以播放 -->
   </div>

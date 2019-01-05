@@ -50,7 +50,7 @@ export default {
       getSingerDetail(this.singer.id).then((res) => {
         if ( res.code === ERR_OK ) {
       this.isSongs =  this._normalizeSong(res.data.list)
-          // console.log( this.isSongs) // 取到了数组
+           console.log( this.isSongs) // 取到了数组
         }
         
       })
