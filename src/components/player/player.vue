@@ -15,7 +15,9 @@
         <div class="middle">
           <div class="middle-lf">
             <div class="cd-wrap" ref="cdWrapper">
-              <img class="disc" alt="" :src="currentSong.image">
+              <div class="cd rotate" :class="cdCls">
+                <img class="disc" alt="" :src="currentSong.image">
+              </div>
             </div>
             <div class="lyrics-wrap">
               <p class="lyrics"></p>
@@ -43,13 +45,13 @@
             <div class="icon">
               <i class="icon-sequence"></i>
             </div>
-            <div class="icon">
+            <div @click="prev" class="icon">
               <i class="icon-prev"></i>
             </div>
             <div @click="togglePlay" class="icon">
               <i :class="playIcon"></i>
             </div>
-            <div class="icon">
+            <div @click="next" class="icon">
               <i class="icon-next"></i>
             </div>
             <div class="icon">
@@ -69,15 +71,15 @@
           <p class="desc">{{currentSong.singer}} </p>
         </div>
         <div class="circle">
-          <div  class="process-circle"></div>
+          <div class="process-circle"></div>
           <i class="mini" @click.stop="togglePlay" :class="playIconMini"></i>
         </div>
         <div class="circle-rt">
           <i class="icon-playlist mini"></i>
         </div>
-      </div> 
+      </div>
     </transition>
-    <audio ref="audio" :src="currentSong.url"></audio>
+    <audio ref="audio" :src="currentSong.url" @canplay="ready"></audio>
   </div>
 </template>
 
@@ -94,25 +96,36 @@
   const transform = prefixStyle('transform')
   
   export default {
-  
+    data() {
+      return {
+        songReady: false
+      }
+    },
     computed: {
       ...mapGetters([
         'fullScreen',
         'playlist',
         'currentSong',
-        'playing'
+        'playing',
+        'currentIndex'
       ]),
       playIcon() {
-       return this.playing ? 'icon-play' : 'icon-pause'
+        return this.playing ? 'icon-play' : 'icon-pause'
       },
       playIconMini() {
-       return this.playing ? 'icon-play-mini' : 'icon-pause-mini'
-      }
+        return this.playing ? 'icon-play-mini' : 'icon-pause-mini'
+      },
+      cdCls() {
+        // 'play pause'是为了防止暂停后，旋转的角度归零，不是从当前停止的旋转角度开始
+        return this.playing ? 'play' : 'play pause'
+      },
+  
   
     },
   
   
     methods: {
+  
       back() {
         this.setFullScreen(false); // 沿用mutation的flag状态
         // console.log("back " + this.fullScreen ) // undefined
@@ -120,10 +133,11 @@
       open() {
         this.setFullScreen(true);
       },
-      
+  
       ...mapMutations({ // 关闭全屏需要改变mutation的状态
         setFullScreen: 'SET_FULL_SCREEN',
-        setPlayingState: 'SET_PLAYING_STATE'
+        setPlayingState: 'SET_PLAYING_STATE',
+        setCurrentIndex: 'SET_CURRENT_INDEX'
       }),
       enter(el, done) {
         const {
@@ -167,7 +181,7 @@
           x,
           y,
           scale
-        } = this._getPosAndScale() 
+        } = this._getPosAndScale()
         this.$refs.cdWrapper.style[transform] = `translate3d(${x}px, ${y}px, 0) scale(${scale})`
   
       },
@@ -177,7 +191,46 @@
       },
       // 控制音乐播放
       togglePlay() {
+        if (!this.songReady) {
+          return // 只是返回就好，不做其他，直到可以播放为止
+        }
         this.setPlayingState(!this.playing)
+        this.songReady = false
+      },
+      // 上一曲
+      prev() {
+        if (!this.songReady) {
+          return
+        }
+        let index = this.currentIndex - 1
+        if (index === 0) {
+          index = this.playlist.length
+        }
+        this.setCurrentIndex(index)
+        if (!this.playing) {
+          this.togglePlay()
+        }
+        this.songReady = false
+  
+      },
+      // 下一曲
+      next() {
+        if (!this.songReady) {
+          return // 只是返回就好，不做其他，直到可以播放为止
+        }
+        let index = this.currentIndex + 1
+        if (index === this.playlist.length) {
+          index = 0
+        }
+        this.setCurrentIndex(index)
+        if (!this.playing) {
+          this.togglePlay()
+        }
+        this.songReady = false
+      },
+
+      ready() {
+       return  this.songReady = true
       },
   
   
@@ -203,15 +256,17 @@
     watch: {
       currentSong() {
         this.$nextTick(() => {
-            this.$refs.audio.play()
+  
+          this.$refs.audio.play()
         })
       },
       playing() {
         const audio = this.$refs.audio
         this.$nextTick(() => { // 等dom 加载完毕
           this.playing ? audio.play() : audio.pause()
+  
         })
-        
+  
       },
     },
     compoennts: {}
@@ -287,26 +342,43 @@
             position: absolute;
             left: 10%;
             top: 0;
-            box-sizing: border-box;
             width: 80%;
             height: 100%;
-            text-align: center;
-            margin: 0 auto;
-            overflow: hidden;
-            // dd
-            .disc {
+            .cd {
               position: absolute;
               left: 0;
               top: 0;
+              overflow: hidden;
               width: 100%;
               height: 100%;
               box-sizing: border-box;
               border: 1rem solid $color-disc-border;
               border-radius: 50%;
+              &.play {
+                animation: rotate 20s linear infinite;
+              }
+              &.pause {
+                animation-play-state: paused;
+              }
+              .disc {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                box-sizing: border-box;
+              }
             }
-          }
-          &.rotate {
-
+            &.rotate {
+              @keyframes rotate {
+                from {
+                  -webkit-transform: rotate(0deg)
+                }
+                to {
+                  -webkit-transform: rotate(360deg)
+                }
+              }
+            }
           }
           .lyrics-wrap {
             width: 80%;

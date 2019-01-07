@@ -23,7 +23,7 @@
       album: musicData.albumname,
       duration: musicData.interval,
       image: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${musicData.albummid}.jpg?max_age=2592000`, // 专辑封面图，用于播放列表
-      url:  `http://dl.stream.qqmusic.qq.com/http://dl.stream.qqmusic.qq.com/C400004Z8Ihr0JIu5s.m4a?guid=4433254815&vkey=CA162E06FA6BE6041FBCAA23E4125C35EB916E23DF98E92C98C21D959B0D6277DE1648F93B0D0F57A5407532EA9E929EC9C1C029FFC7ACD3&uin=0&fromtag=38`, // musicData.url
+      url:  `http://dl.stream.qqmusic.qq.com/http://dl.stream.qqmusic.qq.com/C400004Z8Ihr0JIu5s.m4a?guid=7637035946&vkey=87EB0709AA03BD0BF69FC3C98F5B9B9EE637EF5DB2B1B78D75F85B3DACB5D6B44E642B2AD8C673A55F8EC3B13448C789B3FCE52786155DBE&uin=0&fromtag=38`, // musicData.url
       // `http://ws.stream.qqmusic.qq.com/${musicData.songid}.m4a?fromtag=46` // 播放
     })
 }  
