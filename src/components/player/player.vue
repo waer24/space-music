@@ -31,27 +31,23 @@
           </div>
           <div class="process-stripe">
             <span class="time lt"></span>
-            <div class="process-bar-wrap">
-              <div class="bar-inner">
-                <!--class="bar-passed" -->
-                <div>
-                  <div class="play-dot"></div>
-                </div>
-              </div>
-            </div>
+            <progress-bar></progress-bar>
             <span class="time rt"></span>
           </div>
           <div class="operators">
-            <div class="icon">
+            <div class="icon" >
               <i class="icon-sequence"></i>
             </div>
-            <div @click="prev" class="icon">
+            <!-- 暂时不加:class="disableCls" 的样式-->
+            <div @click="prev" class="icon" >
               <i class="icon-prev"></i>
             </div>
-            <div @click="togglePlay" class="icon">
+            <!-- :class="disableCls" -->
+            <div @click="togglePlay" class="icon" >
               <i :class="playIcon"></i>
             </div>
-            <div @click="next" class="icon">
+            <!-- :class="disableCls" -->
+            <div @click="next" class="icon" >
               <i class="icon-next"></i>
             </div>
             <div class="icon">
@@ -79,19 +75,16 @@
         </div>
       </div>
     </transition>
-    <audio ref="audio" :src="currentSong.url" @canplay="ready"></audio>
+    <audio ref="audio" :src="currentSong.url" @canplay="ready" 
+    @error="error"></audio>
   </div>
 </template>
 
 <script>
-  import {
-    mapGetters,
-    mapMutations
-  } from 'vuex'
+  import {mapGetters, mapMutations} from 'vuex'
   import animations from 'create-keyframe-animation'
-  import {
-    prefixStyle
-  } from '@/common/js/dom'
+  import {prefixStyle} from '@/common/js/dom'
+  import progressBar from '@/base/progress-bar/progress-bar'
   
   const transform = prefixStyle('transform')
   
@@ -119,7 +112,9 @@
         // 'play pause'是为了防止暂停后，旋转的角度归零，不是从当前停止的旋转角度开始
         return this.playing ? 'play' : 'play pause'
       },
-  
+      disableCls() {
+        return this.songReady ? '' : 'disable'
+      }
   
     },
   
@@ -191,20 +186,20 @@
       },
       // 控制音乐播放
       togglePlay() {
-        if (!this.songReady) {
-          return // 只是返回就好，不做其他，直到可以播放为止
-        }
+        /* if (!this.songReady) {
+          return // 只是返回就好，不做其他，直到可以播放为止 因为视频源播放的限制，暂时只能关闭这个功能
+        } */
         this.setPlayingState(!this.playing)
         this.songReady = false
       },
       // 上一曲
       prev() {
-        if (!this.songReady) {
+       /*  if (!this.songReady) {
           return
-        }
+        } */
         let index = this.currentIndex - 1
         if (index === 0) {
-          index = this.playlist.length
+          index = this.playlist.length - 1
         }
         this.setCurrentIndex(index)
         if (!this.playing) {
@@ -215,11 +210,11 @@
       },
       // 下一曲
       next() {
-        if (!this.songReady) {
-          return // 只是返回就好，不做其他，直到可以播放为止
-        }
+        /* if (!this.songReady) {
+          return // 只是返回就好，不做其他，直到可以播放为止  因为视频源播放的限制，暂时只能关闭这个功能
+        } */
         let index = this.currentIndex + 1
-        if (index === this.playlist.length) {
+        if (index === this.playlist.length - 1) {
           index = 0
         }
         this.setCurrentIndex(index)
@@ -232,8 +227,12 @@
       ready() {
        return  this.songReady = true
       },
-  
-  
+
+      // 当播放资源出错
+      error() {
+        this.songReady = true // 保证在错误的情况下点击下一首，也能快速播放
+      },
+
       _getPosAndScale() {
         const targetWidth = 40
         const paddingLeft = 40
@@ -256,20 +255,21 @@
     watch: {
       currentSong() {
         this.$nextTick(() => {
-  
           this.$refs.audio.play()
+          
         })
       },
       playing() {
         const audio = this.$refs.audio
         this.$nextTick(() => { // 等dom 加载完毕
           this.playing ? audio.play() : audio.pause()
-  
         })
   
       },
     },
-    compoennts: {}
+    components: {
+      progressBar,
+    }
   }
 </script>
 
@@ -430,31 +430,7 @@
           .rt {
             text-align: right;
           }
-          .process-bar-wrap {
-            flex: 1;
-            height: 3rem;
-            .bar-inner {
-              height: 0.4rem;
-              top: 0.5rem;
-              background-color: $color-background-d;
-              position: relative;
-              .bar-passed {
-                height: 100%;
-                background-color: $color-theme;
-              }
-              .play-dot {
-                position: absolute;
-                top: -0.4rem;
-                left: 0;
-                width: 1.6rem;
-                height: 1.6rem;
-                border-radius: 50%;
-                box-sizing: border-box;
-                border: 0.2rem solid $color-text;
-                background-color: $color-theme;
-              }
-            }
-          }
+          
         }
         .operators {
           display: flex;
@@ -463,6 +439,10 @@
           .icon {
             margin: 0 1.8rem;
             font-size: 3rem;
+            &.disable {
+              color: $color-theme-d
+            }
+              
           }
         }
       }
