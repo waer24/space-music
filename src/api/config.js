@@ -5,12 +5,17 @@ export const commonParams = {
   outCharset: 'utf-8',
   notice: 0,
   format: 'jsonp',
-  jsonp: "callback",
+   jsonp: "callback",
 }
 
 export const options = {
   // 定义前后端统一参数
-  param: 'jsonpCallback'
+  param:  'jsonpCallback'
+}
+
+export const optionFree = {
+  // 定义前后端统一参数
+  param:  ''
 }
 
 export const ERR_OK = 0
