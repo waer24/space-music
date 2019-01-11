@@ -12,8 +12,5 @@ export const options = {
   // 定义前后端统一参数
   param: 'jsonpCallback'
 }
-// old api: 定义成功的代码状态返回0, 首页滚动轮播还保留这个状态
- export const ERR_OK = 0
 
-// 新api规定 返回成功的状态是200
-export const STATUS_OK = 200
+export const ERR_OK = 0

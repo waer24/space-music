@@ -32,8 +32,6 @@ const HOT_NAME = '热门'
           path: `/singer/${singer.id}`
         })
         this.setSinger(singer) // store.commit()提交singer数据给vuex
-        // console.log(this.setSinger(singer))
-       
       },
 
       // 获取歌手的显示数据
@@ -46,7 +44,6 @@ const HOT_NAME = '热门'
            }
         })
       },
-
      //   let title = list[0].Fsinger_name 直接赋值去取list数组中Fsinger_name的值 取不到，数组有很多个，需要用到循环才行, forEach,
      // 将热门的放在一个数组，按首字母分类，一个字母一个数组，装好在map中
       _normalizeSinger(list){

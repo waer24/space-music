@@ -18,40 +18,51 @@
     createSongs,
   } from '@/common/js/song'
   import {
-    ERR_OK
+    ERR_OK, STATUS_OK
   } from '@/api/config'
   
   export default {
   
     computed: {
       title() {
-  
-        return this.disc.dissname
+        return this.disc.name
       },
       bgImg() {
-        console.log(this.disc)
-        return this.disc.imgurl
+        return this.disc.pic
       },
-      ...mapGetters(['disc'])
+      ...mapGetters(['disc']) // 获取磁盘的数据
     },
     data() {
       return {
         songs: []
       }
     },
+    created() {
+      this._getSongList()
+    },
     methods: {
+      _getSongList() {
+        if (!this.disc.id) {
+          this.$router.push('/recommend')
+          return
+        }
+        getSongList(this.disc.id).then((res) => {
+          if( res.code === STATUS_OK) {
+             let songs = res.data.songs
+            this.songs = songs
+          }
+        })
+      },  
+     /*  old api:
       _getSongList() {
         if (!this.disc.dissid) {
           this.$router.push('/recommend')
           return
         }
         getSongList(this.disc.dissid).then((res) => {
-  
-          // if (res.code === ERR_OK) {
-  
-  
+          if (res.code === ERR_OK) {
           processSongsUrl(this._normalizeSongs(res)).then((songs) => {
-            //  console.log(res.cdlist[0])
+            console.log(res.cdlist[0])
             this.songs = songs
           })
         })
@@ -64,7 +75,7 @@
           }
         })
         return ret
-      },
+      }, */
   
       // 渲染歌单曲目
       _getSongList2() {

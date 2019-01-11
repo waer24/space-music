@@ -49,8 +49,8 @@ export default {
         }
       getSingerDetail(this.singer.id).then((res) => {
         if ( res.code === ERR_OK ) {
-      this.isSongs =  this._normalizeSong(res.data.list)
-           console.log( this.isSongs) // 取到了数组
+      this.isSongs =  this._normalizeSong(res.data.list) // 此时的res.data.list还是没处理的原始数据
+         //  console.log( this.isSongs) // 取到了数组
         }
         
       })

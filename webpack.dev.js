@@ -61,11 +61,9 @@ module.exports = merge(common, {
     使用axios实现ajax请求：axios是一个基于promise的HTTP库，可以用于浏览器和node.js
     在浏览器创建XMLHttpRequest对象，从node.js创建http请求 */
     before(app) {
-      app.get('/api/getDiscList', (req, res) => {
+   /* old api:   app.get('/api/getDiscList', (req, res) => {
         let url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
-        /* 这里的路径是给前端发送请求的url
-
-         axios发送get请求，可以自己配置config*/
+       // 这里的路径是给前端发送请求的url,axios发送get请求，可以自己配置config
         axios.get(url, {
             headers: {
               // 伪造referer，直接打开上面的url会失效 
@@ -80,7 +78,7 @@ module.exports = merge(common, {
         }).catch((error) => {
           console.log(error)
         })
-      })
+      }) */
 
       //在node层做转发层 获取歌单的所有曲目，用axios获取
       app.get('/api/getSongList', (req, res) => {

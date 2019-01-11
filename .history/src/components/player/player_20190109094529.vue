@@ -38,13 +38,16 @@
             <div class="icon" >
               <i class="icon-sequence"></i>
             </div>
-            <div @click="prev" class="icon" :class="disableCls">
+            <!-- 暂时不加:class="disableCls" 的样式-->
+            <div @click="prev" class="icon" >
               <i class="icon-prev"></i>
             </div>
-            <div @click="togglePlay" class="icon" :class="disableCls">
+            <!-- :class="disableCls" -->
+            <div @click="togglePlay" class="icon" >
               <i :class="playIcon"></i>
             </div>
-            <div @click="next" class="icon" :class="disableCls">
+            <!-- :class="disableCls" -->
+            <div @click="next" class="icon" >
               <i class="icon-next"></i>
             </div>
             <div class="icon">
@@ -221,7 +224,7 @@
       },
 
       ready() {
-       return this.songReady = true
+       return  this.songReady = true
       },
 
       // 当播放资源出错

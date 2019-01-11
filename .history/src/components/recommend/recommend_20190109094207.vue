@@ -22,10 +22,10 @@
           <h1 class="list-title">热门歌单推荐</h1>
           <ul class="list-wrap">
             <li v-for="(item,index) in discList" :key="index" @click="selectItem(item)" class="list-item">
-              <div class="list-img"><img v-lazy="item.pic" width="60" height="60" alt=""></div>
+              <div class="list-img"><img v-lazy="item.imgurl" width="60" height="60" alt=""></div>
               <div class="list-txt">
-                <h2 class="list-tlt"> {{ item.creator }}</h2>
-                <p class="list-subtlt">{{ item.name }}</p>
+                <h2 class="list-tlt"> {{ item.creator.name }}</h2>
+                <p class="list-subtlt">{{ item.dissname }}</p>
               </div>
             </li>
           </ul>
@@ -49,7 +49,7 @@
     getSongList
   } from '@/api/recommend.js'
   import {
-     ERR_OK, STATUS_OK
+    ERR_OK
   } from '@/api/config'
   import scroll from '@/base/scroll/scroll'
   import slider from '@/base/slider/slider'
@@ -76,29 +76,28 @@
       // 渲染推荐的swiper
       _getWallSwiper() {
         getWallSwiper().then((res) => {
-           if (res.code === ERR_OK) {
+          // if (res.code === ERR_OK) {
           // console.log(res.data)
           this.recommends = res.data.slider
-          }
+          // }
         })
       },
   
       // 渲染歌单
       _getDiscList() {
         getDiscList().then((res) => {
-          if (res.code === STATUS_OK ){
-             //  console.log(res.data)
-            this.discList = res.data // 真正的数据源，用一个变量代进去
+          if (res.code === ERR_OK){
+              // console.log(res.data.list)
+            this.discList = res.data.list // 真正的数据源，用一个变量代进去
           }
         })
       },
 
      selectItem(item) {
        this.$router.push({
-        path: `recommend/${item.id}`, // 进入到点击的那个具体歌单里面
+        path: `recommend/${item.dissid}`,
        })
-       // console.log(item.id)
-       this.setDisc(item) // 触发每个歌单item的歌单详情页面,
+       this.setDisc(item) // 触发每个歌单item的歌单详情页面
      },
 
      loadImg(){
@@ -106,8 +105,8 @@
      },
 
      ...mapMutations({
-       setDisc: 'SET_DISC' // 将事件提交到vuex中，使得后面的组件能拿到这个磁盘中的数据
-     }) 
+       setDisc: 'SET_DISC'
+     })
     },
   
     components: {
@@ -175,7 +174,7 @@
               }
               .list-subtlt {
                 color: $color-text-d;
-                @include fs(1.4rem);
+                font-size: $font-size-small;
               }
             }
           }

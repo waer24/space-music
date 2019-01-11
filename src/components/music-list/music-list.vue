@@ -92,7 +92,7 @@
       scroll(pos) {
         this.scrollY = pos.y
       },
-      select(item, index) { // 点击播放到歌曲页面
+      select(item, index) { // 点击歌曲跳转到player页面，跳转是由vuex拉动的数据
        this.selectItemPlay({
          list: this.isSongs, // list 来源于actions.js中SET_PLAYLIST的list
          index,

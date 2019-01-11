@@ -3,7 +3,7 @@
     <ul>
       <li class="item" @click="selectItem(song, index)" v-for="(song,index) in isSongs" :key="index">
         <h2 class="text">{{song.name}}</h2>
-        <p class="subtext">{{song.singer}}</p>
+        <p class="subtext">{{song.singer}} </p>
       </li>
     </ul>
   </div>

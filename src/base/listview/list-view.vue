@@ -136,19 +136,6 @@
     },
   
     watch: { // 在每次监听的值有变化时，都会执行回调
-      /*  '_calculateHeight':{ 
-         handler: function() {
-         setTimeout(function() {
-           this._calculateHeight()
-         }, 20)
-         },
-         deep: true
-       }, */
-      /* data() {
-         setTimeout(() => {
-          this._calculateHeight()
-        }, 20) 
-      }, */
       data: { // 为什么要监听data？ data中包含了3个属性，都是在scroll中触发，需要不断监听，便于后续scrolly事件
         handler: function() {
           setTimeout(() => {
@@ -160,9 +147,6 @@
       },
   
       scrollY: function(newY) {
-        /* setTimeout(() => {
-          this._calculateHeight()
-        }, 20) */
         const listHeight = this.listHeight
         // 从method的scrollY可知，scroll滚动的坐标，即newY 会有在item中间 ，>0, <0的三种情况，因此需要分别讨论
         // 在顶部的情况
@@ -218,7 +202,7 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background-color: darkred;
+    background-color: $color-background;
     .list-stripe {
       padding-bottom: 3rem;
       .text-item {
