@@ -67,8 +67,9 @@ module.exports = merge(common, {
         axios.get(url, {
             headers: {
               // 伪造referer，直接打开上面的url会失效 
-            referer: 'https://c.y.qq.com/',
-            host: 'c.y.qq.com',
+            'referer': 'https://c.y.qq.com/',
+            'host': 'c.y.qq.com',
+            'content-type': 'application/x-www-form-urlencoded'
           }, 
           //  params是即将与请求一起发送的url参数，无格式对象/URLSearchParams对象
           params: req.query
@@ -85,8 +86,9 @@ module.exports = merge(common, {
         let url ='https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
         axios.get(url, {
           headers: {
-            referer: 'https://c.y.qq.com/',
-            host: 'c.y.qq.com'
+            'referer': 'https://c.y.qq.com/',
+            'host': 'c.y.qq.com',
+            'content-type': 'application/x-www-form-urlencoded'
           },
           params: req.query
         }).then((response) => {
@@ -100,6 +102,29 @@ module.exports = merge(common, {
           res.json(response.data)
         }).catch((e) => {
           console.log(e)
+        })
+      })
+
+      app.get('/api/getSongsUrl', (req, res) => {
+        let url = 'https://api.bzqll.com/music/tencent/url'
+        /* 这里的路径是给前端发送请求的url
+
+         axios发送get请求，可以自己配置config*/
+        axios.get(url, {
+            headers: {
+              // 伪造referer，直接打开上面的url会失效 
+            'referer': 'https://c.y.qq.com/',
+            'host': 'c.y.qq.com',
+            'content-type': 'application/x-www-form-urlencoded'
+          }, 
+          //  params是即将与请求一起发送的url参数，无格式对象/URLSearchParams对象
+          params: req.query
+        }).then((response) => {
+          // console.log(response.data)
+          res.json(response.data)  //返回数据
+          
+        }).catch((error) => {
+          console.log(error)
         })
       })
     },

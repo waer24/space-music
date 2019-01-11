@@ -1,4 +1,24 @@
-export function getSongsUrl(songs) {
+import axios from 'axios'
+
+export function getSongsUrl(urlId) {
+  const url = `https://api.bzqll.com/music/tencent/url`
+  const data = Object.assign({}, {}, {
+    key: '579621905',
+    id: urlId,
+    br: 192
+  })
+  return axios.get(url, {
+    params: data
+  }).then((res) => {
+  //  console.log(res.data)
+    return Promise.resolve(res.data)
+   
+  }).catch((e) => {
+    // console.log(e)  
+  }) 
+}
+
+/* export function getSongsUrl(songs) {
   const url = debug ? '/api/getPurlUrl' : 'http://ustbhuangyi.com/music/api/getPurlUrl'
   let mids = []
   let types = []
@@ -55,3 +75,4 @@ export function getSongsUrl(songs) {
     request()
   })
 }
+ */

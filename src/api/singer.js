@@ -1,7 +1,7 @@
 import jsonp from '@/common/js/jsonp'
 import {
   commonParams,
-  options
+  options,
 } from './config'
 
 // 获取歌手数据

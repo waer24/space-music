@@ -1,5 +1,4 @@
-  import { getSongsUrl } from '@/api/song'
-  
+import { getSongsUrl } from '@/api/song'
   export default class Song {
   constructor({id, mid, name, singer, album,duration, image, url}) {
     this.id = id, // 实例化，绑定到当前vue的实例
@@ -30,6 +29,18 @@
     })
 }  
 
+
+/* 
+return axios.get(url,{
+  params: data
+}).then ((res) => {
+     成功返回一个Promise对象
+  return Promise.resolve(res.data)
+}).catch((e) => {
+  console.log
+}) 
+*/
+
 export function filterSinger(singer){
   let ret = []
   if ( !singer ) {
@@ -39,20 +50,4 @@ export function filterSinger(singer){
     ret.push(s.name)
   })
   return ret.join('/')
-}
-
-export function processSongsUrl(songs) {
-  if (!songs.length) {
-    return Promise.resolve(songs)
-  }
-  return getSongsUrl(songs).then((res) => {
-    if (res.code === ERR_OK) {
-      let midUrlInfo = res.url_mid.data.midurlinfo
-      midUrlInfo.forEach((info, index) => {
-        let song = songs[index]
-        song.url = `http://dl.stream.qqmusic.qq.com/${info.purl}`
-      })
-    }
-    return songs
-  })
 }
