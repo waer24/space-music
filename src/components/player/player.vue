@@ -20,7 +20,7 @@
               </div>
             </div>
             <div class="lyrics-wrap">
-              <p class="lyrics"></p>
+              <p class="lyrics">{{currentSong.lyric}}</p>
             </div>
           </div>
         </div>
@@ -30,11 +30,11 @@
             <span class="dot"></span>
           </div>
           <div class="process-stripe">
-            <span class="time lt"></span>
-            <progress-bar></progress-bar>
-            <span class="time rt">{{currentSong.duration}}</span>
+            <span class="time lt">{{formatTime(currentTime)}}</span>
+            <progress-bar :percent="percent"></progress-bar>
+            <span class="time rt">{{formatTime(currentSong.duration)}}</span>
           </div>
-          <div class="operators">
+          <div class="operators" ref="operators">
             <div class="icon" >
               <i class="icon-sequence"></i>
             </div>
@@ -72,7 +72,8 @@
         </div>
       </div>
     </transition>
-    <audio ref="audio" :src="currentSong.url" @canplay="ready" 
+    <audio ref="audio" :src="currentSong.url" @canplay="ready" @timeupdate="timeupdate"
+    @ended="end"
     @error="error"></audio>
   </div>
 </template>
@@ -82,14 +83,23 @@
   import animations from 'create-keyframe-animation'
   import {prefixStyle} from '@/common/js/dom'
   import progressBar from '@/base/progress-bar/progress-bar'
+  import lyric from 'lyric-parser'
+  // import { getLyric } from '@/api/song'
   
   const transform = prefixStyle('transform')
   
   export default {
     data() {
       return {
-        songReady: false
+        songReady: false, // 设置歌曲的准备状态的标示符号
+        currentTime: 0,
+        playingLyric: '',
       }
+    },
+    created() {
+      
+     // this.listerenPassive()
+     
     },
     computed: {
       ...mapGetters([
@@ -97,7 +107,8 @@
         'playlist',
         'currentSong',
         'playing',
-        'currentIndex'
+        'currentIndex',
+        'singer'
       ]),
       playIcon() {
         return this.playing ? 'icon-play' : 'icon-pause'
@@ -111,12 +122,18 @@
       },
       disableCls() {
         return this.songReady ? '' : 'disable'
+      },
+      percent() {
+        return this.currentTime / this.currentSong.duration
+      },
+      analysisLyric() {
+
       }
+      
     },
   
   
     methods: {
-  
       back() {
         this.setFullScreen(false); // 沿用mutation的flag状态
         // console.log("back " + this.fullScreen ) // undefined
@@ -182,17 +199,16 @@
       },
       // 控制音乐播放
       togglePlay() {
-        /* if (!this.songReady) {
-          return // 只是返回就好，不做其他，直到可以播放为止 因为视频源播放的限制，暂时只能关闭这个功能
-        } */
+         if (!this.songReady) {
+          return // 当audio资源没有准备好，就不让播放，等到audio资源ok，才准备播放 
+        }
         this.setPlayingState(!this.playing)
-        this.songReady = false
       },
       // 上一曲
       prev() {
-       /*  if (!this.songReady) {
-          return
-        } */
+        if (!this.songReady) {
+          return // 当audio资源没有准备好，就不让播放，等到audio资源ok，才准备播放 
+        }
         let index = this.currentIndex - 1
         if (index === 0) {
           index = this.playlist.length - 1
@@ -206,9 +222,9 @@
       },
       // 下一曲
       next() {
-        /* if (!this.songReady) {
-          return // 只是返回就好，不做其他，直到可以播放为止  因为视频源播放的限制，暂时只能关闭这个功能
-        } */
+        if (!this.songReady) {
+          return // 当audio资源没有准备好，就不让播放，等到audio资源ok，才准备播放 
+        } 
         let index = this.currentIndex + 1
         if (index === this.playlist.length - 1) {
           index = 0
@@ -228,6 +244,38 @@
       error() {
         this.songReady = true // 保证在错误的情况下点击下一首，也能快速播放
       },
+      end() {
+          this.next()
+      },
+
+      listerenPassive() { // 解决Unable to preventDefault inside passive event listener due to target being treated as passive.的问题
+        let preventSupport = false
+        try {
+          let options = Object.defineProperty({}, "passive", {
+            get: function () {
+              preventSupport = true
+            }
+          })
+          window.addEventListener(this.$refs.operators, null, options)
+        }catch(err){}
+      },
+
+      formatTime(time) {
+        time = time | 0
+        let m = time / 60 | 0
+        let s = this._pad(time % 60 )
+        return  `${m}:${s}`
+      },
+
+      timeupdate(e) { // target 事件属性可返回事件的目标节点（触发该事件的节点），如生成事件的元素、文档或窗口。
+        this.currentTime = e.target.currentTime
+      },
+
+      // 获取歌词
+      getLyric(){
+      
+      },
+
 
       _getPosAndScale() {
         const targetWidth = 40
@@ -245,7 +293,16 @@
           y,
           scale
         }
-      }
+      },
+      
+      _pad(num, n =2) {
+        let len = num.toString().length
+        while (len < 2) {
+          num = '0' + num
+          len ++
+        }
+        return num
+       }
     },
     watch: {
       currentSong() {
@@ -391,7 +448,7 @@
         bottom: 5rem;
         width: 100%;
         .disc-dot-wrap {
-          margin: 2rem auto;
+          margin: 0.5rem auto;
           height: 0.8rem;
           text-align: center;
           .dot {
@@ -413,9 +470,11 @@
           margin: 0 auto;
           padding: 0.4rem 0;
           display: flex;
+          line-height: 3rem;
           .time {
             @include fs(1.2rem);
             color: $color-text;
+            flex: 0 0 3rem;
           }
           .lf {
             text-align: left;

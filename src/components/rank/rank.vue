@@ -7,7 +7,9 @@
           <img :src="item.picUrl" alt="" width="100" height="100">
         </div>
         <ul class="list-song">
-          <li class="song" v-for="(song,index) in item.songList" :key="index">{{index}}&nbsp;{{song.singername}}-{{song.songname}}</li>
+          <li class="song" v-for="(song,index) in item.songList" :key="index"
+          @click="selectItem(item)"
+          >{{index}}&nbsp;{{song.singername}}-{{song.songname}}</li>
         </ul>
       </li>
     </ul>
@@ -37,7 +39,7 @@ import scroll from '@/base/scroll/scroll'
       }
     },
     created() {
-      //  this._getMusicList()
+      this._getMusicList()
       this._getTopList()
     },
   
@@ -56,15 +58,21 @@ import scroll from '@/base/scroll/scroll'
         topList().then((res) => {
           if (res.code === ERR_OK) {
             this.toplist = res.data.topList
-           // console.log(res.data.topList)
+           // console.log(this.toplist)
           }
+           Array.from(this.toplist).forEach((item) => {
+           console.log(item.id) // 取到了id
+          return item.id
         })
+        })
+       
       },
 
       selectItem(item) {
        this.$router.push({
-        path: `recommend/${item.id}`,
+        path: `rank/${item.id}`,
        })
+       
       //  this.setDisc(item) // 触发每个歌单item的歌单详情页面
      },
     },

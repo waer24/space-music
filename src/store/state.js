@@ -13,6 +13,7 @@ const state = {
    sequenceList: [],
    mode: playMode.sequence, // 默认顺序播放
    currentIndex: -1,
+   
 
 }
 export default state

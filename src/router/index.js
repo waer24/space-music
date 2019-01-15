@@ -51,6 +51,12 @@ const singerDetail = (resolve) => {
   })
 }
 
+const rankDetail = (resolve) => {
+  import ('@/components/rank-detail/rank-detail').then((module) => {
+    resolve(module)
+  })
+}
+
 
 const router = new Router({
   mode: 'hash',
@@ -85,8 +91,14 @@ const router = new Router({
     },
     {
       path: '/rank',
-      name: 'rank',
-      component: rank
+      // name: 'rank',
+      component: rank,
+      children: [
+        {
+          path: ':id',
+          component: rankDetail
+        }
+      ]
     },
     {
       path: '/search',
