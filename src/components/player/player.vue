@@ -31,7 +31,7 @@
           </div>
           <div class="process-stripe">
             <span class="time lt">{{formatTime(currentTime)}}</span>
-            <progress-bar :percent="percent"></progress-bar>
+            <progress-bar :percent="percent" @progressChange="progressBarChange"></progress-bar>
             <span class="time rt">{{formatTime(currentSong.duration)}}</span>
           </div>
           <div class="operators" ref="operators">
@@ -274,6 +274,10 @@
       // 获取歌词
       getLyric(){
       
+      },
+      progressBarChange(percent){
+        const currentTime = this.currentSong.duration * percent
+        this.$refs.audio.currentTime = currentTime
       },
 
 
