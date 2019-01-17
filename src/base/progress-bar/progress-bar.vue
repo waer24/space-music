@@ -32,7 +32,32 @@ const dotBtnWidth = 16
    },
 
     methods: {
-       _offset(offsetWidth) {
+      progressTouchStart(e) {
+        this.touch.initiated = true // touch开始时， 将对象设置为已经初始化的状态
+        this.touch.startX = e.touches[0].pageX // pageX是水平漂移
+        this.touch.left = this.$refs.progress.clientWidth
+      },
+      progressTouchMove(e) {
+        if(!this.touch.initiated) {
+          return
+        }
+        const delta = e.touches[0].pageX - this.touch.startX
+        // console.log(e.touches[0].pageX)
+        // console.log(this.touch.startX)
+        const offsetWidth = Math.min(this.$refs.processBar.clientWidth - dotBtnWidth, Math.max(0, this.touch.left + delta))
+        this._offset(offsetWidth)
+      },
+      progressTouchEnd() {
+        this.touch.initiated = false 
+        this._triggerPercent()
+      },
+      _triggerPercent() {
+       const barWidth = this.$refs.processBar.clientWidth - dotBtnWidth
+       const percent = this.$refs.progress.clientWidth / barWidth // progress是已播放的进度条
+       console.log(percent)
+       this.$emit('progressChange', percent)
+      },
+       _offset(offsetWidth) { // offsetWidth是偏移量，即歌词滚动过了的范围
          this.$refs.progress.style.width = `${offsetWidth}px` // style.width改变ui
         const dot = this.$refs.playDot
         let dotWidth = parseFloat(offsetWidth).toFixed(4)
@@ -76,7 +101,6 @@ const dotBtnWidth = 16
         this._offset(offsetWidth)
        // console.log(offsetWidth)
         }
-        
       }
     }
   }

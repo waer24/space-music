@@ -31,7 +31,11 @@
           </div>
           <div class="process-stripe">
             <span class="time lt">{{formatTime(currentTime)}}</span>
+<<<<<<< HEAD
             <progress-bar :percent="percent" @pregressChange="pregressPercentChange"></progress-bar>
+=======
+            <progress-bar :percent="percent" @progressChange="progressBarChange"></progress-bar>
+>>>>>>> 0254ce49722a956c05ab4128c79021d5701a2d76
             <span class="time rt">{{formatTime(currentSong.duration)}}</span>
           </div>
           <div class="operators" ref="operators">
