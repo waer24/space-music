@@ -1,6 +1,6 @@
 <template>
   <div class="rank-list-wrap" >
-    <!-- <music-list @is-songs="songs"></music-list> -->
+    <music-list @is-songs="songs" :is-title="title" :is-bg-img="bgImg"></music-list>
   </div>
 </template>
 
@@ -8,7 +8,9 @@
 import musicList from '@/components/music-list/music-list'
 import { getMusicList } from '@/api/rank'
 import { mapGetters } from 'vuex'
-import { ERR_OK }from '@/api/config'
+import { ERR_OK } from '@/api/config'
+import { createSongs } from '@/common/js/song'
+
 export default {
   data() {
     return {
@@ -16,6 +18,16 @@ export default {
     }
   },
    computed: {
+     title() {
+       console.log(this.topList.topTitle)
+       return this.topList.topTitle
+     },
+     bgImg() {
+       if(this.songs.length) {
+         console.log(this.songs[0].image)
+         return this.songs[0].image
+       }
+     },
     ...mapGetters(['topList'])
   },
   created() {
@@ -27,20 +39,29 @@ export default {
 
   methods: {
     _getMusicList() {
-      console.log(this.topList)
       if (!this.topList.id) {
         this.$router.push('/rank')
         return
       }
-      getMusicList(this.topList).then((res) => {
-         console.log(this.topList)
+      getMusicList(this.topList.id).then((res) => {
       if (res.code === ERR_OK) {
-        this.songs = res.data
-       // console.log(res.data)
+        this.songs = this._normilizeSong(res.songlist) 
+        console.log(this.songs)
       }
     })
      
     },
+    _normilizeSong(list) {
+      let ret = []
+      Array.from(list).forEach((item) => {
+        const musicData = item.data
+        if (musicData.songid && musicData.albummid) {
+          ret.push(createSongs(musicData)) // 增加createSongs的那些参数到list中
+        }
+      })
+      // console.log("this ret  " + ret)
+      return ret
+    }
   },
 
   components: {
