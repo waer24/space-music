@@ -50,7 +50,7 @@ import { mapMutations } from 'vuex'
            //  console.log(this.topList)
           }
        /*     Array.from(this.topList).forEach((item) => {
-          // console.log(item.id) // 取到了id
+          console.log(item.id) // 取到了id
           return item
         }) */
         })
