@@ -1,5 +1,5 @@
 <template>
-  <div class="player-wrap" v-show="playlist.length>0">
+  <div class="player-wrap" v-show="playList.length>0">
     <transition name="normal" @enter="enter" @after-enter="afterEnter" @leave="leave" @after-leave="afterLeave">
       <div class="normal-player" v-show="fullScreen">
         <div class="bg">
@@ -31,7 +31,7 @@
           </div>
           <div class="process-stripe">
             <span class="time lt">{{formatTime(currentTime)}}</span>
-            <progress-bar :percent="percent"></progress-bar>
+            <progress-bar :percent="percent" @pregressChange="pregressPercentChange"></progress-bar>
             <span class="time rt">{{formatTime(currentSong.duration)}}</span>
           </div>
           <div class="operators" ref="operators">
@@ -104,7 +104,7 @@
     computed: {
       ...mapGetters([
         'fullScreen',
-        'playlist',
+        'playList',
         'currentSong',
         'playing',
         'currentIndex',
@@ -211,7 +211,7 @@
         }
         let index = this.currentIndex - 1
         if (index === 0) {
-          index = this.playlist.length - 1
+          index = this.playList.length - 1
         }
         this.setCurrentIndex(index)
         if (!this.playing) {
@@ -226,7 +226,7 @@
           return // 当audio资源没有准备好，就不让播放，等到audio资源ok，才准备播放 
         } 
         let index = this.currentIndex + 1
-        if (index === this.playlist.length - 1) {
+        if (index === this.playList.length - 1) {
           index = 0
         }
         this.setCurrentIndex(index)
@@ -268,13 +268,19 @@
       },
 
       timeupdate(e) { // target 事件属性可返回事件的目标节点（触发该事件的节点），如生成事件的元素、文档或窗口。
-        this.currentTime = e.target.currentTime
+        this.currentTime = e.target.currentTime // 保证时间的更新
       },
 
       // 获取歌词
       getLyric(){
       
       },
+      // 接受进度条组件的emit（）
+      pregressPercentChange(percent){
+        const currentTime = this.currentSong.duration * percent
+        this.$refs.audio.currentTime = currentTime
+      },
+
 
 
       _getPosAndScale() {

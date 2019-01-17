@@ -1,9 +1,12 @@
 <template>
-  <div class="process-bar-wrap" @click="_offset">
+  <div class="process-bar-wrap" @click="clickProgress" ref="processBar">
     <div class="bar-inner-wrap">
       <div class="bar-inner" ref="barInner" >
         <div class="progress" ref="progress"></div>
-        <div class="play-dot-wrap" ref="playDot">
+        <div class="play-dot-wrap" ref="playDot"
+        @touchstart.prevent="progressTouchStart"
+        @touchmove.prevent="progressTouchMove"
+        @touchend="progressTouchEnd">
           <div class="dot"></div>
         </div>
       </div>
@@ -24,7 +27,9 @@ const dotBtnWidth = 16
       }
     },
     
-   
+   created() {
+     this.touch = {} 
+   },
 
     methods: {
        _offset(offsetWidth) {
@@ -33,14 +38,45 @@ const dotBtnWidth = 16
         let dotWidth = parseFloat(offsetWidth).toFixed(4)
         dot.style[transform] = `translate3d(${dotWidth}px, 0px, 0px)` // 总共可以滚动的宽度
         // console.log(dot.style[transfom])
-      } 
+      } ,
+      progressTouchStart(e) {
+        this.touch.initiated = true // 设置默认启动状态
+        this.touch.startX = e.touches[0].pageX
+        this.touch.left = this.$refs.progress.clientWidth
+      },
+      progressTouchMove(e) {
+        const delta = e.touches[0].pageX - this.touch.startX
+        const offsetWidth = Math.min(this.$refs.barInner.clientWidth - dotBtnWidth, Math.max(0, this.touch.left + delta))
+        this._offset(offsetWidth)
+      },
+      progressTouchEnd(){
+        this.touch.initiated = false
+        this._triggerChange()
+      },
+      _triggerChange(){
+        const barWidth = this.$refs.barInner.clientWidth - dotBtnWidth
+        const percent = this.$refs.progress.clientWidth / barWidth
+        this.$emit('pregressChange', percent)
+      },
+      clickProgress(e) { // element.getBoundingClientRect()返回一组对象的集合，返回left、top、right和bottom，width，height
+          const rect = this.$refs.processBar.getBoundingClientRect()
+          const offsetWidth = e.pageX - rect.left // 获取点击的x的落差
+          this._offset(offsetWidth)
+          this._triggerChange()
+      },
+
+
     },
     watch: {
       percent(newPercent) {
-        const barWidth = this.$refs.barInner.clientWidth - dotBtnWidth // barWidth: 进度条的实时宽度
+        if( newPercent >= 0 && !this.touch.initiated) { // 解决手动移动进度条又跳回原来的点，（手动移动一段，但是又要监听percent，
+        //导致moveend时会跳回），所以只要保证拖动时不监听就行，那就通过标识符来判断最好
+          const barWidth = this.$refs.barInner.clientWidth - dotBtnWidth // barWidth: 进度条的实时宽度
         const offsetWidth = newPercent * barWidth
         this._offset(offsetWidth)
        // console.log(offsetWidth)
+        }
+        
       }
     }
   }

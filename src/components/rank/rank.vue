@@ -1,8 +1,8 @@
 <template>
   <div class="rank-wrap">
-    <scroll :scroll-data="toplist" :probe-type="probeType" class="toplist">
+    <scroll :scroll-data="topList" :probe-type="probeType" class="toplist">
     <ul>
-      <li class="rank-item" v-for="(item,index) in toplist" :key="index" @click="selectItem(item)">
+      <li class="rank-item" v-for="(item,index) in topList" :key="index" @click="selectItem(item)">
         <div>
           <img :src="item.picUrl" alt="" width="100" height="100">
         </div>
@@ -22,7 +22,7 @@
 <script>
 
 import scroll from '@/base/scroll/scroll'
-
+import { mapMutations } from 'vuex'
   import {
     getMusicList,
     topList
@@ -34,47 +34,39 @@ import scroll from '@/base/scroll/scroll'
   export default {
     data() {
       return {
-        toplist: [],
+        topList: [],
         probeType: 3,
       }
     },
     created() {
-      this._getMusicList()
       this._getTopList()
     },
   
     methods: {
-      _getMusicList() {
-        getMusicList(this.toplist.id).then((res) => {
-  
-          if (res.code === ERR_OK) {
-            console.log(22)
-            console.log(res.data)
-          }
-        })
-      },
-  
       _getTopList() {
         topList().then((res) => {
           if (res.code === ERR_OK) {
-            this.toplist = res.data.topList
-           // console.log(this.toplist)
+            this.topList = res.data.topList
+           //  console.log(this.topList)
           }
-           Array.from(this.toplist).forEach((item) => {
-           console.log(item.id) // 取到了id
-          return item.id
-        })
+       /*     Array.from(this.topList).forEach((item) => {
+          // console.log(item.id) // 取到了id
+          return item
+        }) */
         })
        
       },
 
-      selectItem(item) {
+      selectItem(item) {   // 触发每个歌单item的歌单详情页面
        this.$router.push({
-        path: `rank/${item.id}`,
+        path: `/rank/${item.id}`,
        })
-       
-      //  this.setDisc(item) // 触发每个歌单item的歌单详情页面
+       this.setTopList(item) // 应该返回item
      },
+
+     ...mapMutations({
+       setTopList: 'SET_TOP_LIST'
+     }) 
     },
 
     components: {
