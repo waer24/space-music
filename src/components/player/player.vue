@@ -63,12 +63,13 @@
           <h2 class="name">{{currentSong.name}}</h2>
           <p class="desc">{{currentSong.singer}} </p>
         </div>
-        <div class="circle">
-          <div class="process-circle"></div>
+        <div class="control">
+          <progress-circle :radius="radius" :percent="percent">
           <i class="mini" @click.stop="togglePlay" :class="playIconMini"></i>
+          </progress-circle>
         </div>
-        <div class="circle-rt">
-          <i class="icon-playlist mini"></i>
+        <div class="control">
+          <i class="icon-playlist icon-color " ></i>
         </div>
       </div>
     </transition>
@@ -84,7 +85,7 @@
   import {prefixStyle} from '@/common/js/dom'
   import progressBar from '@/base/progress-bar/progress-bar'
   import lyric from 'lyric-parser'
-  // import { getLyric } from '@/api/song'
+  import progressCircle from '@/base/progress-circle/progress-circle'
   
   const transform = prefixStyle('transform')
   
@@ -94,8 +95,10 @@
         songReady: false, // 设置歌曲的准备状态的标示符号
         currentTime: 0,
         playingLyric: '',
+        radius: 32,
       }
     },
+    
     created() {
       
      // this.listerenPassive()
@@ -325,6 +328,7 @@
     },
     components: {
       progressBar,
+      progressCircle,
     }
   }
 </script>
@@ -525,9 +529,6 @@
     }
     .mini-player {
       background-color: darkred;
-      .mini {
-        color: $color-theme-d;
-      }
       display: flex;
       align-items: center;
       height: 6rem;
@@ -559,19 +560,23 @@
           color: $color-text-d;
         }
       }
-      .circle {
+      .control {
         flex: 0 0 3rem;
         font-size: 3rem;
-        .process-circle {
-          position: relative;
-        }
+        width:3rem;
+        padding:0 1rem;
+        .mini {
+          font-size: 3.2rem;
+           position: absolute;
+    left: 0;
+    top:0;
+        color: $color-theme-d;
       }
-      .circle-rt {
-        width: 3rem;
-        flex: 0 0 3rem;
-        font-size: 3rem;
-        margin: 0 2rem;
+      .icon-color {
+        color:  $color-theme-d;
       }
+      }
+    
       &.mini-enter-active,
       &.mini-leave-active {
         transition: all 0.4s;
