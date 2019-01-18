@@ -35,8 +35,8 @@
             <span class="time rt">{{formatTime(currentSong.duration)}}</span>
           </div>
           <div class="operators" ref="operators">
-            <div class="icon" >
-              <i class="icon-sequence"></i>
+            <div class="icon" @click="changeIconMode">
+              <i :class="iconMode"></i>
             </div>
             <div @click="prev" class="icon" :class="disableCls">
               <i class="icon-prev"></i>
@@ -86,6 +86,7 @@
   import progressBar from '@/base/progress-bar/progress-bar'
   import lyric from 'lyric-parser'
   import progressCircle from '@/base/progress-circle/progress-circle'
+  import { playMode } from '@/common/js/config'
   
   const transform = prefixStyle('transform')
   
@@ -111,7 +112,9 @@
         'currentSong',
         'playing',
         'currentIndex',
-        'singer'
+        'singer',
+        'mode',
+
       ]),
       playIcon() {
         return this.playing ? 'icon-play' : 'icon-pause'
@@ -131,7 +134,10 @@
       },
       analysisLyric() {
 
-      }
+      },
+     iconMode(){
+       return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
+     },
       
     },
   
@@ -148,7 +154,8 @@
       ...mapMutations({ // 关闭全屏需要改变mutation的状态
         setFullScreen: 'SET_FULL_SCREEN',
         setPlayingState: 'SET_PLAYING_STATE',
-        setCurrentIndex: 'SET_CURRENT_INDEX'
+        setCurrentIndex: 'SET_CURRENT_INDEX',
+        setPlayMode: 'SET_PLAY_MODE'
       }),
       enter(el, done) {
         const {
@@ -282,6 +289,13 @@
       pregressPercentChange(percent){
         const currentTime = this.currentSong.duration * percent
         this.$refs.audio.currentTime = currentTime
+      },
+
+      // 点击切换播放模式
+       changeIconMode(){
+         this.
+         this.setPlayMode
+        
       },
 
 
