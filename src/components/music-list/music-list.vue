@@ -6,8 +6,8 @@
     <h1 class="title"> {{isTitle}}</h1>
     <div class="bg-img" ref="bgImg" :style="bgStyle">
       <div class="filter" ref="filter"></div>
-      <div class="play-wrap">
-        <div class="play" ref="playBtn">
+      <div class="play-wrap" @click="randomPlay">
+        <div class="play" ref="playBtn" >
           <i class="icon icon-play"></i>
           <span class="text">随机播放全部</span>
         </div>
@@ -34,7 +34,7 @@
   import songList from '@/base/song-list/song-list'
   import { prefixStyle} from '@/common/js/dom'
   import loading from '@/base/loading/loading'
-  import { mapActions } from 'vuex'
+  import { mapActions, mapGetters } from 'vuex'
   
   const RESERVED_HEIGHT = 40
   const transform = prefixStyle('transform')
@@ -82,6 +82,11 @@
         // this.$refs.bgImg.style.backgroundImage = `${isBgImg}`
         return `background-image: url(${this.isBgImg})`
       },
+      ...mapGetters([
+        'playList',
+        'currentIndex',
+        'fullScreen',
+      ])
     },
   
     methods: {
@@ -99,8 +104,18 @@
        })
      //  console.log(this.isSongs) 
       },
+      randomPlay(){
+        this.randomModePlay({
+          list: this.isSongs,
+        
+        })
+        console.log(this.isSongs.id)
+        /* 跳转到play页面， 模式为random*/
+
+      },
       ...mapActions([
         'selectItemPlay',
+        'randomModePlay'
       ]),
     },
   

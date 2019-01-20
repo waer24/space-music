@@ -87,6 +87,9 @@
   import lyric from 'lyric-parser'
   import progressCircle from '@/base/progress-circle/progress-circle'
   import { playMode } from '@/common/js/config'
+  import { shuffle } from '@/common/js/utils'
+  import { changeMode } from '@/store/actions'
+
   
   const transform = prefixStyle('transform')
   
@@ -106,7 +109,7 @@
      
     },
     computed: {
-      ...mapGetters([
+      ...mapGetters([ // 都是从getter.js中获得
         'fullScreen',
         'playList',
         'currentSong',
@@ -114,6 +117,7 @@
         'currentIndex',
         'singer',
         'mode',
+        'sequenceList'
 
       ]),
       playIcon() {
@@ -135,7 +139,7 @@
       analysisLyric() {
 
       },
-     iconMode(){
+      iconMode(){ // 更换icon
        return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
      },
       
@@ -155,7 +159,8 @@
         setFullScreen: 'SET_FULL_SCREEN',
         setPlayingState: 'SET_PLAYING_STATE',
         setCurrentIndex: 'SET_CURRENT_INDEX',
-        setPlayMode: 'SET_PLAY_MODE'
+        setPlayMode: 'SET_PLAY_MODE',
+        setSequenceList: 'SET_SEQUENCE_LIST'
       }),
       enter(el, done) {
         const {
@@ -255,7 +260,12 @@
         this.songReady = true // 保证在错误的情况下点击下一首，也能快速播放
       },
       end() {
+        if(this.mode === playMode.loop) { // 循环模式下结束之后不做下一曲播放（当前时间置为0）
+          this.loop()
+        } else {
           this.next()
+        }
+        
       },
 
       listerenPassive() { // 解决Unable to preventDefault inside passive event listener due to target being treated as passive.的问题
@@ -292,10 +302,28 @@
       },
 
       // 点击切换播放模式
-       changeIconMode(){
-         this.
-         this.setPlayMode
-        
+       changeIconMode(){ 
+        const mode = (this.mode + 1 ) % 3 // 点击一个icon换一个模式，0，1，2
+        this.setPlayMode(mode)
+        let list = null
+        if(this.mode === playMode.random) {
+          list = shuffle(this.sequenceList)
+        } else {
+          list = this.sequenceList
+        }
+        this.setSequenceList(list)
+        this.resetCurrentIndex(list) // 保证切换模式时，当前播放歌曲不变
+         
+      },
+      resetCurrentIndex(list) {
+        let index = list.findIndex((item) => {
+          return item.id === this.currentSong.id
+        })
+        this.setCurrentIndex(index) // 向vuex传递
+      },
+      loop() {
+        this.$refs.audio.currentTime = 0
+        this.$refs.audio.play()
       },
 
 
