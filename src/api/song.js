@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-/* export function getLyric(mid) {
+export function getLyric(mid) {
 const url =`https://api.bzqll.com/music/tencent/url` 
 const data = Object.assign({},{
   key: 579621905,
@@ -12,7 +12,7 @@ return axios.get(url,{
   console.log(res.data)
   return Promise.resolve(res.data)
 })
-} */
+} 
 
 
 

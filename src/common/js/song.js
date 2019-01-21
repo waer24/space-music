@@ -1,7 +1,7 @@
 import { getLyric } from '@/api/song'
 import { STATUS_OK } from '@/api/config'
   export default class Song {
-  constructor({id, mid, name, singer, album,duration, image, url,lyric}) {
+  constructor({id, mid, name, singer, album,duration, image, url}) {
     this.id = id, // 实例化，绑定到当前vue的实例
     this.mid = mid,
     this.name = name,
@@ -9,23 +9,19 @@ import { STATUS_OK } from '@/api/config'
     this.album = album,
     this.duration = duration,
     this.image = image,
-    this.url = url,
-    this.lyric = lyric
+    this.url = url
+   
   }
-  // 解析歌词
-/*   getLyric() {
-  if(this.lyric) {
-    return Promise.resolve(this.lyric)
-  }
-  return new Promise((resolve, reject) => {
-    getLyric(this.mid).then((res) => { // 传入当前的mid这个参数
-      if (res.retcode === STATUS_OK ) {
-        this.lyric = Base64.decode(resolve.lyric)
+  // 解析歌词,作为一个方法封装在song中
+  getLyric() {
+    getLyric(this.mid).then((res) => {
+      if(res.retcode === STATUS_OK) {
+        this.lyric = res.lyric
+        console.log(this.lyric)
       }
-      reject('no lyric')
     })
-  })
-} */
+  }
+ 
  } 
  /* 之前忘记写{}导致取不到song里面的各个值 */
  
@@ -42,6 +38,8 @@ import { STATUS_OK } from '@/api/config'
       lyric: `https://api.bzqll.com/music/tencent/lrc?key=579621905&id=${musicData.songmid}` //歌词不能这样子写，这样带过去无法传参
       // url 很多被封了，这个地址来源于https://www.bzqll.com/2019/01/262.html
     })
+
+    
 }  
 
 export function filterSinger(singer){

@@ -324,8 +324,8 @@
       loop() {
         this.$refs.audio.currentTime = 0
         this.$refs.audio.play()
+       
       },
-
 
 
       _getPosAndScale() {
@@ -359,6 +359,7 @@
       currentSong() {
         this.$nextTick(() => {
           this.$refs.audio.play()
+           this.currentSong.getLyric()
         })
       },
       playing() {

@@ -109,7 +109,7 @@
           list: this.isSongs,
         
         })
-        console.log(this.isSongs.id)
+       // console.log(this.isSongs)
         /* 跳转到play页面， 模式为random*/
 
       },
