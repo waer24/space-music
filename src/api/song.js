@@ -1,21 +1,24 @@
 import axios from 'axios'
+import { commonParams } from '@/api/config'
 
 export function getLyric(mid) {
-const url =`https://api.bzqll.com/music/tencent/url` 
-const data = Object.assign({},{
-  key: 579621905,
-  id: mid
+const url = `/api/getlyric` 
+const data = Object.assign({},commonParams, {
+  songmid: mid,
+    platform: 'yqq',
+    hostUin: 0,
+    needNewCode: 0,
+    categoryId: 10000000,
+    pcachetime: +new Date(),
+     format: 'json'
 })
 return axios.get(url,{
   params: data
 }).then((res) => {
-  console.log(res.data)
+ // console.log(res.data)
   return Promise.resolve(res.data)
 })
 } 
-
-
-
 
 /* old api:
  export function getSongsUrl(songs) {

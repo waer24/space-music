@@ -13,7 +13,7 @@
           <h2 class="singer"> {{currentSong.singer}}</h2>
         </div>
         <div class="middle">
-          <div class="middle-lf">
+          <div class="middle-lf" style="display:none">
             <div class="cd-wrap" ref="cdWrapper">
               <div class="cd rotate" :class="cdCls">
                 <img class="disc" alt="" :src="currentSong.image">
@@ -21,6 +21,33 @@
             </div>
             <div class="lyrics-wrap">
               <p class="lyrics">{{currentSong.lyric}}</p>
+            </div>
+          </div>
+          <div class="middle-rt">
+            <div class="rt-wrap">
+              <div class="inner-wrap">
+                <div class="pad-wrap">
+                <p class="text">词：周杰伦</p>
+                <p class="text">多少人为生命在努力勇敢的走下去</p>
+                <p class="text">不要哭让萤火虫带着你逃跑</p>
+                <p class="text">多少人为生命在努力勇敢的走下去</p>
+                <p class="text">不要哭让萤火虫带着你逃跑</p>
+                <p class="text">多少人为生命在努力勇敢的走下去</p>
+                <p class="text">不要哭让萤火虫带着你逃跑</p>
+                <p class="text">多少人为生命在努力勇敢的走下去</p>
+                <p class="text">不要哭让萤火虫带着你逃跑</p>
+                <p class="text">多少人为生命在努力勇敢的走下去</p>
+                <p class="text">不要哭让萤火虫带着你逃跑</p>
+                <p class="text">多少人为生命在努力勇敢的走下去</p>
+                <p class="text">不要哭让萤火虫带着你逃跑</p>
+                <p class="text">多少人为生命在努力勇敢的走下去</p>
+                <p class="text">不要哭让萤火虫带着你逃跑</p>
+                <p class="text">多少人为生命在努力勇敢的走下去</p>
+                <p class="text">不要哭让萤火虫带着你逃跑</p>
+                <p class="text">多少人为生命在努力勇敢的走下去</p>
+                <p class="text">不要哭让萤火虫带着你逃跑</p>
+              </div>
+              </div>
             </div>
           </div>
         </div>
@@ -65,31 +92,43 @@
         </div>
         <div class="control">
           <progress-circle :radius="radius" :percent="percent">
-          <i class="mini" @click.stop="togglePlay" :class="playIconMini"></i>
+            <i class="mini" @click.stop="togglePlay" :class="playIconMini"></i>
           </progress-circle>
         </div>
         <div class="control">
-          <i class="icon-playlist icon-color " ></i>
+          <i class="icon-playlist icon-color "></i>
         </div>
       </div>
     </transition>
-    <audio ref="audio" :src="currentSong.url" @canplay="ready" @timeupdate="timeupdate"
-    @ended="end"
-    @error="error"></audio>
+    <audio ref="audio" :src="currentSong.url" @canplay="ready" @timeupdate="timeupdate" @ended="end" @error="error"></audio>
   </div>
 </template>
 
 <script>
-  import {mapGetters, mapMutations} from 'vuex'
+  import {
+    mapGetters,
+    mapMutations
+  } from 'vuex'
   import animations from 'create-keyframe-animation'
-  import {prefixStyle} from '@/common/js/dom'
+  import {
+    prefixStyle
+  } from '@/common/js/dom'
   import progressBar from '@/base/progress-bar/progress-bar'
-  import lyric from 'lyric-parser'
+  import Lyric from 'lyric-parser'
   import progressCircle from '@/base/progress-circle/progress-circle'
-  import { playMode } from '@/common/js/config'
-  import { shuffle } from '@/common/js/utils'
-  import { changeMode } from '@/store/actions'
-
+  import {
+    playMode
+  } from '@/common/js/config'
+  import {
+    shuffle
+  } from '@/common/js/utils'
+  import {
+    changeMode
+  } from '@/store/actions'
+  import {
+    getLyric
+  } from '@/common/js/song'
+  
   
   const transform = prefixStyle('transform')
   
@@ -102,11 +141,11 @@
         radius: 32,
       }
     },
-    
+  
     created() {
-      
-     // this.listerenPassive()
-     
+  
+      // this.listerenPassive()
+  
     },
     computed: {
       ...mapGetters([ // 都是从getter.js中获得
@@ -118,7 +157,7 @@
         'singer',
         'mode',
         'sequenceList'
-
+  
       ]),
       playIcon() {
         return this.playing ? 'icon-play' : 'icon-pause'
@@ -137,12 +176,12 @@
         return this.currentTime / this.currentSong.duration
       },
       analysisLyric() {
-
+  
       },
-      iconMode(){ // 更换icon
-       return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
-     },
-      
+      iconMode() { // 更换icon
+        return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
+      },
+  
     },
   
   
@@ -214,7 +253,7 @@
       },
       // 控制音乐播放
       togglePlay() {
-         if (!this.songReady) {
+        if (!this.songReady) {
           return // 当audio资源没有准备好，就不让播放，等到audio资源ok，才准备播放 
         }
         this.setPlayingState(!this.playing)
@@ -239,7 +278,7 @@
       next() {
         if (!this.songReady) {
           return // 当audio资源没有准备好，就不让播放，等到audio资源ok，才准备播放 
-        } 
+        }
         let index = this.currentIndex + 1
         if (index === this.playList.length - 1) {
           index = 0
@@ -250,70 +289,68 @@
         }
         this.songReady = false
       },
-
+  
       ready() {
-       return this.songReady = true
+        return this.songReady = true
       },
-
+  
       // 当播放资源出错
       error() {
         this.songReady = true // 保证在错误的情况下点击下一首，也能快速播放
       },
       end() {
-        if(this.mode === playMode.loop) { // 循环模式下结束之后不做下一曲播放（当前时间置为0）
+        if (this.mode === playMode.loop) { // 循环模式下结束之后不做下一曲播放（当前时间置为0）
           this.loop()
         } else {
           this.next()
         }
-        
+  
       },
-
+  
       listerenPassive() { // 解决Unable to preventDefault inside passive event listener due to target being treated as passive.的问题
         let preventSupport = false
         try {
           let options = Object.defineProperty({}, "passive", {
-            get: function () {
+            get: function() {
               preventSupport = true
             }
           })
           window.addEventListener(this.$refs.operators, null, options)
-        }catch(err){}
+        } catch (err) {}
       },
-
+  
       formatTime(time) {
         time = time | 0
         let m = time / 60 | 0
-        let s = this._pad(time % 60 )
-        return  `${m}:${s}`
+        let s = this._pad(time % 60)
+        return `${m}:${s}`
       },
-
+  
       timeupdate(e) { // target 事件属性可返回事件的目标节点（触发该事件的节点），如生成事件的元素、文档或窗口。
         this.currentTime = e.target.currentTime // 保证时间的更新
       },
-
+  
       // 获取歌词
-      getLyric(){
-      
-      },
+  
       // 接受进度条组件的emit（）
-      pregressPercentChange(percent){
+      pregressPercentChange(percent) {
         const currentTime = this.currentSong.duration * percent
         this.$refs.audio.currentTime = currentTime
       },
-
+  
       // 点击切换播放模式
-       changeIconMode(){ 
-        const mode = (this.mode + 1 ) % 3 // 点击一个icon换一个模式，0，1，2
+      changeIconMode() {
+        const mode = (this.mode + 1) % 3 // 点击一个icon换一个模式，0，1，2
         this.setPlayMode(mode)
         let list = null
-        if(this.mode === playMode.random) {
+        if (this.mode === playMode.random) {
           list = shuffle(this.sequenceList)
         } else {
           list = this.sequenceList
         }
         this.setSequenceList(list)
         this.resetCurrentIndex(list) // 保证切换模式时，当前播放歌曲不变
-         
+  
       },
       resetCurrentIndex(list) {
         let index = list.findIndex((item) => {
@@ -324,10 +361,19 @@
       loop() {
         this.$refs.audio.currentTime = 0
         this.$refs.audio.play()
-       
+  
       },
-
-
+      // 歌词播放
+      /* getLyric() {
+        this.currentSong.getLyric().then((lyric) => {
+          if (this.currentSong.lyric !== lyric ) {
+            return
+          } 
+          
+        })
+      }, */
+  
+  
       _getPosAndScale() {
         const targetWidth = 40
         const paddingLeft = 40
@@ -345,21 +391,21 @@
           scale
         }
       },
-      
-      _pad(num, n =2) {
+  
+      _pad(num, n = 2) {
         let len = num.toString().length
         while (len < 2) {
           num = '0' + num
-          len ++
+          len++
         }
         return num
-       }
+      }
     },
     watch: {
       currentSong() {
         this.$nextTick(() => {
           this.$refs.audio.play()
-           this.currentSong.getLyric()
+          this.currentSong.getLyric()
         })
       },
       playing() {
@@ -495,6 +541,38 @@
             }
           }
         }
+        .middle-rt {
+          position: relative;
+          left: 0;
+          top: 0;
+          padding-top: 100%;
+          height: 0;
+          .rt-wrap {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            .inner-wrap {
+              
+              .pad-wrap {
+              margin: 0 4rem;
+              height: 100%;
+              position: relative;
+              .text {
+               @include fs(1.4rem);
+               line-height: 2.9rem;
+               text-align: center;
+               color:$color-text-self;
+               &.active {
+                 color: #fff;
+               }
+              }
+            }
+            }
+          }
+        }
       }
       .bottom {
         position: absolute;
@@ -535,7 +613,6 @@
           .rt {
             text-align: right;
           }
-          
         }
         .operators {
           display: flex;
@@ -547,7 +624,6 @@
             &.disable {
               color: $color-theme-d
             }
-              
           }
         }
       }
@@ -606,20 +682,19 @@
       .control {
         flex: 0 0 3rem;
         font-size: 3rem;
-        width:3rem;
-        padding:0 1rem;
+        width: 3rem;
+        padding: 0 1rem;
         .mini {
           font-size: 3.2rem;
-           position: absolute;
-    left: 0;
-    top:0;
-        color: $color-theme-d;
+          position: absolute;
+          left: 0;
+          top: 0;
+          color: $color-theme-d;
+        }
+        .icon-color {
+          color: $color-theme-d;
+        }
       }
-      .icon-color {
-        color:  $color-theme-d;
-      }
-      }
-    
       &.mini-enter-active,
       &.mini-leave-active {
         transition: all 0.4s;

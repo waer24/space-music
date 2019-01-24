@@ -1,5 +1,6 @@
 import { getLyric } from '@/api/song'
-import { STATUS_OK } from '@/api/config'
+import { ERR_OK } from '@/api/config'
+import {Base64} from 'js-base64'
   export default class Song {
   constructor({id, mid, name, singer, album,duration, image, url}) {
     this.id = id, // 实例化，绑定到当前vue的实例
@@ -15,9 +16,9 @@ import { STATUS_OK } from '@/api/config'
   // 解析歌词,作为一个方法封装在song中
   getLyric() {
     getLyric(this.mid).then((res) => {
-      if(res.retcode === STATUS_OK) {
-        this.lyric = res.lyric
-        console.log(this.lyric)
+      if(res.retcode === ERR_OK) {
+        this.lyric = Base64.decode(res.lyric)
+       // console.log(this.lyric) // 歌词已经可以解析
       }
     })
   }
@@ -35,7 +36,7 @@ import { STATUS_OK } from '@/api/config'
       duration: musicData.interval,
       image: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${musicData.albummid}.jpg?max_age=2592000`, // 专辑封面图，用于播放列表
       url: `https://api.bzqll.com/music/tencent/url?key=579621905&id=${musicData.songmid}&br=192`, // 获取播放源
-      lyric: `https://api.bzqll.com/music/tencent/lrc?key=579621905&id=${musicData.songmid}` //歌词不能这样子写，这样带过去无法传参
+      // lyric: `https://api.bzqll.com/music/tencent/lrc?key=579621905&id=${musicData.songmid}` //歌词不能这样子写，这样带过去无法传参
       // url 很多被封了，这个地址来源于https://www.bzqll.com/2019/01/262.html
     })
 

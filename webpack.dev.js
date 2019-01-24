@@ -81,8 +81,8 @@ module.exports = merge(common, {
         })
       }) */
 
-      //在node层做转发层 获取歌单的所有曲目，用axios获取
-      app.get('/api/getSongList', (req, res) => {
+      //在node层做转发层 获取歌单的所有曲目，用axios获取 ,注释这个是用了新的api
+ /*      app.get('/api/getSongList', (req, res) => {
         let url ='https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
         axios.get(url, {
           headers: {
@@ -100,6 +100,33 @@ module.exports = merge(common, {
             }
           }
           res.json(response.data)
+        }).catch((e) => {
+          console.log(e)
+        })
+      }) */
+      // 获取歌词 在
+      app.get('/api/getlyric', (req, res) => { // 用地址可以找到匹配的，注意地址要小写
+        let url = `https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg` 
+        axios.get(url, {
+          headers: {
+            'referer': 'https://c.y.qq.com/',
+            'host': 'c.y.qq.com'
+          },
+          params: req.query
+        }).then((response) => {
+          var ret = response.data
+          if (typeof ret === 'string' ) {
+            // 用于匹配 MusicJsonCallback({"retcode":0,....
+            var reg = /^\w+\(({[^()]+})\)$/
+            var matches = ret.match(reg) //  match() 方法可在字符串内检索指定的值
+            if ( matches ) {
+              // console.log('hahahh    ' + matches) // 触发之后会在vscode的终端显示
+              // console.log(matches[0])
+              // console.log(matches[1])
+              ret = JSON.parse(matches[1])
+            }
+          }
+          res.json(ret)
         }).catch((e) => {
           console.log(e)
         })
