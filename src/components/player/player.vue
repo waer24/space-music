@@ -23,33 +23,14 @@
               <p class="lyrics">{{currentSong.lyric}}</p>
             </div>
           </div>
-          <div class="middle-rt">
-            <div class="rt-wrap">
-              <div class="inner-wrap">
-                <div class="pad-wrap">
-                <p class="text">词：周杰伦</p>
-                <p class="text">多少人为生命在努力勇敢的走下去</p>
-                <p class="text">不要哭让萤火虫带着你逃跑</p>
-                <p class="text">多少人为生命在努力勇敢的走下去</p>
-                <p class="text">不要哭让萤火虫带着你逃跑</p>
-                <p class="text">多少人为生命在努力勇敢的走下去</p>
-                <p class="text">不要哭让萤火虫带着你逃跑</p>
-                <p class="text">多少人为生命在努力勇敢的走下去</p>
-                <p class="text">不要哭让萤火虫带着你逃跑</p>
-                <p class="text">多少人为生命在努力勇敢的走下去</p>
-                <p class="text">不要哭让萤火虫带着你逃跑</p>
-                <p class="text">多少人为生命在努力勇敢的走下去</p>
-                <p class="text">不要哭让萤火虫带着你逃跑</p>
-                <p class="text">多少人为生命在努力勇敢的走下去</p>
-                <p class="text">不要哭让萤火虫带着你逃跑</p>
-                <p class="text">多少人为生命在努力勇敢的走下去</p>
-                <p class="text">不要哭让萤火虫带着你逃跑</p>
-                <p class="text">多少人为生命在努力勇敢的走下去</p>
-                <p class="text">不要哭让萤火虫带着你逃跑</p>
-              </div>
+          <!-- 右边 -->
+          <scroll class="middle-rt" ref="lyriclist" :scroll-data="currentLyric && currentLyric.lines">
+            <div class="lyric-wrap">
+              <div class="content" v-if="currentLyric">
+                <p class="text" v-for="(line, index) in currentLyric.lines" :key="index">{{line.txt}}</p>
               </div>
             </div>
-          </div>
+          </scroll>
         </div>
         <div class="bottom">
           <div class="disc-dot-wrap">
@@ -128,6 +109,7 @@
   import {
     getLyric
   } from '@/common/js/song'
+  import scroll from '@/base/scroll/scroll'
   
   
   const transform = prefixStyle('transform')
@@ -139,6 +121,7 @@
         currentTime: 0,
         playingLyric: '',
         radius: 32,
+        currentLyric: null, // 默认歌词为空
       }
     },
   
@@ -364,14 +347,16 @@
   
       },
       // 歌词播放
-      /* getLyric() {
-        this.currentSong.getLyric().then((lyric) => {
-          if (this.currentSong.lyric !== lyric ) {
+      getLyric() {
+        this.currentSong.getLyric().then((lyric) => { // 数据中的lyric
+          if (this.currentSong.lyric !== lyric) {
             return
-          } 
-          
+          }
+          this.currentLyric = new Lyric(lyric)
+          console.log(this.currentLyric)
+  
         })
-      }, */
+      },
   
   
       _getPosAndScale() {
@@ -405,7 +390,7 @@
       currentSong() {
         this.$nextTick(() => {
           this.$refs.audio.play()
-          this.currentSong.getLyric()
+          this.getLyric() // 调用
         })
       },
       playing() {
@@ -418,6 +403,7 @@
     components: {
       progressBar,
       progressCircle,
+      scroll,
     }
   }
 </script>
@@ -542,34 +528,25 @@
           }
         }
         .middle-rt {
-          position: relative;
-          left: 0;
-          top: 0;
-          padding-top: 100%;
-          height: 0;
-          .rt-wrap {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+          vertical-align: top;
+          .lyric-wrap {
+            width: 80%;
             overflow: hidden;
-            .inner-wrap {
-              
-              .pad-wrap {
-              margin: 0 4rem;
-              height: 100%;
-              position: relative;
+            margin: 0 auto;
+            text-align: center;
+            .content {
               .text {
-               @include fs(1.4rem);
-               line-height: 2.9rem;
-               text-align: center;
-               color:$color-text-self;
-               &.active {
-                 color: #fff;
-               }
+                @include fs(1.4rem);
+                line-height: 3rem;
+                text-align: center;
+                color: $color-text-self;
+                &.active {
+                  color: #fff;
+                }
               }
-            }
             }
           }
         }

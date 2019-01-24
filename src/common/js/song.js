@@ -13,14 +13,23 @@ import {Base64} from 'js-base64'
     this.url = url
    
   }
-  // 解析歌词,作为一个方法封装在song中
+  // 从接口中获取歌词 ,作为一个方法封装在song中,lyric本身就是返回一个promise，解析它，其他的组件只需用lyric parse再调用就行
   getLyric() {
-    getLyric(this.mid).then((res) => {
-      if(res.retcode === ERR_OK) {
-        this.lyric = Base64.decode(res.lyric)
-       // console.log(this.lyric) // 歌词已经可以解析
-      }
-    })
+    if (this.lyric) {
+       return Promise.resolve(this.lyric)
+    }
+    return new Promise((resolve, reject) => {
+      getLyric(this.mid).then((res) => {
+        if(res.retcode === ERR_OK) {
+          this.lyric = Base64.decode(res.lyric)
+          resolve(this.lyric)
+         // console.log(this.lyric) // 歌词已经可以解析
+        } else {
+          reject('no lyric')
+        }
+      })
+    } )
+    
   }
  
  } 

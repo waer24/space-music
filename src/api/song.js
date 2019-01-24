@@ -2,7 +2,7 @@ import axios from 'axios'
 import { commonParams } from '@/api/config'
 
 export function getLyric(mid) {
-const url = `/api/getlyric` 
+const url = `/api/lyric` 
 const data = Object.assign({},commonParams, {
   songmid: mid,
     platform: 'yqq',
@@ -10,7 +10,7 @@ const data = Object.assign({},commonParams, {
     needNewCode: 0,
     categoryId: 10000000,
     pcachetime: +new Date(),
-     format: 'json'
+    format: 'json'
 })
 return axios.get(url,{
   params: data
