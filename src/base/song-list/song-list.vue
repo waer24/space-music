@@ -2,8 +2,14 @@
   <div class="song-list-wrapper">
     <ul>
       <li class="item" @click="selectItem(song, index)" v-for="(song,index) in isSongs" :key="index">
-        <h2 class="text">{{song.name}}</h2>
+        <div class="rank-list">
+          <span :class="getRankIcon(index)"></span>
+        </div>
+          <div class="content">
+            <h2 class="text">{{song.name}}</h2>
         <p class="subtext">{{song.singer}} </p>
+          </div>
+        
       </li>
     </ul>
   </div>
@@ -17,13 +23,22 @@
          default() { [] }
       } 
     },
+    computed: {
+      getDesc(song) {
+        return `${song.singer}·${song.name}`
+      },
+    },
+
     methods: {
       selectItem(item, index) {
         this.$emit('select', item, index)
-      }
+      },
+      getRankIcon(index){
+        if ( index <= 2) {
+          return `icon icon${index}`
+        }
+      },
     }
-
-   
   }
 
 </script>
@@ -32,11 +47,35 @@
 .song-list-wrapper{
   // height: 64px;
   .item {
+    display: flex;
+    align-items: center;
     overflow: hidden;
     color: $color-text;
     padding: 0.8rem 0;
+    .rank-list {
+      flex: 0 0 2.5rem;
+      width:2.5rem;
+      margin-right: 2rem;
+      text-align: center;
+      .icon {
+        width: 2.5rem;
+        height: 2.4rem;
+        background-size: 2.5rem 2.4rem;
+        display: inline-block;
+        &.icon0 {
+          @include bg-img('first')
+        }
+        &.icon1 {
+          @include bg-img('second')
+        }
+        &.icon2 {
+          @include bg-img('third')
+        }
+      }
+    }
+    .content{
 
-    .text {
+      .text {
      @include no-wrap(); 
       @include fs(1.4rem);
      font-weight: 400;
@@ -47,6 +86,8 @@
        @include fs(1.4rem);
       color: $color-text-d;
     }
+    }
+    
   }
 }
 

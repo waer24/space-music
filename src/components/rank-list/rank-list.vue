@@ -1,6 +1,6 @@
 <template>
   <div class="rank-list-wrap" >
-    <music-list @is-songs="songs" :is-title="title" :is-bg-img="bgImg"></music-list>
+    <music-list :is-songs="songs" :is-title="title" :is-bg-img="bgImg"></music-list>
   </div>
 </template>
 
@@ -19,23 +19,20 @@ export default {
   },
    computed: {
      title() {
-       console.log(this.topList.topTitle)
        return this.topList.topTitle
      },
+
      bgImg() {
-       if(this.songs.length) {
-         console.log(this.songs[0].image)
-         return this.songs[0].image
-       }
+         if(this.songs.length) {
+           return this.songs[0].image
+         }
      },
     ...mapGetters(['topList'])
   },
+
   created() {
     this._getMusicList()
   },
-
- 
-
 
   methods: {
     _getMusicList() {
@@ -45,11 +42,9 @@ export default {
       }
       getMusicList(this.topList.id).then((res) => {
       if (res.code === ERR_OK) {
-        this.songs = this._normilizeSong(res.songlist) 
-        console.log(this.songs)
+        this.songs = this._normilizeSong(res.songlist)
       }
     })
-     
     },
     _normilizeSong(list) {
       let ret = []
@@ -59,7 +54,6 @@ export default {
           ret.push(createSongs(musicData)) // 增加createSongs的那些参数到list中
         }
       })
-      // console.log("this ret  " + ret)
       return ret
     }
   },

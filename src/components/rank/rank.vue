@@ -47,12 +47,8 @@ import { mapMutations } from 'vuex'
         topList().then((res) => {
           if (res.code === ERR_OK) {
             this.topList = res.data.topList
-             console.log(this.topList)
           }
-       /*     Array.from(this.topList).forEach((item) => {
-          console.log(item.id) // 取到了id
-          return item
-        }) */
+      
         })
        
       },

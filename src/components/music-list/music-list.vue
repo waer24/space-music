@@ -65,6 +65,7 @@
     },
     // 为什么created和mounted在创建变量时要用this，用了this可以在整个组件中引用，用let只能在当前的钩子函数中引用
     created() {
+      
       this.probeType = 3,
         this.listenScroll = true
   
