@@ -3,7 +3,7 @@
     <ul>
       <li class="item" @click="selectItem(song, index)" v-for="(song,index) in isSongs" :key="index">
         <div class="rank-list">
-          <span :class="getRankIcon(index)"></span>
+          <span :class="getRankIcon(index)" v-text="getRankIndex(index)"></span>
         </div>
           <div class="content">
             <h2 class="text">{{song.name}}</h2>
@@ -38,6 +38,11 @@
           return `icon icon${index}`
         }
       },
+      getRankIndex(index){
+        if (index > 2) {
+          return `${index}`
+        }
+      }
     }
   }
 
