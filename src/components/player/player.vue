@@ -5,41 +5,51 @@
         <div class="bg">
           <img alt="" width="100%" height="100%" :src="currentSong.image">
         </div>
-        <div class="top">
+        <div class="top" ref="top">
           <div class="back" @click="back">
             <i class="icon-back"></i>
           </div>
           <h1 class="title">{{currentSong.name}}</h1>
           <h2 class="singer"> {{currentSong.singer}}</h2>
         </div>
-        <div class="middle">
-          <div class="middle-lf" style="display:none">
+        <div class="middle" ref="middle"
+        @touchstart.prevent="middleMoveStart"
+        @touchmove.prevent="middleMoveEnter"
+        @touchend="middleMoveEnd">
+          <!-- 左边 -->
+          <div class="middle-lf" ref="middleLf">
             <div class="cd-wrap" ref="cdWrapper">
               <div class="cd rotate" :class="cdCls">
                 <img class="disc" alt="" :src="currentSong.image">
               </div>
             </div>
             <div class="lyrics-wrap">
-              <p class="lyrics">{{currentSong.lyric}}</p>
+              <p class="lyrics" >{{playingLyric}}</p>
             </div>
           </div>
           <!-- 右边 -->
           <scroll class="middle-rt" ref="lyriclist" :scroll-data="currentLyric && currentLyric.lines">
             <div class="lyric-wrap">
               <div class="content" v-if="currentLyric">
-                <p class="text" v-for="(line, index) in currentLyric.lines" :key="index">{{line.txt}}</p>
+                <p class="text" ref="lyricLine" v-for="(line, index) in currentLyric.lines" :key="index"
+                :class="{'active':currentLineNum === index}"
+                >{{line.txt}}</p>
               </div>
             </div>
           </scroll>
         </div>
         <div class="bottom">
           <div class="disc-dot-wrap">
-            <span class="dot active"></span>
-            <span class="dot"></span>
+            <span class="dot" :class="{'active': middleShow === 'cd'}"></span>
+            <span class="dot" :class="{'active': middleShow === 'lyric'}"></span>
           </div>
           <div class="process-stripe">
             <span class="time lt">{{formatTime(currentTime)}}</span>
-            <progress-bar :percent="percent" @pregressChange="pregressPercentChange"></progress-bar>
+            <progress-bar 
+            :percent="percent" 
+            @pregressChange="pregressPercentChange"
+             @pregressChanging="pregressPercentChanging"
+            ></progress-bar>
             <span class="time rt">{{formatTime(currentSong.duration)}}</span>
           </div>
           <div class="operators" ref="operators">
@@ -113,22 +123,23 @@
   
   
   const transform = prefixStyle('transform')
-  
+  const transitionDuration = prefixStyle('transitionDuration')
+  const topMarginTop = 20
   export default {
     data() {
       return {
         songReady: false, // 设置歌曲的准备状态的标示符号
         currentTime: 0,
-        playingLyric: '',
+        playingLyric: '', // cd 下面正在播放的歌词
         radius: 32,
         currentLyric: null, // 默认歌词为空
+        currentLineNum: 0, // 当前显示第几行歌词
+        middleShow: 'cd'
       }
     },
   
     created() {
-  
-      // this.listerenPassive()
-  
+      this.touch = {}
     },
     computed: {
       ...mapGetters([ // 都是从getter.js中获得
@@ -164,7 +175,9 @@
       iconMode() { // 更换icon
         return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
       },
-  
+     // middleListShow(){
+       // return this.middleShow === "cd" ? this.$refs.cdWrapper.show() : this.$refs.lyriclist.show()
+      //}
     },
   
   
@@ -175,6 +188,9 @@
       },
       open() {
         this.setFullScreen(true);
+      },
+      show(el) {
+        el.style.display = ''
       },
   
       ...mapMutations({ // 关闭全屏需要改变mutation的状态
@@ -240,6 +256,9 @@
           return // 当audio资源没有准备好，就不让播放，等到audio资源ok，才准备播放 
         }
         this.setPlayingState(!this.playing)
+        if(this.currentLyric) { // 歌曲暂停时，歌词暂停播放
+          this.currentLyric.togglePlay()
+        }
       },
       // 上一曲
       prev() {
@@ -319,6 +338,21 @@
       pregressPercentChange(percent) {
         const currentTime = this.currentSong.duration * percent
         this.$refs.audio.currentTime = currentTime
+       // console.log(currentTime)
+        if(this.currentLyric) {
+          this.currentLyric.seek(currentTime * 1000)
+        }
+        if (!this.playing) {
+          this.togglePlay()
+        }
+      },
+      // 正在拖动的时候，歌词也要体现出滚动的变化
+      pregressPercentChanging(percent) {
+        const currentTime = this.currentSong.duration * percent
+        // this.$refs.audio.currentTime = currentTime
+         if(this.currentLyric) {
+          this.currentLyric.seek(currentTime * 1000)
+        }
       },
   
       // 点击切换播放模式
@@ -344,7 +378,9 @@
       loop() {
         this.$refs.audio.currentTime = 0
         this.$refs.audio.play()
-  
+        if(this.currentLyric) {
+          this.currentLyric.seek(0) // 歌词重新播放
+        }
       },
       // 歌词播放
       getLyric() {
@@ -352,13 +388,92 @@
           if (this.currentSong.lyric !== lyric) {
             return
           }
-          this.currentLyric = new Lyric(lyric)
-          console.log(this.currentLyric)
-  
+          this.currentLyric = new Lyric(lyric, this.lyricHandle)
+          if (this.playing) {
+            this.currentLyric.play()
+          } 
+        }).catch(() => { 
+          this.currentLyric = null
+          this.currentLineNum = 0
+          this.playingLyric = ''
         })
+        
       },
-  
-  
+      lyricHandle({lineNum, txt}) { // 歌词滚动
+        this.currentLineNum = lineNum
+        if (lineNum > 5) {
+          let lineEl = this.$refs.lyricLine[lineNum - 5] // 保证当前的歌词位于手机中间
+          this.$refs.lyriclist.scrollToElement(lineEl, 1000) // 有就跳到那个元素
+        } else {
+          this.$refs.lyriclist.scrollTo(0, 0, 1000) // 没有就滚动到第一行
+        }
+        this.playingLyric = txt
+      },
+
+      // 页面中间左右切换
+      middleMoveStart(e) {
+        this.touch.initiated = true
+        this.touch.moved = false // 用来判断是否是一次移动
+        this.touch.startX = e.touches[0].pageX
+        this.touch.startY = e.touches[0].pageY
+        // console.log(this.touch.startY)
+      },
+      middleMoveEnter(e) {
+        if (!this.touch.initiated) {
+          return
+        }
+        const deltaX = e.touches[0].pageX - this.touch.startX
+        const deltaY = e.touches[0].pageY  - this.touch.startY
+       if (Math.abs(deltaY) > Math.abs(deltaX)) {
+          return
+        }
+       if( !this.touch.moved) {
+         this.touch.moved = true
+       }
+       const left  = this.middleShow === 'cd' ? 0 : -window.innerWidth
+       const offsetWidth = Math.min(0, Math.max(-window.innerWidth, left + deltaX))
+       this.touch.percent = Math.abs(offsetWidth / window.innerWidth)
+       // this.$refs.lyriclist.style[transform] 会报错： Cannot set property 'webkitTransform' of undefined
+       this.$refs.lyriclist.$el.style[transform] = `translate3d(${offsetWidth}px, 0, 0)`
+       this.$refs.lyriclist.$el.style[transitionDuration] = 0 
+       this.$refs.middleLf.style.opacity = 1 - this.touch.percent
+       this.$refs.middleLf.style[transitionDuration] = 0
+        
+      },
+      middleMoveEnd() { // 先通过设置元素值，再把元素值放在元素的样式中
+        if(!this.touch.moved) {
+          return
+        }
+        let offsetWidth
+        let opacity
+        if (this.middleShow === 'cd') {
+          if(this.touch.percent > 0.1) {
+            offsetWidth = -window.innerWidth
+            opacity = 0
+            this.middleShow = 'lyric'
+          } else {
+            offsetWidth = 0
+            opacity = 1
+            this.middleShow = 'cd'
+          }
+        } else {
+          if (this.touch.percent < 0.9) {
+            offsetWidth = 0
+            this.middleShow = 'cd'
+            opacity = 1
+          } else {
+            offsetWidth = -window.innerWidth
+            opacity = 0
+          }
+        }
+        const time = 300
+        this.$refs.lyriclist.$el.style[transform] = `translate3d(${offsetWidth}px, 0,0)`
+        this.$refs.lyriclist.$el.style[transitionDuration] = `${time}ms`
+        this.$refs.middleLf.style.opacity = opacity
+        this.$refs.middleLf.style[transitionDuration] = `${time}ms`
+        this.touch.initiated = false
+      },
+      
       _getPosAndScale() {
         const targetWidth = 40
         const paddingLeft = 40
@@ -387,16 +502,31 @@
       }
     },
     watch: {
-      currentSong() {
-        this.$nextTick(() => {
+      currentSong(newSong, oldSong) {
+        if (!newSong.id) {
+          return
+        }
+        if(newSong.id === oldSong.id ) {
+          return 
+        }
+        if(this.currentLyric) { // 切换新歌，歌词也更换
+          this.currentLyric.stop()
+          this.currentTime = 0
+          this.playingLyric = ''
+          this.currentLineNum = 0
+
+        }
+        clearTimeout(this.timer)
+        this.timer = setTimeout(() => {
           this.$refs.audio.play()
           this.getLyric() // 调用
-        })
+        },1000)
+        
       },
-      playing() {
+      playing(newPlaying) {
         const audio = this.$refs.audio
         this.$nextTick(() => { // 等dom 加载完毕
-          this.playing ? audio.play() : audio.pause()
+          newPlaying ? audio.play() : audio.pause()
         })
       },
     },
@@ -519,15 +649,20 @@
             width: 80%;
             margin: 3rem auto 0;
             text-align: center;
+            height: 5rem;
             .lyrics {
               @include fs(1.4rem);
               overflow: hidden;
               white-space: nowrap;
               color: $color-text-self;
+              height: 100%;
+              text-align: center;
+              line-height: 5rem;
             }
           }
         }
         .middle-rt {
+          display: inline-block;
           width: 100%;
           height: 100%;
           overflow: hidden;
@@ -540,7 +675,7 @@
             .content {
               .text {
                 @include fs(1.4rem);
-                line-height: 3rem;
+                line-height: 3.2rem;
                 text-align: center;
                 color: $color-text-self;
                 &.active {
