@@ -36,6 +36,7 @@ import { mapMutations } from 'vuex'
       return {
         topList: [],
         probeType: 3,
+        rank: true,
       }
     },
     created() {

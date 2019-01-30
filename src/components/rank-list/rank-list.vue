@@ -1,6 +1,6 @@
 <template>
   <div class="rank-list-wrap" >
-    <music-list :is-songs="songs" :is-title="title" :is-bg-img="bgImg"></music-list>
+    <music-list :is-songs="songs" :is-title="title" :is-bg-img="bgImg" :rank="rank"></music-list>
   </div>
 </template>
 
@@ -14,7 +14,8 @@ import { createSongs } from '@/common/js/song'
 export default {
   data() {
     return {
-      songs: []
+      songs: [],
+      rank: true, // 先声明一个值，默认为false，一直向下传，最终的组件song-list接收
     }
   },
    computed: {

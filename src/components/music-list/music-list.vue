@@ -18,7 +18,7 @@
     <scroll :probe-type="probeType" :scroll-data="isSongs" :listen-scroll="listenScroll" @scroll="scroll" class="list" ref="listScroll">
       <!-- 这个scroll事件来源于子组件传递的scroll -->
       <div class="song-list-wrap">
-        <song-list @select="select" :is-songs="isSongs"></song-list>
+        <song-list @select="select" :is-songs="isSongs" :rank="rank"></song-list>
       </div>
       <div>
         <loading class="loading-container" v-show="!isSongs.length"></loading>
@@ -62,6 +62,10 @@
         type: String,
         default: ''
       },
+      rank: {
+        type: Boolean,
+        default: false
+      }
     },
     // 为什么created和mounted在创建变量时要用this，用了this可以在整个组件中引用，用let只能在当前的钩子函数中引用
     created() {

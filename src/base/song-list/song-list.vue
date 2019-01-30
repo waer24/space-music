@@ -2,7 +2,7 @@
   <div class="song-list-wrapper">
     <ul>
       <li class="item" @click="selectItem(song, index)" v-for="(song,index) in isSongs" :key="index">
-        <div class="rank-list">
+        <div class="rank-list" v-show="rank">
           <span :class="getRankIcon(index)" v-text="getRankIndex(index)"></span>
         </div>
           <div class="content">
@@ -21,6 +21,10 @@
       isSongs: { 
         type: Array,
          default() { [] }
+      },
+      rank: {
+        type: Boolean,
+        default: false,
       } 
     },
     computed: {
@@ -36,6 +40,8 @@
       getRankIcon(index){
         if ( index <= 2) {
           return `icon icon${index}`
+        } else {
+          return 'text'
         }
       },
       getRankIndex(index){
@@ -77,9 +83,12 @@
           @include bg-img('third')
         }
       }
+      .text{
+        font-size: 1.8rem;
+        color: $color-theme;
+      }
     }
     .content{
-
       .text {
      @include no-wrap(); 
       @include fs(1.4rem);

@@ -9,10 +9,12 @@
 </template>
 
 <script>
+import { debounce } from '@/common/js/util'
+
   export default {
     data() {
       return {
-        query: ''
+        query: '',
       }
     },
 
@@ -23,17 +25,21 @@
       }
     },
 
-    
+    created() { // 监控输入到input框的值
+      this.$watch('query', debounce((newQuery) => {
+        this.$emit('query', newQuery)
+      }, 200))
+    },
 
     methods: {
+      blur() {
+        this.$refs.query.blur()
+      },
       clear(){
         this.query = ''
       },
-
-      /* blur() {
-        this.$refs.query.blur()
-      } */
     },
+    
   }
 </script>
 
@@ -45,13 +51,14 @@
       background-color: $color-text-d;
       .icon {
         vertical-align: middle;
+        line-height: 3.2rem;
       }
       .ipt {
         line-height: 3rem;
         width: 80%;
         color: #fff;
         @include fs(1.4rem);
-        background-color: $color-text-d;
+        background-color: rgba(255, 255, 255, 0);
       }
       .icon-bg {
         font-size: 1.2rem;
