@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { debounce } from '@/common/js/util'
+import { debounce } from '@/common/js/utils'
 
   export default {
     data() {

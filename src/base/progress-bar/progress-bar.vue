@@ -126,5 +126,3 @@ const dotBtnWidth = 16
     }
   }
 </style>
-
-
