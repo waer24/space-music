@@ -265,13 +265,17 @@
         if (!this.songReady) {
           return // 当audio资源没有准备好，就不让播放，等到audio资源ok，才准备播放 
         }
-        let index = this.currentIndex - 1
+         if(this.playList.length === 1) {
+          this.loop()
+        } else {
+          let index = this.currentIndex - 1
         if (index === 0) {
           index = this.playList.length - 1
         }
-        this.setCurrentIndex(index)
+       is.setCurrentIndex(index)
         if (!this.playing) {
           this.togglePlay()
+        }
         }
         this.songReady = false
   
@@ -281,13 +285,17 @@
         if (!this.songReady) {
           return // 当audio资源没有准备好，就不让播放，等到audio资源ok，才准备播放 
         }
-        let index = this.currentIndex + 1
+        if (this.playList.length ===1) {
+          this.loop()
+        } else {
+          let index = this.currentIndex + 1
         if (index === this.playList.length - 1) {
           index = 0
         }
         this.setCurrentIndex(index)
         if (!this.playing) {
           this.togglePlay()
+        }
         }
         this.songReady = false
       },
