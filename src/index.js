@@ -1,27 +1,33 @@
 /* webpack 0 config. index.js is the first entry */
 
-import 'babel-polyfill' // es6语法补丁
+// import 'babel-polyfill' // es6语法补丁
 import Vue from 'vue' 
 import App from './App'
+import store from './store'
+import router from './router' // 引用 router 配置
+import fastClick from 'fastclick'  // 引入页面公共js
+import VueLazyload from 'vue-lazyload'
+
+// 引入公共的样式
+import '@/common/style/base.scss'
+import '@/common/style/variable.scss'
+import '@/common/style/mixin.scss'
 
  Vue.config.productionTip = false
 
-// 引入公共的样式
- import style from '@/common/style/test.css'
- import astyle from '@/common/style/test.scss'
+Vue.use(VueLazyload, {
+  loading: require('@/common/images/default.png'), // 懒加载的显示的图片
+  // listenEvents: [ 'scroll' ]  // 只有监听有滚动事件发生才开始懒加载
 
- // 引用 router 配置
-import router from '@/router/index'
+})
 
-// 引入页面公共js
-/* import { someTest } from 'src/common/js/test'
-console.log(someTest) */
-// import test from 'src/common/js/test.js'
-// console.log(test)
+// 取消300ms的延迟
+fastClick.attach(document.body)
 
  new Vue({
   el: '#root', // index.html
   router,
-  components: { App },
-  template: '<App/>',
+  store,
+  render: h => h(App)
+  
 }) 

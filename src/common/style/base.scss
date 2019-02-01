@@ -1,0 +1,54 @@
+@import '../style/variable.scss';
+
+html, body {
+  padding: 0;
+  margin: 0;
+  font-size: 62.5%;
+  font-family: 'PingFang SC', 'STHeitiSC-Light', 'Helvetica-Light', arial, sans-serif, 'Droid Sans Fallback';
+  background-color: $color-background;
+}
+  
+a  {
+  text-decoration: none;
+  color: rgb(77, 85, 93);
+}
+ 
+p,h4,h5,h2, h3,h1, ul,li{
+  padding: 0;
+  margin: 0;
+}
+
+input {
+  outline: none;
+  border: none;
+}
+
+.clearFix  {
+  display: inline-block;
+  &:after  {
+    display: block;
+    content: '.';
+    height: 0;
+    line-height: 0;
+    clear: both;
+    visibility: hidden;
+  } 
+}
+
+li {
+  list-style-type: none;
+}
+ 
+.icon {
+  font-size: 2.5rem;
+  color: $color-theme;
+}
+
+.pa  {
+  position: absolute;
+}
+  
+::-webkit-input-placeholder { /* WebKit browsers */
+  color: $color-text-self;
+}
+

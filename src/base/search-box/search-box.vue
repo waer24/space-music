@@ -1,0 +1,69 @@
+<template>
+  <div class="search-box">
+    <div class="search-box-inner">
+      <i class="icon icon-Search"></i>
+      <input ref="query" type="text" class="ipt" v-model="query" :placeholder="placeholder">
+      <i class="icon-bg icon-close" @click="clear" v-show="query"></i>
+    </div>
+  </div>
+</template>
+
+<script>
+import { debounce } from '@/common/js/utils'
+
+  export default {
+    data() {
+      return {
+        query: '',
+      }
+    },
+
+    props: {
+      placeholder: {
+        type: String,
+        default: '请输入歌曲、歌手'
+      }
+    },
+
+    created() { // 监控输入到input框的值
+      this.$watch('query', debounce((newQuery) => {
+        this.$emit('query', newQuery)
+      }, 200))
+    },
+
+    methods: {
+      blur() {
+        this.$refs.query.blur()
+      },
+      clear(){
+        this.query = ''
+      },
+    },
+    
+  }
+</script>
+
+<style lang="scss" scoped>
+  .search-box {
+    // width: 100%;
+    margin: 2rem;
+    .search-box-inner {
+      background-color: $color-text-d;
+      .icon {
+        vertical-align: middle;
+        line-height: 3.2rem;
+      }
+      .ipt {
+        line-height: 3rem;
+        width: 80%;
+        color: #fff;
+        @include fs(1.4rem);
+        background-color: rgba(255, 255, 255, 0);
+      }
+      .icon-bg {
+        font-size: 1.2rem;
+        border-radius: 50%;
+      }
+    }
+  }
+</style>
