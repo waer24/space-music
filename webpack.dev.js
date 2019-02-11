@@ -83,7 +83,7 @@ module.exports = merge(common, {
 
       
       //在node层做转发层 获取歌单的所有曲目，用axios获取
-      app.get('/api/getSongList', (req, res) => {
+      app.get('/api/getsonglist', (req, res) => {
         let url ='https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
         axios.get(url, {
           headers: {

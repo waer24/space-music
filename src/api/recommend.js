@@ -33,7 +33,7 @@ export function getDiscList() {
   })
 }
 
-export function getSongList(listId) {
+export function getsonglist(listId) {
   const url = ` https://api.bzqll.com/music/tencent/songList`
   const data = Object.assign({}, {
     key: '579621905',

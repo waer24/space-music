@@ -116,9 +116,9 @@
   import {
     changeMode
   } from '@/store/actions'
-  import {
+/*   import {
     getLyric
-  } from '@/common/js/song'
+  } from '@/common/js/song' */
   import scroll from '@/base/scroll/scroll'
   
   
@@ -405,7 +405,6 @@
           this.currentLineNum = 0
           this.playingLyric = ''
         })
-        
       },
       lyricHandle({lineNum, txt}) { // 歌词滚动
         this.currentLineNum = lineNum

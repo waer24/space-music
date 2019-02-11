@@ -12,7 +12,7 @@
     mapGetters
   } from 'vuex'
   import {
-    getSongList
+    getsonglist
   } from '@/api/recommend'
   import {
     createSongs,
@@ -46,7 +46,7 @@
           this.$router.push('/recommend')
           return
         }
-        getSongList(this.disc.id).then((res) => {
+        getsonglist(this.disc.id).then((res) => {
           if( res.code === STATUS_OK) {
              let songs = res.data.songs
             this.songs = songs

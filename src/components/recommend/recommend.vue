@@ -46,7 +46,6 @@
   import {
     getWallSwiper,
     getDiscList,
-    getSongList
   } from '@/api/recommend.js'
   import {
      ERR_OK, STATUS_OK
