@@ -30,8 +30,12 @@ const mutations = {
   },
   [types.SET_TOP_LIST](state, list) {
     state.topList = list
+  },
+  //SEARCH
+  [types.SET_SEARCH_HISTORY](state, history) {
+    state.searchHistroy = history
   }
-
+  
 }
 
 export default mutations

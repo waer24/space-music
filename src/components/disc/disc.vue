@@ -12,13 +12,13 @@
     mapGetters
   } from 'vuex'
   import {
-    getsonglist
+    getSongList
   } from '@/api/recommend'
   import {
     createSongs,
   } from '@/common/js/song'
   import {
-    ERR_OK, STATUS_OK
+    ERR_OK
   } from '@/api/config'
   
   export default {
@@ -38,48 +38,32 @@
       }
     },
     created() {
-      this._getSongList()
+      // this._getSongList()
     },
     methods: {
-      _getSongList() {
-        if (!this.disc.id) {
-          this.$router.push('/recommend')
-          return
-        }
-        getsonglist(this.disc.id).then((res) => {
-          if( res.code === STATUS_OK) {
-             let songs = res.data.songs
-            this.songs = songs
-          }
-        })
-      },  
-     /*  old api:
-      _getSongList() {
+      /* _getSongList() {
         if (!this.disc.dissid) {
           this.$router.push('/recommend')
           return
         }
         getSongList(this.disc.dissid).then((res) => {
           if (res.code === ERR_OK) {
-          processSongsUrl(this._normalizeSongs(res)).then((songs) => {
-            console.log(res.cdlist[0])
-            this.songs = songs
-          })
+              this.songs = this._normalizeSongs(res.cdlist[0].songlist)
+          }
         })
-      },
+      }, */
       _normalizeSongs(list) {
         let ret = []
         Array.from(list).forEach((musicData) => {
-          if (isValidMusic(musicData)) {
+          if (musicData.songid && musicData.albummid) {
             ret.push(createSongs(musicData))
           }
         })
         return ret
-      }, */
-    },
-  
+      },
     components: {
       musicList,
+    }
     }
   }
 </script>

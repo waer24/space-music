@@ -55,6 +55,7 @@
     "babel-polyfill": "^6.26.0",
     "babel-runtime": "^6.26.0",
     "create-keyframe-animation": "^0.1.0",
+    "good-storage": "^1.1.0",
     "jsonp": "^0.2.1",
     "qs": "^6.6.0",
     "vue": "^2.5.17",

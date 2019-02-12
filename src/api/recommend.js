@@ -15,44 +15,12 @@ export function getWallSwiper() {
    return jsonp(url, data, options)
 }
 
-export function getDiscList() {
-  const url = `https://api.bzqll.com/music/tencent/hotSongList`
-  const data = Object.assign({},  {
-    key: '579621905',
-    categoryId: 10000000,
-    sort: 3,
-    limit: 60
-  })
-  return axios.get(url,{
-    params: data,
-  }).then((res) => {
-   // console.log(res.data)
-    return Promise.resolve(res.data)
-  }).catch((e) => {
-    console.log(e)
-  })
-}
-
-export function getsonglist(listId) {
-  const url = ` https://api.bzqll.com/music/tencent/songList`
-  const data = Object.assign({}, {
-    key: '579621905',
-    id: listId
-  })
-  return axios.get(url, {
-    params: data
-  }).then((res) => {
-    return Promise.resolve(res.data)
-  }).catch((e) => {
-    console.log(e)
-  })
-} 
 // old api: 获取歌单 
-/* export function getDiscList() {
-  const url = '/api/getDiscList'
+export function getDiscList() {
+  const url = '/api/getdisclist'
   const data = Object.assign({}, commonParams, {
     platform: 'yqq',
-    hostUin: 0,
+    uin: 0,
     sin: 0,
     ein: 29,
     sortId: 5,
@@ -77,7 +45,7 @@ return axios.get(url,{
 // old api: 获取歌单中的所有曲目
 // disstid 是从每个歌单点击进去，由dissid的参数传递的
 export function getSongList(disstid) {
-  const url = '/api/getSongList'
+  const url = 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
   const data = Object.assign({}, commonParams, {
     disstid,
     type: 1,
@@ -96,8 +64,9 @@ export function getSongList(disstid) {
   }).then((res) => {
     console.log(res.data)
     return Promise.resolve(res.data)
-  })
-} 
+  }) 
+}
+
 // 新的api
 /* export function getDiscList() {
   const url = `https://api.bzqll.com/music/tencent/hotSongList`
@@ -110,7 +79,7 @@ export function getSongList(disstid) {
   return axios.get(url,{
     params: data,
   }).then((res) => {
-   // console.log(res.data)
+    console.log(res.data)
     return Promise.resolve(res.data)
   }).catch((e) => {
     console.log(e)

@@ -3,7 +3,7 @@
     <div class="search-box-inner">
       <i class="icon icon-Search"></i>
       <input ref="query" type="text" class="ipt" v-model="query" :placeholder="placeholder">
-      <i class="icon-bg icon-close" @click="clear" v-show="query"></i>
+      <i class="icon-bg icon-close" @click="clear" v-show="query" ></i>
     </div>
   </div>
 </template>
