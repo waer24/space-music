@@ -9,7 +9,7 @@
         <ul class="list-song">
           <li class="song" v-for="(song,index) in item.songList" :key="index"
           @click="selectItem(item)"
-          >{{index}}&nbsp;{{song.singername}}-{{song.songname}}</li>
+          >{{index+1}}&nbsp;{{song.singername}}-{{song.songname}}</li>
         </ul>
       </li>
     </ul>

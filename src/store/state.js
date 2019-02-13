@@ -2,6 +2,7 @@
 声明 state => this.$store.state.NAME
 */
 import { playMode } from '@/common/js/config'
+import {loadSearch, loadPlay, loadFavorite} from '@/common/js/cache'
 
 const state = {
    disc: {},
@@ -13,8 +14,9 @@ const state = {
    sequenceList: [],
    mode: playMode.sequence, // 默认顺序播放
    currentIndex: -1,
-   topList: {} // rank 
-   
-
+   topList: {}, // rank 
+   searchHistory: loadSearch(), // 加载本地缓存的加载历史
+   playHistory: loadPlay(),
+   favoriteList: loadFavorite()
 }
 export default state

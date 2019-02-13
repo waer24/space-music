@@ -61,35 +61,34 @@ module.exports = merge(common, {
     使用axios实现ajax请求：axios是一个基于promise的HTTP库，可以用于浏览器和node.js
     在浏览器创建XMLHttpRequest对象，从node.js创建http请求 */
     before(app) {
-   /* old api:   app.get('/api/getDiscList', (req, res) => {
+    // old api:  
+     app.get('/api/getdisclist', (req, res) => { // 地址要小写
         let url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
        // 这里的路径是给前端发送请求的url,axios发送get请求，可以自己配置config
         axios.get(url, {
             headers: {
               // 伪造referer，直接打开上面的url会失效 
-            'referer': 'https://c.y.qq.com/',
-            'host': 'c.y.qq.com',
-            'content-type': 'application/x-www-form-urlencoded'
+            referer: 'https://c.y.qq.com/',
+            host: 'c.y.qq.com',
           }, 
           //  params是即将与请求一起发送的url参数，无格式对象/URLSearchParams对象
           params: req.query
         }).then((response) => {
           res.json(response.data)  //返回数据
-          // console.log(response.data)
+         // console.log(response.data)
         }).catch((error) => {
           console.log(error)
         })
-      }) */
+      }) 
 
       
       //在node层做转发层 获取歌单的所有曲目，用axios获取
-      app.get('/api/getSongList', (req, res) => {
+      /* app.get('/api/getsonglist', (req, res) => {
         let url ='https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
         axios.get(url, {
           headers: {
-            'referer': 'https://c.y.qq.com/',
-            'host': 'c.y.qq.com',
-            'content-type': 'application/x-www-form-urlencoded'
+            referer: 'https://c.y.qq.com/',
+            host: 'c.y.qq.com',
           },
           params: req.query
         }).then((response) => {
@@ -104,7 +103,7 @@ module.exports = merge(common, {
         }).catch((e) => {
           console.log(e)
         })
-      })
+      }) */
       // 歌词
       app.get('/api/lyric', (req, res) => { // 地址要小写
         let url ='https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg'
