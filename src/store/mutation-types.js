@@ -19,3 +19,7 @@ export const SET_CURRENT_INDEX = 'SET_CURRENT_INDEX'
 export const SET_TOP_LIST = 'SET_TOP_LIST' 
 // search
 export const SET_SEARCH_HISTORY = 'SET_SEARCH_HISTORY'
+// play
+export const SET_PLAY_HISTORY = 'SET_PLAY_HISTORY'
+// favorite
+export const SET_FAVORITE_LIST = 'SET_FAVORITE_LIST'

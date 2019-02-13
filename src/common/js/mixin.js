@@ -48,7 +48,7 @@ export const searchMixin = {
       this.$refs.searchBox.blur()
     },
     addQuery(query){
-      this.$refs.searchBox.setQuery(query)
+      this.$refs.searchBox.setQuery(query) // setQuery在sugges 页面中有出现
     },
     saveSearch(){
       this.saveSearchHistory(this.query)

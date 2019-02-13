@@ -38,6 +38,9 @@ import { debounce } from '@/common/js/utils'
       clear(){
         this.query = ''
       },
+      setQuery(newQuery) { // 设置，通过mixin能取到
+        this.query = newQuery
+      }
     },
     
   }

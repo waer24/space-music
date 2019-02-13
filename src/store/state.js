@@ -2,7 +2,7 @@
 声明 state => this.$store.state.NAME
 */
 import { playMode } from '@/common/js/config'
-import {loadSearch} from '@/common/js/cache'
+import {loadSearch, loadPlay, loadFavorite} from '@/common/js/cache'
 
 const state = {
    disc: {},
@@ -16,7 +16,7 @@ const state = {
    currentIndex: -1,
    topList: {}, // rank 
    searchHistroy: loadSearch(), // 加载本地缓存的加载历史
-   
-
+   playHistory: loadPlay(),
+   favoriteList: loadFavorite()
 }
 export default state

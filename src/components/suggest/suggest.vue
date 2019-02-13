@@ -8,13 +8,29 @@
             <p class="name">withof</p>
           </div>
         </li>
+        <loading v-show="hasMore" title="" style="display:none"></loading>
       </ul>
+      <div class="no-result-wrap" v-show="!hasMore && !result.length">
+        <no-result></no-result>
+      </div>
   </div>
 </template>
 
 <script>
+import loading from '@/base/loading/loading'
+import noResult from '@/base/no-result/no-result'
+
 export default {
-  
+  data(){
+    return {
+      hasMore: true, // 标识符
+      result: [] // 搜索结果
+    }
+  },
+  components: {
+    loading,
+    noResult,
+  }
 }
 </script>
 
@@ -45,6 +61,12 @@ export default {
             @include no-wrap()
           }
         }
+      }
+      .no-result-wrap {
+        position: absolute;
+        width: 100%;
+        top: 50%;
+        transform: translateY(-50%);
       }
   }
 </style>

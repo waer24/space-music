@@ -1,7 +1,7 @@
 <template>
   <div class='search'>
-    <search-box ref="searchBox" ></search-box>
-    <div class="serh-wrap" ref="serhWrap">
+    <search-box ref="searchBox" @query="onQueryChange"></search-box>
+    <div class="serh-wrap" ref="serhWrap" style="display:none">
       <div class="serh-hot" ref="serhHot">
         <h1 class="title">热门搜索</h1>
         <ul>
@@ -11,7 +11,7 @@
           </li>
         </ul>
       </div>
-      <div class="serh-history" ref="searchHistory" v-show="searchHistory.length">
+      <div class="serh-history" >
         <h2 class="title">
           <span class="text">搜索历史</span>
           <span class="icon-trash-wrap"><i class="icon-clear"></i></span>
@@ -33,11 +33,12 @@
   import { hotKey } from '@/api/search'
   import { ERR_OK } from '@/api/config'
   import searchList from '@/base/search-list/search-list'
+  import { searchMixin } from '@/common/js/mixin'
 
   export default {
+    mixins: [searchMixin],
     data() {
       return {
-        searchHistory: true, 
         hotKey: [],
       }
     },
@@ -65,11 +66,11 @@
       searchList,
     },
     watch: {
-      /* query(newQuery) {
+       query(newQuery) {
         if(!newQuery) {
           this.$refs.serhHot.refresh()
         }
-      } */
+      }
     }
   }
 </script>
