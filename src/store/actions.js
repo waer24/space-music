@@ -36,7 +36,7 @@ export const randomModePlay = function ({commit, state}, {list}) { // commit & p
 }
 
 // 插入歌曲
-export const insertSong = function ({common, state}, song) {
+export const insertSong = function ({commit, state}, song) {
     let playlist = state.playList.slice()
     let sequenceList = state.sequenceList.slice()
     let currentIndex = state.currentIndex

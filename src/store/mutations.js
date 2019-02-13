@@ -40,7 +40,7 @@ const mutations = {
   },
 
   [types.SET_SEARCH_HISTORY](state, history) {
-    state.searchHistroy = history
+    state.searchHistory = history
   },
 
   [types.SET_PLAY_HISTORY](state, history) {

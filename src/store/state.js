@@ -15,7 +15,7 @@ const state = {
    mode: playMode.sequence, // 默认顺序播放
    currentIndex: -1,
    topList: {}, // rank 
-   searchHistroy: loadSearch(), // 加载本地缓存的加载历史
+   searchHistory: loadSearch(), // 加载本地缓存的加载历史
    playHistory: loadPlay(),
    favoriteList: loadFavorite()
 }

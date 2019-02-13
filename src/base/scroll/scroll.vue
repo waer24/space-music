@@ -33,7 +33,11 @@ import Bscroll from 'better-scroll'
       refreshDelay: {
         type: Number,
         default: 20,
-      }
+      },
+       pullup: { // 是否滚动到底
+        type: Boolean,
+        default: false
+      },
     },
 
     mounted() { 

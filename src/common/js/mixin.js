@@ -1,4 +1,6 @@
 import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { playMode } from '@/common/js/config'
+import { shuffle } from '@/common/js/utils'
 
 
 // 需要共用的方法
@@ -54,8 +56,8 @@ export const searchMixin = {
       this.saveSearchHistory(this.query)
     },
     ...mapActions([
-      'saveSearchHistory'
+      'saveSearchHistory',
+      'deleteSearchHistory'
     ])
   }
-
 }
