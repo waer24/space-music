@@ -83,27 +83,27 @@ module.exports = merge(common, {
 
       
       //在node层做转发层 获取歌单的所有曲目，用axios获取
-      /* app.get('/api/getsonglist', (req, res) => {
+      app.get('/api/getsonglist', (req, res) => {
         let url ='https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
         axios.get(url, {
           headers: {
-            referer: 'https://c.y.qq.com/',
-            host: 'c.y.qq.com',
+            'referer': 'https://c.y.qq.com/',
+            'host': 'c.y.qq.com',
           },
           params: req.query
         }).then((response) => {
           if (typeof response.data  === 'String') {
-            var reg = /{.*}/
+            var reg = /^\w+\(({[^()]+})\)$/  //jsoncallback({.....})
             var matches = response.data.match(reg)
             if (matches) {
-              response.data = JSON.parse(matches[0])
+              response.data = JSON.parse(matches[1])
             }
           }
           res.json(response.data)
         }).catch((e) => {
           console.log(e)
         })
-      }) */
+      }) 
       // 歌词
       app.get('/api/lyric', (req, res) => { // 地址要小写
         let url ='https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg'

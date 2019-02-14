@@ -15,7 +15,7 @@
     getSongList
   } from '@/api/recommend'
   import {
-    createSongs,
+    createSongs,isValidMusic, processSongsUrl
   } from '@/common/js/song'
   import {
     ERR_OK
@@ -38,32 +38,35 @@
       }
     },
     created() {
-      // this._getSongList()
+       this._getSongList()
     },
     methods: {
-      /* _getSongList() {
+       _getSongList() {
         if (!this.disc.dissid) {
           this.$router.push('/recommend')
           return
         }
         getSongList(this.disc.dissid).then((res) => {
           if (res.code === ERR_OK) {
-              this.songs = this._normalizeSongs(res.cdlist[0].songlist)
+              console.log(res)
+              processSongsUrl(this._normalizeSongs(res.cdlist[0].songlist)).then((songs) => {
+              this.songs = songs
+            })
           }
         })
-      }, */
+      }, 
       _normalizeSongs(list) {
         let ret = []
         Array.from(list).forEach((musicData) => {
-          if (musicData.songid && musicData.albummid) {
-            ret.push(createSongs(musicData))
+          if (isValidMusic(musicData)) {
+            ret.push(createSong(musicData))
           }
         })
         return ret
       },
-    components: {
+    },
+     components: { // 之前把components放在了methods中，出现[Vue warn]: Error in nextTick: "TypeError: fn.bind is not a function"一直没发现
       musicList,
-    }
     }
   }
 </script>

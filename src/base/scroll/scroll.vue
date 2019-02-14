@@ -41,9 +41,12 @@ import Bscroll from 'better-scroll'
     },
 
     mounted() { 
-      this.$nextTick(() => { // 在新的dom更新之后初始化scroll
+      setTimeout(() => {
         this._initScroll()
-      })
+      }, 20)
+     /*  this.$nextTick(() => { // 在新的dom更新之后初始化scroll
+        this._initScroll()
+      }) */
     },
 
     methods: {

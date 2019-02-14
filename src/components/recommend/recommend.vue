@@ -1,7 +1,7 @@
 <template>
-  <div class="recommend-wrap">
+  <div class="recommend-wrap" ref="recommend">
     <!-- scroll放在这里是因为滚动事件会覆盖到整个屏幕,content是父级，slider-wrap是子级 只有传入数据了才能撑起变化 -->
-    <scroll ref="commend-content" class="recomment-content" :scroll-data="discList">
+    <scroll ref="scroll" class="recomment-content" :scroll-data="discList">
       <div>
         <div class="bg-hide"></div>
         <!-- 不加length 会造成事件先于渲染的dom，无法获取所有slider-item的宽度 -->
@@ -21,7 +21,7 @@
         <div class="recommend-list">
           <h1 class="list-title">热门歌单推荐</h1>
           <ul class="list-wrap">
-            <li v-for="(item,index) in discList" :key="index" @click="selectItem(item)" class="list-item">
+            <li @click="selectItem(item)" v-for="(item,index) in discList" :key="index" class="list-item">
               <div class="list-img"><img v-lazy="item.imgurl" width="60" height="60" alt=""></div>
               <div class="list-txt">
                 <h2 class="list-tlt"> {{ item.creator.name }}</h2>
@@ -56,9 +56,11 @@
   import {
     mapMutations
   } from 'vuex'
+  import { playlistMixin } from '@/common/js/mixin'
   
   
   export default {
+    mixins: [playlistMixin],
     data() {
       return {
         recommends: [],
@@ -72,7 +74,25 @@
     },
 
     methods: {
-      // 渲染推荐的swiper
+      handlePlaylist(playlist) { // mixin 
+        const bottom = playlist.length > 0 ? '6rem' : ''
+        this.$refs.recommend.style.bottom = bottom
+        this.$refs.scroll.refresh()
+
+      },
+     selectItem(item) {
+       this.$router.push({
+        path: `/recommend/${item.dissid}`, // 进入到点击的那个具体歌单里面
+       })
+        // console.log()
+       this.setDisc(item) // 触发每个歌单item的歌单详情页面,
+     },
+
+     loadImg(){
+       this.$refs.commendContent.refresh()
+     },
+
+     // 渲染推荐的swiper
       _getWallSwiper() {
         getWallSwiper().then((res) => {
            if (res.code === ERR_OK) {
@@ -91,18 +111,6 @@
           }
         })
       },
-
-     selectItem(item) {
-       this.$router.push({
-        path: `/recommend/${item.dissid}`, // 进入到点击的那个具体歌单里面
-       })
-        // console.log()
-       this.setDisc(item) // 触发每个歌单item的歌单详情页面,
-     },
-
-     loadImg(){
-       this.$refs.commendContent.refresh()
-     },
 
      ...mapMutations({
        setDisc: 'SET_DISC' // 将事件提交到vuex中，使得后面的组件能拿到这个磁盘中的数据

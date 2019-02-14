@@ -1,4 +1,4 @@
-import { getLyric } from '@/api/song'
+import { getLyric, getSongsUrl } from '@/api/song'
 import { ERR_OK } from '@/api/config'
 import {Base64} from 'js-base64'
   export default class Song {
@@ -63,12 +63,26 @@ export function filterSinger(singer){
   return ret.join('/')
 }
 
-/* export function processSongUrl(songs) {
+export function isValidMusic(musicData) {
+  return musicData.songid && musicData.albummid && (!musicData.pay || musicData.pay.payalbumprice === 0)
+}
+
+export function processSongsUrl(songs) {
   if (!songs.length) {
     return Promise.resolve(songs)
   }
-  return 
-} */
+  return getSongsUrl(songs).then((res) => {
+    if (res.code === ERR_OK) {
+      let midUrlInfo = res.url_mid.data.midurlinfo
+      midUrlInfo.forEach((info, index) => {
+        let song = songs[index]
+        song.url = `http://dl.stream.qqmusic.qq.com/${info.purl}`
+      })
+    }
+    return songs
+  })
+}
+
 
 
  

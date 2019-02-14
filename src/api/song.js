@@ -20,7 +20,7 @@ return axios.get(url,{
 })
 } 
 
-/* old api:
+// old api:
  export function getSongsUrl(songs) {
   const url = debug ? '/api/getPurlUrl' : 'http://ustbhuangyi.com/music/api/getPurlUrl'
   let mids = []
@@ -78,4 +78,3 @@ return axios.get(url,{
     request()
   })
 }
- */
