@@ -27,7 +27,7 @@ import { debounce } from '@/common/js/utils'
 
     created() { // 监控输入到input框的值
       this.$watch('query', debounce((newQuery) => {
-        this.$emit('query', newQuery)
+        this.$emit('query', newQuery) // 组件当中引用query,把query能够暴露出去
       }, 200))
     },
 

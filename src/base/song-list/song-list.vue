@@ -7,7 +7,7 @@
         </div>
           <div class="content">
             <h2 class="text">{{song.name}}</h2>
-        <p class="subtext">{{song.singer}} </p>
+            <p class="subtext">{{getDesc(song)}} </p>
           </div>
         
       </li>
@@ -28,12 +28,13 @@
       } 
     },
     computed: {
-      getDesc(song) {
-        return `${song.singer}·${song.name}`
-      },
+      
     },
 
     methods: {
+      getDesc(song) {
+        return `${song.singer}·${song.name}`
+      },
       selectItem(item, index) {
         this.$emit('select', item, index)
       },
@@ -99,6 +100,7 @@
     .subtext {
        @include fs(1.4rem);
       color: $color-text-d;
+      margin-right: 3rem;
     }
     }
     
