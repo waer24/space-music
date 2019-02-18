@@ -130,7 +130,7 @@ module.exports = merge(common, {
       })
 
       // input 框的搜索
-      /* app.get('/api/search', (req, res) => {
+       app.get('/api/search', (req, res) => { 
         let url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp'
         axios.get(url, {
           headers: {
@@ -139,14 +139,11 @@ module.exports = merge(common, {
           },
           params: req.query
         }).then((response) => {
-          console.log(response.data)
           res.json(response.data)
         }).catch((e) => {
           console.log(e)
         })
-      }) */
-
-
+      })
     },
   }
 });

@@ -47,8 +47,7 @@ export default {
     search() {
       search(this.query, this.page, this.showSinger).then((res) => {
         if ( res.code === ERR_OK ) {
-          console.log(22)
-          this.result = res.data
+          this.result = res.data // 取到了值,但是搜索要考虑两种情况，歌手 / 歌曲 且icon的表示也不同，因此需要区分，再显示到搜索结果中
         }
       })
     },
@@ -56,7 +55,13 @@ export default {
 
     },
     _genResult() {
-      
+      let ret = []
+       if (data.song) { // 歌曲
+        ret.push(data.song)
+         }
+      if (data.zhida && data.zhida.singerid) {  // 歌手 
+        ret.push({...data.zhida}, {type: TYPE_SINGER}) // 用于区分是歌手还是歌曲
+      }
     }
   },
   watch: {

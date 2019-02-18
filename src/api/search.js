@@ -20,7 +20,7 @@ export function hotKey () {
 
 // input框搜索
 export function search(query, page, zhida, perpage) {
-  const url = `https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp` // 用了视频作者的地址 原地址禁止跨域访问：https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp
+  const url = `/api/search` // 不在启动时获得会提示禁止跨域访问
   const data = Object.assign({}, commonParams, {
     w: query,
     p: page,
@@ -36,13 +36,16 @@ export function search(query, page, zhida, perpage) {
     remoteplace: 'txt.mqq.all',
     uin: 0,
     needNewCode: 1,
-    platform: 'h5'
+    platform: 'h5',
+    format: 'json' // 默认结果是jsonp， 写了这个之后就变成了json了 我的天！
   })
-  return Axios.get(url, {
+    
+  return Axios.get(url,{
     params: data
-  }).then((res) => {
-    console.log(res.data)
-    return Promise.resolve(res.data)
+  }).then((response) => {
+   //  console.log(response.data)
+    return Promise.resolve(response.data)
   })
+  
 }
 
