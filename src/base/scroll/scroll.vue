@@ -26,7 +26,7 @@ import Bscroll from 'better-scroll'
         type: Boolean,
         default: true,
       },
-      beforeScroll: {
+      beforeScrollStart: { // 用于搜索页面
         type: Boolean,
         default: false
       },
@@ -34,7 +34,7 @@ import Bscroll from 'better-scroll'
         type: Number,
         default: 20,
       },
-       pullup: { // 是否滚动到底
+       pullingUp: { // 是否滚动到底 用于搜索页面
         type: Boolean,
         default: false
       },
@@ -70,12 +70,12 @@ import Bscroll from 'better-scroll'
           me.$emit('scroll', pos)
         })
       }
-
-      /* if(this.beforeScroll) { 
-        this.scroll.on('beforeScrollStart', () => {
-          this.$emit('beforeScroll')
+ 
+       if(this.beforeScrollStart) { 
+        this.scroll.on('beforeScrollStart', () => { // 触发beforeScrollStart事件
+          this.$emit('beforeScroll') // 传递出去
         })
-      } */
+      }
     },
 
     scrollTo() {

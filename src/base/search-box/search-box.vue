@@ -55,6 +55,7 @@ import { debounce } from '@/common/js/utils'
       .icon {
         vertical-align: middle;
         line-height: 3.2rem;
+        padding-left: 0.3rem;
       }
       .ipt {
         line-height: 3rem;

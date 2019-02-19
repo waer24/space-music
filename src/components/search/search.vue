@@ -1,7 +1,7 @@
 <template>
-  <div class='search'>
+  <div class='search' >
   <search-box ref="searchBox" @query="onQueryChange"></search-box>
-    <div class="serh-wrap" ref="serhWrap">
+    <div class="serh-wrap" ref="serhWrap" v-show="!query">
       <div>
         <div class="serh-hot" ref="searchHot">
           <h1 class="title">热门搜索</h1>
@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class="serh-result">
-      <suggest :query="query"></suggest>
+      <suggest :query="query" @listScroll="blurInput"></suggest>
     </div>
   </div>
 </template>
@@ -49,7 +49,9 @@ import suggest from '@/components/suggest/suggest'
       onQueryChange(newQuery) {
         this.query = newQuery
       },
-
+      blurInput() {
+        this.$refs.searchBox.blur()
+      },
       _getHotKey() {
         hotKey().then((res) => {
           if (res.code === ERR_OK) {
@@ -70,6 +72,7 @@ import suggest from '@/components/suggest/suggest'
   .search {
     color: $color-theme;
     overflow: hidden;
+
     .title {
       padding-bottom: 1rem;
       display: flex;
@@ -98,7 +101,7 @@ import suggest from '@/components/suggest/suggest'
       position: fixed;
       width: 100%;
       top: 17rem;
-      bottom: 6rem;
+      bottom: 0;
     }
   }
 </style>
