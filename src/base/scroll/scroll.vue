@@ -30,6 +30,11 @@ import Bscroll from 'better-scroll'
         type: Boolean,
         default: false
       },
+      scrollEnd: {
+        type: Boolean,
+        default: false
+      },
+
       refreshDelay: {
         type: Number,
         default: 20,
@@ -74,8 +79,22 @@ import Bscroll from 'better-scroll'
        if(this.beforeScrollStart) { 
         this.scroll.on('beforeScrollStart', () => { // 触发beforeScrollStart事件
           this.$emit('beforeScroll') // 传递出去
+          // console.log(22) // 表明已触发
         })
       }
+
+      if (this.pullingUp) { // 如果出发了pullup 就绑定scrollend事件
+        /* this.scroll.on('scrollEnd', () => { 
+          this.$emit('scrollEndEvent') 
+        }) */
+        this.scroll.on('scrollEnd', () => {
+          if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+            this.$emit('scrollEndEvent') // 这只是名称，传递出去
+          }
+        })
+      }
+
+
     },
 
     scrollTo() {

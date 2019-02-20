@@ -102,8 +102,14 @@ const router = new Router({
     },
     {
       path: '/search',
-      name: 'search',
-      component: search
+     // name: 'search',
+      component: search,
+      children: [
+        {
+          path: ':id',
+          component: singerDetail
+        }
+      ]
     },
   ]
 })

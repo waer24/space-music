@@ -12,15 +12,21 @@ export function shuffle(arr) {
     }
     return _arr
 }
-
+/* 函数柯里化 一个函数返回另一个函数，包含多个参数，最终被外面的函数包裹，只显示单个函数，*/
+// export function debounce(func, delay) { // 包含一个定时器，用于截流，降低搜索的请求次数，在规定delay的时间中，忽略过快的搜索，删除操作
 export function debounce(func, delay) {
-let timer
-return function(...args) {
-    if (timer) {
-        clearTimeout(timer)
+    let timer
+    return function (...args) {
+        if(timer) {
+            clearTimeout(timer)
+        }
+        timer = setTimeout(() => {
+            func.apply(this, args)
+        }, delay)
     }
-    timer = setTimeout(() => {
-        func.apply(this, args)
-    }, delay)
 }
-}
+ /* 
+   func.apply(thisArg, [argsArray]) 
+   apply调用的是一个给定this值的函数，以及作为数组提供的参数
+   call（）方法接收的参数列表 apply（）接收的是一个参数数组
+   */

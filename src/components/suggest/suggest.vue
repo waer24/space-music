@@ -4,11 +4,11 @@
             :pullingUp="pullingUp"
             :beforeScrollStart="beforeScrollStart"
             @beforeScroll="listScroll"
-            @scrollEnd="searchMore"
+            @scrollEndEvent="searchMore"
 
             class="scroll">
     <ul class="list">
-        <li v-for="(item, index) in result" :key="index">
+        <li @click="selectItem(item)" v-for="(item, index) in result" :key="index">
           <div class="item">
             <div class="icon" :class="getIconCls(item)"></div>
               <i ></i>
@@ -17,10 +17,11 @@
             </div>
           </div>
         </li>
-       <!-- <loading v-show="hasMore" title="" ></loading> -->
+       <loading v-show="hasMore && loadingShow" title=""></loading> 
       </ul>
-      <div class="no-result-wrap" >
-        <!-- <no-result title="抱歉，暂无搜索结果"></no-result> -->
+      <div v-show="!hasMore && !result.length"  class="no-result-wrap" >
+        <!-- title是props传递的，若值是固定的，则不必加冒号 -->
+        <no-result title=""></no-result> 
       </div>
       </scroll> 
 </template>
@@ -31,14 +32,18 @@ import { ERR_OK } from '@/api/config'
 import { createSongs } from '@/common/js/song'
 import scroll from '@/base/scroll/scroll'
 import loading from '@/base/loading/loading'
+import NoResult from '@/base/no-result/no-result'
+import Singer from '@/common/js/singer' // class Singer
+import { mapMutations } from 'vuex';
 
 const TYPE_SINGER = 'singer'
 const perpage = 20 // 一页设定有20条搜索结果
-
+/* 这里有个困扰项，loading会默认显示，按源码写不得解；noresult在输入框为空时，也会默认显示。目前自己加了loadingshow和改变hasmore在checkmore的设置暂时解决*/
 export default {
   data() {
     return {
       hasMore: true,
+      loadingShow: false,
       result: [],
       pullingUp: true, // scroll上拉加载
       page: 1,
@@ -58,12 +63,28 @@ export default {
     }
   },
   methods: {
+    selectItem(item) {
+      if(item.type === TYPE_SINGER) {
+        const singer = new Singer({
+          id: item.singermid,
+          name: item.singername
+        })
+        this.$router.push({
+          path: `/search/${singer.id}`
+          // path: `/search/${item.singermid}` // 这样子会跳转到详情页面，singerdetail又回因为没有singer id返回到singer页面
+        })
+        this.setSinger(singer)
+      }
+    },
+
     search() {
       this.page = 1
       this.hasMore = true
+      this.loadingShow = true
       search(this.query, this.page, this.showSinger, perpage).then((res) => {
         if ( res.code === ERR_OK ) {
           this.result = this._genResult(res.data) // 取到了值,但是搜索要考虑两种情况，歌手 / 歌曲 且icon的表示也不同，因此需要区分，再显示到搜索结果中
+          console.log(this.result)
           this._ckeckMore(res.data)
         }
       })
@@ -106,7 +127,8 @@ export default {
     _ckeckMore(data) { // 检查是否到底了
       const song = data.song
       if (!song.list.length || (perpage * this.page + song.curpage > song.totalnum )) { // 当前的歌曲数量等于总共搜索出来的数量，证明到底了
-        this.hasMore = false
+        this.hasMore = true
+        this.loadingShow = false
       }
     },
 
@@ -130,7 +152,12 @@ export default {
         }
       })
       return ret
-    }
+    },
+
+    ...mapMutations({
+      setSinger: 'SET_SINGER'
+    })
+
     
   },
   watch: {
@@ -142,6 +169,7 @@ export default {
   components: {
     scroll,
     loading,
+    NoResult,
   }
 
 }

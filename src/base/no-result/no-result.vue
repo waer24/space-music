@@ -9,7 +9,7 @@
 export default {
   data() {
     return {
-      title: ''
+      title: '抱歉，暂无搜索结果'
     }
   }
 }
