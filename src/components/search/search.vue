@@ -6,7 +6,7 @@
         <div class="serh-hot" ref="searchHot">
           <h1 class="title">热门搜索</h1>
           <ul>
-            <li class="label-item" v-for="(item, index) in hotkey" :key="index">
+            <li class="label-item" @click="selectHistory(item.k)" v-for="(item, index) in hotkey" :key="index">
               <span class="label">{{item.k}}</span>
             </li>
           </ul>
@@ -18,14 +18,15 @@
               <i class="icon-clear"></i>
             </span>
           </h2>
+          <search-list></search-list>
           
-          <router-view></router-view>
         </div>
       </div>
     </div>
-    <div class="serh-result">
+    <div class="serh-result" v-show="query">
       <suggest :query="query" @listScroll="blurInput"></suggest>
     </div>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -34,6 +35,7 @@ import searchBox from '@/base/search-box/search-box'
 import {hotKey} from '@/api/search'
 import {ERR_OK} from '@/api/config'
 import suggest from '@/components/suggest/suggest'
+import searchList from '@/base/search-list/search-list'
 
   export default {
     data() {
@@ -52,6 +54,10 @@ import suggest from '@/components/suggest/suggest'
       blurInput() {
         this.$refs.searchBox.blur()
       },
+      selectHistory(item) {
+       this.$refs.searchBox.setQuery(item)
+      },
+
       _getHotKey() {
         hotKey().then((res) => {
           if (res.code === ERR_OK) {
@@ -63,6 +69,7 @@ import suggest from '@/components/suggest/suggest'
      components: {
        searchBox,
        suggest,
+       searchList,
      }
   
   }
