@@ -1,23 +1,31 @@
 <template>
-  <div class="list-wrap">
+  <div class="list-wrap" v-show="searches.length">
     <ul>
-          <li class="list-item">
-            <span class="list-content">zhoujielun</span>
-            <span class="icon-wrap"><i class="icon-close"></i></span>
-          </li>
-          <li class="list-item">
-            <span class="list-content">zhoujielun</span>
-            <span class="icon-wrap" @click="deleteHistory"><i class="icon-close"></i></span>
-          </li>
+      <li class="list-item" v-for="item in searches" :key="item"
+          @click="select(item)">
+        <span class="list-content">{{item}}</span>
+        <span class="icon-wrap" @click.stop="deleteOne(item)"><i class="icon-close"></i></span>
+      </li>
         </ul>
-  </div>
+  </div>  
 </template>
 
 <script>
 export default {
+  props:  {
+      searches: {
+        type: Array,
+        default:function() {
+          return []
+        }
+      }
+  },
   methods: {
-    deleteHistory () {
-      this
+    deleteOne (item) {
+      this.$emit('deleteHistory', item)
+    },
+    select (item) {
+      this.$emit('selectHistory', item)
     }
   }
 }

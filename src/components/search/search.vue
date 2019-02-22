@@ -11,20 +11,19 @@
             </li>
           </ul>
         </div>
-        <div class="serh-history">
+        <div class="serh-history" v-show="searchHistory.length">
           <h2 class="title">
             <span class="text">搜索历史</span>
             <span class="icon-trash-wrap">
               <i class="icon-clear"></i>
             </span>
           </h2>
-          <search-list></search-list>
-          
+          <search-list :searches="searchHistory" @deleteHistory="deleteSearch"></search-list>
         </div>
       </div>
     </div>
     <div class="serh-result" v-show="query">
-      <suggest :query="query" @listScroll="blurInput"></suggest>
+      <suggest :query="query" @listScroll="blurInput" @searchItem="saveSearch"></suggest>
     </div>
     <router-view></router-view>
   </div>
@@ -36,6 +35,7 @@ import {hotKey} from '@/api/search'
 import {ERR_OK} from '@/api/config'
 import suggest from '@/components/suggest/suggest'
 import searchList from '@/base/search-list/search-list'
+import { mapGetters, mapActions } from 'vuex';
 
   export default {
     data() {
@@ -43,6 +43,11 @@ import searchList from '@/base/search-list/search-list'
         hotkey: [], 
         query: '',
       }
+    },
+    computed: {
+      ...mapGetters([
+        'searchHistory'
+      ])
     },
     created() {
       this._getHotKey()
@@ -57,14 +62,26 @@ import searchList from '@/base/search-list/search-list'
       selectHistory(item) {
        this.$refs.searchBox.setQuery(item)
       },
-
+      recodeSearch(query){
+        
+      },
+      saveSearch() {
+        this.saveSearchHistory(this.query)
+      },
+      deleteSearch() {
+        this.deleteSearchHistory()
+      },
       _getHotKey() {
         hotKey().then((res) => {
           if (res.code === ERR_OK) {
            this.hotkey = res.data.hotkey.slice(0, 10)
           }
         })
-      }
+      },
+      ...mapActions([
+        'saveSearchHistory',
+        'deleteSearchHistory'
+      ])
      },
      components: {
        searchBox,

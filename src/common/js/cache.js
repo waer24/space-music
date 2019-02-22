@@ -27,6 +27,7 @@ function deleteFromArray(arr, compare){
   const index = arr.findIndex(compare)
   if (index > -1) {
     arr.splice(index, 1)
+    
   }
 }
 
@@ -37,6 +38,7 @@ export function loadSearch() {
 
 // 存储搜索历史
 export function saveSearch(query) {
+  console.log(query)
   let searches = storage.get(SEARCH_KEY, [])
   insertArray(searches, query, (item) => {
     return item === query
@@ -46,7 +48,8 @@ export function saveSearch(query) {
 }
 
 export function deleteSearch(query) {
-  let searches = storage.get(SEARCY_KEY, [])
+  let searches = storage.get(SEARCH_KEY, [])
+  console.log('delete' + query)
   deleteFromArray(searches, (item) => {
     return item === query
   })

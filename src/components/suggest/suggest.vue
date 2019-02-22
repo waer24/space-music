@@ -80,6 +80,7 @@ export default {
       } else { 
         this.insertSong(item)
       }
+      this.$emit('searchItem', item)
     },
 
     search() {
