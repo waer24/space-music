@@ -74,8 +74,10 @@
     </transition>
     <transition name="mini">
       <div class="mini-player" v-show="!fullScreen" @click="open">
-        <div class="mini-pic">
+        <div class="mini-play-inner">
+          <div class="mini-pic rotate">
           <img width="40" height="40" class="img" alt="" :src="currentSong.image">
+        </div>
         </div>
         <div class="text">
           <h2 class="name">{{currentSong.name}}</h2>
@@ -86,11 +88,12 @@
             <i class="mini" @click.stop="togglePlay" :class="playIconMini"></i>
           </progress-circle>
         </div>
-        <div class="control">
-          <i class="icon-playlist icon-color "></i>
+        <div class="control" @click="showPlaylist">
+          <i class="icon-playlist icon-color " ></i>
         </div>
       </div>
     </transition>
+    <playlist></playlist>
     <audio ref="audio" :src="currentSong.url" @canplay="ready" @timeupdate="timeupdate" @ended="end" @error="error"></audio>
   </div>
 </template>
@@ -120,6 +123,7 @@
     getLyric
   } from '@/common/js/song' */
   import scroll from '@/base/scroll/scroll'
+  import playlist from '@/components/playlist/playlist'
   
   
   const transform = prefixStyle('transform')
@@ -189,9 +193,9 @@
       open() {
         this.setFullScreen(true);
       },
-      show(el) {
+      /* show(el) {
         el.style.display = ''
-      },
+      }, */
   
       ...mapMutations({ // 关闭全屏需要改变mutation的状态
         setFullScreen: 'SET_FULL_SCREEN',
@@ -200,6 +204,9 @@
         setPlayMode: 'SET_PLAY_MODE',
         setSequenceList: 'SET_SEQUENCE_LIST'
       }),
+      showPlaylist() {
+        this.$refs.playlist.show()
+      },
       enter(el, done) {
         const {
           x,
@@ -541,6 +548,7 @@
       progressBar,
       progressCircle,
       scroll,
+      playlist,
     }
   }
 </script>
@@ -765,6 +773,8 @@
         }
       }
     }
+    
+      
     .mini-player {
       background-color: darkred;
       display: flex;
@@ -774,14 +784,26 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      .mini-pic {
+      .mini-play-inner {
         flex: 0 0 4rem;
+        padding: 0 1rem 0 2rem;
+      .mini-pic {
         width: 4rem;
         height: 4rem;
-        padding: 0 1rem 0 2rem;
         .img {
           border-radius: 50%;
         }
+      }
+      &.rotate {
+        @keyframes rotate {
+          from {
+            -webkit-transform: rotate(0deg)
+          }
+          to {
+            -webkit-transform: rotate(360deg)
+          }
+        }
+      }
       }
       .text {
         flex: 1;
@@ -802,7 +824,7 @@
         flex: 0 0 3rem;
         font-size: 3rem;
         width: 3rem;
-        padding: 0 1rem;
+        padding: 1rem 1rem;
         .mini {
           font-size: 3.2rem;
           position: absolute;
@@ -822,6 +844,7 @@
       &.mini-leave-to {
         opacity: 0;
       }
+    
     }
   }
 </style>

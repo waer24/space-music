@@ -13,7 +13,7 @@
             <div class="icon" :class="getIconCls(item)"></div>
               <i ></i>
             <div class="name">
-              <p class="text">{{ getDisplayName(item)}}</p>
+              <p class="text" v-html="getDisplayName(item)"></p>
             </div>
           </div>
         </li>
@@ -133,7 +133,7 @@ export default {
     _ckeckMore(data) { // 检查是否到底了
       const song = data.song
       if (!song.list.length || (perpage * this.page + song.curpage > song.totalnum )) { // 当前的歌曲数量等于总共搜索出来的数量，证明到底了
-        this.hasMore = true
+        this.hasMore = false
         this.loadingShow = false
       }
     },

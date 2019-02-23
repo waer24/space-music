@@ -18,7 +18,7 @@
               <i class="icon-clear"></i>
             </span>
           </h2>
-          <search-list :searches="searchHistory" @deleteHistory="deleteSearch"></search-list>
+          <search-list :searches="searchHistory" @deleteHistory="deleteSearchHistory"></search-list>
         </div>
       </div>
     </div>
@@ -68,9 +68,9 @@ import { mapGetters, mapActions } from 'vuex';
       saveSearch() {
         this.saveSearchHistory(this.query)
       },
-      deleteSearch() {
+     /*  deleteSearch() { 删除的时候不需要再创建一个函数
         this.deleteSearchHistory()
-      },
+      }, */
       _getHotKey() {
         hotKey().then((res) => {
           if (res.code === ERR_OK) {
