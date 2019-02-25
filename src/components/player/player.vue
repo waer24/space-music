@@ -88,12 +88,12 @@
             <i class="mini" @click.stop="togglePlay" :class="playIconMini"></i>
           </progress-circle>
         </div>
-        <div class="control" @click="showPlaylist">
+        <div class="control" @click.stop="showPlaylist">
           <i class="icon-playlist icon-color " ></i>
         </div>
       </div>
     </transition>
-    <playlist></playlist>
+    <playlist ref="playlist"></playlist>
     <audio ref="audio" :src="currentSong.url" @canplay="ready" @timeupdate="timeupdate" @ended="end" @error="error"></audio>
   </div>
 </template>
