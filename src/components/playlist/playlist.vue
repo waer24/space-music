@@ -17,14 +17,14 @@
               @click="selectItem(item, index)">
             <i class="current" :class="currentPlay(item)"></i>
             <span class="text" >{{item.name}}</span>
-            <span class="like"><i class="icon-like" :class="likeCls"></i></span>
-            <span class="delete" @click="deleteItem(item)"><i class="icon-close"></i></span>
+            <span class="like" @click.stop="toggleFavorite(item)"><i :class="getFavoriteIcon(item)"></i></span>
+            <span class="delete" @click.stop="deleteItem(item)"><i class="icon-close"></i></span>
           </li>
         </ul>
       </scroll>
       <div class="add-button" @click="addSong">
         <i class="icon">+</i>
-        <span class="add">添加歌曲到队列</span>
+        <span class="add" @click="showSongList">添加歌曲到队列</span>
       </div>
       <div class="close" @click="hide">
         <span class="close-text">关闭</span>
@@ -49,31 +49,20 @@
   } from '@/common/js/config'
   import { shuffle } from '@/common/js/utils'
   import scroll from '@/base/scroll/scroll'
+  import { playerMixin } from '@/common/js/mixin'
   
   export default {
+    mixins: [playerMixin],
     data() {
       return {
         showFlag: false,
       }
     },
     computed: {
-      ...mapGetters([
-        'sequenceList',
-        'mode', // mode要从mapgetter中获取，不然无法获得上下的值
-        'playList',
-        'currentSong'
-      ]),
-      iconClass() {
-        
-        return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
-  
-      },
       modeText() {
         //ERROR return this.playMode === playMode.sequence ? '顺序播放' : this.playMode === playMode.loop ? '单曲循环' : this.playMode === playMode.random ? '随机播放'
         return this.mode === playMode.sequence ? '顺序播放' : this.mode === playMode.loop ? '单曲循环' : '随机播放'
       },
-      
-      
     },
 
   
@@ -87,18 +76,7 @@
       addSong() {
         this.$refs.addSong.show()
       },
-      changeIcon() {
-        const mode = (this.mode + 1) % 3 // 0, 1, 2
-        this.setPlayMode(mode) // 提交到mutation
-        let list = null
-        if(this.mode === playMode.random ) {
-          list = shuffle(this.sequenceList)
-        } else {
-          list = this.sequenceList
-        }
-        this.setCurrentIndex(list)
-        this.setPlayList(list)
-      },
+      
       currentPlay(item) {
         if(this.currentSong.id === item.id) {
           return 'icon-play-mini'
@@ -106,11 +84,7 @@
           return ''
         }
       },
-      resetCurrentIndex(list){
-        let index = list.findIndex((item) => {
-          return item.id === this.currentSong.id
-        })
-      },
+      
       deleteItem(item) {
         this.deleteSong(item)
         if (!this.playList.length) {
@@ -123,9 +97,7 @@
           this.hide()
         }
       },
-      likeCls(item) {
-        
-      },
+
       // 选中当前的播放
       selectItem(item ,index) {
        if (this.mode === playMode.random ) {
@@ -143,19 +115,17 @@
       },
 
       cancelClear() {
-        this.hide()
+        this.$refs.confirm.hide()
       },
 
       confirmClear() {
         this.deleteSongList()
         this.hide()
       },
-      ...mapMutations({
-        setPlayMode: 'SET_PLAY_MODE',
-        setPlayList: 'SET_PLAYLIST',
-        setCurrentIndex: 'SET_CURRENT_INDEX',
-        setPlayState: 'SET_PLAYING_STATE'
-      }),
+      // 打开添加歌曲列表
+      showSongList() {
+        this.$refs.addSong.show()
+      },
       ...mapActions([
         'deleteSong',
         'deleteSongList',
@@ -233,11 +203,8 @@
         }
         .like {
           margin-right: 1.6rem;
-          color: $color-theme;
+          color: $color-favorite;
           @include fs(1.2rem);
-          .icon-like {
-            color: $color-favorite;
-          }
         }
         .delete {
           position: relative;

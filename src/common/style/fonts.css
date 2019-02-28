@@ -53,6 +53,7 @@
 }
 .icon-like:before {
   content: "\e909";
+  color:  #d93f30;
 }
 .icon-not-like:before {
   content: "\e90a";

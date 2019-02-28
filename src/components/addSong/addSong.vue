@@ -1,4 +1,5 @@
 <template>
+<transition name="slide">
   <div class="add-wrap" v-show="showFlag">
     <div class="header">
       <h1 class="title">添加歌曲到列表</h1>
@@ -6,16 +7,9 @@
         <i class="icon-no"></i>
       </span>
     </div>
-    <search-box></search-box>
+    <search-box @query="onQueryChange"></search-box>
     <div class="shortcut">
-      <ul class="switches">
-        <li class="item active">
-          <span class="txt">最近播放</span>
-        </li>
-        <li class="item">
-          <span class="txt">搜索历史</span>
-        </li>
-      </ul>
+      <switches :list="switchesList"></switches>
       <div class="list-wrap">
         <div class="list-inner">
           <ul>
@@ -31,17 +25,26 @@
         </div>
       </div>
     </div>
-    
+    <!-- result -->
+   <!--  <div class="result"  v-show="showFlag">
+      <suggest></suggest>
+    </div> -->
   </div>
+  </transition>
 </template>
 
 <script>
 import searchBox from '@/base/search-box/search-box'
+import suggest from '@/components/suggest/suggest'
+import switches from '@/base/switches/switches'
+import { searchMixin} from '@/common/js/mixin'
 
 export default {
+  mixins: [searchMixin],
   data() {
     return {
-      showFlag: false
+      showFlag: false,
+      switchesList: ['最近播放', '搜索历史']
     }
   },
   methods: {
@@ -54,6 +57,8 @@ export default {
   },
   components: {
     searchBox,
+    suggest,
+    switches,
   }
 }
 </script>
@@ -66,6 +71,12 @@ export default {
     width: 100%;
     height: 100%;
     background-color:$color-background;
+    &.slide-enter-active, &.slide-leave-active {
+      transition: all 0.3s;
+    }
+    &.slide-enter, &.slide-leave-to {
+      transform: translate3d(100%, 0, 0)
+    }
   .header {
     height: 4.4rem;
     text-align: center;
@@ -85,32 +96,6 @@ export default {
   }
   .shortcut {
     margin:0 auto;
-    .switches {
-          border: 1px solid #C4C4C4;
-    border-radius: 0.5rem;
-    font-size: 1.4rem;
-    width: 24rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-      .item {
-       
-        color: #C4C4C4;
-            padding: 0.4rem 0.5rem;
-    margin: 0;
-    flex: 1;
-    text-align: center;
-          .txt {
-        @include fs(1.4rem);
-    }
-      }
-       .active {
-        color: #fff;
-        background-color: $color-text-d;
-      }
-      } 
-     
     .list-wrap {
       position: absolute;
       top: 16rem;

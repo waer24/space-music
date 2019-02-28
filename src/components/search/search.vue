@@ -36,12 +36,13 @@ import {ERR_OK} from '@/api/config'
 import suggest from '@/components/suggest/suggest'
 import searchList from '@/base/search-list/search-list'
 import { mapGetters, mapActions } from 'vuex';
+import { searchMixin} from '@/common/js/mixin'
 
   export default {
+    mixins: [searchMixin],
     data() {
       return {
         hotkey: [], 
-        query: '',
       }
     },
     computed: {
@@ -53,20 +54,8 @@ import { mapGetters, mapActions } from 'vuex';
       this._getHotKey()
     },
     methods: {
-      onQueryChange(newQuery) {
-        this.query = newQuery
-      },
-      blurInput() {
-        this.$refs.searchBox.blur()
-      },
       selectHistory(item) {
        this.$refs.searchBox.setQuery(item)
-      },
-      recodeSearch(query){
-        
-      },
-      saveSearch() {
-        this.saveSearchHistory(this.query)
       },
      /*  deleteSearch() { 删除的时候不需要再创建一个函数
         this.deleteSearchHistory()

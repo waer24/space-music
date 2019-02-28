@@ -10,14 +10,11 @@
 
 <script>
 import { debounce } from '@/common/js/utils'
+import { searchMixin} from '@/common/js/mixin'
 
   export default {
-    data() {
-      return {
-        query: '',
-      }
-    },
-
+    mixins: [searchMixin],
+  
     props: {
       placeholder: {
         type: String,

@@ -66,7 +66,7 @@
               <i class="icon-next"></i>
             </div>
             <div class="icon">
-              <i class="icon-not-like"></i>
+              <i  @click="toggleFavorite(currentSong)" :class="getFavoriteIcon(currentSong)"></i>
             </div>
           </div>
         </div>
@@ -89,7 +89,7 @@
           </progress-circle>
         </div>
         <div class="control" @click.stop="showPlaylist">
-          <i class="icon-playlist icon-color " ></i>
+          <i class="icon-playlist icon-color" ></i>
         </div>
       </div>
     </transition>
@@ -124,12 +124,14 @@
   } from '@/common/js/song' */
   import scroll from '@/base/scroll/scroll'
   import playlist from '@/components/playlist/playlist'
+    import { playerMixin } from '@/common/js/mixin'
   
   
   const transform = prefixStyle('transform')
   const transitionDuration = prefixStyle('transitionDuration')
   const topMarginTop = 20
   export default {
+    mixins: [playerMixin],
     data() {
       return {
         songReady: false, // 设置歌曲的准备状态的标示符号
@@ -487,7 +489,7 @@
         this.$refs.middleLf.style[transitionDuration] = `${time}ms`
         this.touch.initiated = false
       },
-      
+
       _getPosAndScale() {
         const targetWidth = 40
         const paddingLeft = 40
@@ -748,6 +750,7 @@
           .icon {
             margin: 0 1.8rem;
             font-size: 3rem;
+          
             &.disable {
               color: $color-theme-d
             }
