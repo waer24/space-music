@@ -1,10 +1,10 @@
 <template>
-  <div class="confirm-wrap">
+  <div class="confirm-wrap" v-show="showFlag">
     <div class="confirm">
-      <div class="content">是否清空所有搜索历史</div>
+      <div class="content">{{contentText}}</div>
       <div class="select">
-        <span class="lf">取消</span>
-        <span class="rt">清空</span>
+        <span class="lf" @click="cancel">{{cancelText}}</span>
+        <span class="rt" @click="confirm">{{sureText}}</span>
       </div>
     </div>
   </div>
@@ -12,7 +12,39 @@
 
 <script>
 export default {
-  
+  data() {
+  return {
+    showFlag: false
+  }
+},
+props: {
+contentText: {
+  type: String,
+  default: ''
+},
+  cancelText: {
+    type: String,
+    default: '取消'
+  },
+  sureText: {
+    type: String,
+    default: '确定'
+  }
+},
+methods: {
+  show() {
+    this.showFlag = true
+  },
+  hide() {
+    this.showFlag = false
+  },
+  cancel() {
+    this.$emit('cancel')
+  },
+  confirm() {
+    this.$emit('confirm')
+  }
+}
 }
 </script>
 
@@ -25,7 +57,7 @@ export default {
   z-index:400;
   .confirm {
     padding: 2rem 4rem;
-    background-color: darkred;
+    background-color: #99112C;
     font-size: 1.5rem;
     min-width: 15rem;
     color: $color-text-ll;
