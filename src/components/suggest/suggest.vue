@@ -23,8 +23,6 @@
         <!-- title是props传递的，若值是固定的，则不必加冒号 -->
         <no-result title=""></no-result> 
       </div>
-      <!-- 通过搜索歌手，router进入到歌手详情页面，需要router-view给定页面来显示 -->
-      <router-view></router-view> 
       </scroll> 
 </template>
 
@@ -73,9 +71,7 @@ export default {
         })
         this.$router.push({
           path: `/search/${singer.id}`
-          // path: `/search/${item.singermid}` // 这样子会跳转到详情页面，singerdetail又回因为没有singer id返回到singer页面
         })
-        
         this.setSinger(singer)
       } else { 
         this.insertSong(item)
@@ -90,7 +86,7 @@ export default {
       search(this.query, this.page, this.showSinger, perpage).then((res) => {
         if ( res.code === ERR_OK ) {
           this.result = this._genResult(res.data) // 取到了值,但是搜索要考虑两种情况，歌手 / 歌曲 且icon的表示也不同，因此需要区分，再显示到搜索结果中
-          console.log(this.result)
+          // console.log(this.result)
           this._ckeckMore(res.data)
         }
       })

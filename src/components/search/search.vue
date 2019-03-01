@@ -22,13 +22,13 @@
         </div>
       </div>
     </div>
-    <div class="serh-result" v-show="query">
+    <div class="search-result" v-show="query">
       <suggest :query="query" @listScroll="blurInput" @searchItem="saveSearch"></suggest>
     </div>
     <router-view></router-view>
   </div>
 </template>
-
+ 
 <script>
 import searchBox from '@/base/search-box/search-box'
 import {hotKey} from '@/api/search'
@@ -110,7 +110,7 @@ import { searchMixin} from '@/common/js/mixin'
         }
       }
     }
-    .serh-result {
+    .search-result {
       position: fixed;
       width: 100%;
       top: 17rem;

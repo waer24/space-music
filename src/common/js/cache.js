@@ -62,11 +62,12 @@ export function clearSearch() {
 }
 
 export function savePlay(song) {
-  let songs = storage.get(PALY_KEY, [])
+  let songs = storage.get(PLAY_KEY, [])
   insertArray(songs, song, (item) => {
     return song.id === item.id
   },PLAY_MAX_LEN)
-  storage.set(PLAY_LEY, songs)
+  storage.set(PLAY_KEY, songs)
+  console.log(storage) // 相关的storage信息
   return songs
 }
 

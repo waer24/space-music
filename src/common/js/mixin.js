@@ -37,6 +37,7 @@ export const searchMixin = {
       refreshDelay: 120,
     }
   },
+
   computed: {
     ...mapGetters([
       'searchHistory'

@@ -94,22 +94,27 @@
       </div>
     </transition>
     <playlist ref="playlist"></playlist>
-    <audio ref="audio" :src="currentSong.url" @canplay="ready" @timeupdate="timeupdate" @ended="end" @error="error"></audio>
+    <audio ref="audio" :src="currentSong.url"
+           @timeupdate="timeupdate" 
+           @ended="end" 
+           @error="error"
+           @play="ready"></audio>
   </div>
 </template>
 
 <script>
   import {
     mapGetters,
-    mapMutations
+    mapMutations,
+    mapActions,
   } from 'vuex'
   import animations from 'create-keyframe-animation'
-  import {
-    prefixStyle
-  } from '@/common/js/dom'
+
   import progressBar from '@/base/progress-bar/progress-bar'
   import Lyric from 'lyric-parser'
   import progressCircle from '@/base/progress-circle/progress-circle'
+    import scroll from '@/base/scroll/scroll'
+  import playlist from '@/components/playlist/playlist'
   import {
     playMode
   } from '@/common/js/config'
@@ -119,12 +124,10 @@
   import {
     changeMode
   } from '@/store/actions'
-/*   import {
-    getLyric
-  } from '@/common/js/song' */
-  import scroll from '@/base/scroll/scroll'
-  import playlist from '@/components/playlist/playlist'
-    import { playerMixin } from '@/common/js/mixin'
+  import {
+    prefixStyle
+  } from '@/common/js/dom'
+  import { playerMixin } from '@/common/js/mixin'
   
   
   const transform = prefixStyle('transform')
@@ -310,7 +313,8 @@
       },
   
       ready() {
-        return this.songReady = true
+        this.songReady = true
+        this.savePlayHistory(this.currentSong)
       },
   
       // 当播放资源出错
@@ -323,7 +327,6 @@
         } else {
           this.next()
         }
-  
       },
   
       listerenPassive() { // 解决Unable to preventDefault inside passive event listener due to target being treated as passive.的问题
@@ -515,7 +518,10 @@
           len++
         }
         return num
-      }
+      },
+      ...mapActions([
+        'savePlayHistory'
+      ])
     },
     watch: {
       currentSong(newSong, oldSong) {
@@ -568,6 +574,7 @@
       color: $color-text;
       overflow: hidden;
       height: 100%;
+      z-index: 150; // 因为有多个页面的显示隐藏，需要用这个来控制，根据前后的顺序来确定值的范围
       .bg {
         position: absolute;
         height: 100%;

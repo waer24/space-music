@@ -57,7 +57,7 @@
 
 <style lang="scss" scoped>
 .song-list-wrapper{
-  // height: 64px;
+   // height: 64px;
   .item {
     display: flex;
     align-items: center;

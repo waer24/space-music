@@ -241,7 +241,7 @@
       }
     }
     .list {
-      position: fixed;
+      position: absolute; // fixed; 会导致页面一直被占据再
       top: 0;
       bottom: 0;
       width: 100%;
