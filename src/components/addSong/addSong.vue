@@ -12,13 +12,7 @@
         <switches :list="switchesList" @switch="switchAnother" :currentIndex="currentIndex"></switches>
         <div class="list-wrap">
           <div class="list-inner">
-            <song-list :is-songs="playHistory">ssfds</song-list>
-           <!--  <ul>
-              <li class="item" v-for="(currentSong, index) in currentSongs" :key="index">
-                <h2 class="name">{{currentSong.name}}</h2>
-                <p class="sub-name">{{currentSong.album}}</p>
-              </li>
-            </ul> -->
+            <song-list :is-songs="playHistory" @select="selectSong"></song-list>
           </div>
         </div>
       </div>
@@ -26,6 +20,7 @@
       <div class="search-result" v-show="query">
         <suggest :query="query" @listScroll="blurInput" @searchItem="saveSearch" :showSinger="showSinger"></suggest>
       </div>
+      <top-tip ref="topTip" ></top-tip>
     </div>
   </transition>
 </template>
@@ -35,7 +30,8 @@
   import suggest from '@/components/suggest/suggest'
   import switches from '@/base/switches/switches'
   import songList from '@/base/song-list/song-list'
-  import { mapGetters } from 'vuex'
+  import topTip from '@/base/top-tip/top-tip'
+  import { mapGetters, mapActions } from 'vuex'
   import {
     searchMixin
   } from '@/common/js/mixin'
@@ -71,15 +67,25 @@
        // console.log(this.playHistory)
       },
       switchAnother() {
-  
+        
       },
-     
+      selectSong(song, index) {
+        if (this.index !== 0) {
+          this.insertSong(song, index)
+          this.$refs.topTip.show()
+        }
+        
+      },
+     ...mapActions([
+       'insertSong',
+     ])
     },
     components: {
       searchBox,
       suggest,
       switches,
       songList,
+      topTip,
     }
   }
 </script>
