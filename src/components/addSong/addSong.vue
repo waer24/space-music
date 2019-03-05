@@ -4,23 +4,30 @@
       <div class="header">
         <h1 class="title">添加歌曲到列表</h1>
         <span class="close" @click="hide">
-          <i class="icon-no"></i>
-        </span>
+            <i class="icon-no"></i>
+          </span>
       </div>
       <search-box @query="onQueryChange" :placeholder="placeholder"></search-box>
       <div class="shortcut">
-        <switches :list="switchesList" @switch="switchAnother" :currentIndex="currentIndex"></switches>
+        <switches :list="switchesList" @switch="" :currentIndex="currentIndex"></switches>
         <div class="list-wrap">
+          <scroll :scroll-data="playHistory" :probe-type="probeType" class="list-scroll">
           <div class="list-inner">
             <song-list :is-songs="playHistory" @select="selectSong"></song-list>
           </div>
+           </scroll>
         </div>
       </div>
       <!-- result -->
       <div class="search-result" v-show="query">
-        <suggest :query="query" @listScroll="blurInput" @searchItem="saveSearch" :showSinger="showSinger"></suggest>
+        <suggest :query="query" @listScroll="blurInput" @searchItem="selectSuggest" :showSinger="showSinger"></suggest>
       </div>
-      <top-tip ref="topTip" ></top-tip>
+      <top-tip ref="topTip">
+        <div class="text" >
+          <span class="icon"><i class="icon-ok"></i></span> 
+          1首歌曲已经添加到播放列表
+        </div>
+      </top-tip>
     </div>
   </transition>
 </template>
@@ -31,7 +38,11 @@
   import switches from '@/base/switches/switches'
   import songList from '@/base/song-list/song-list'
   import topTip from '@/base/top-tip/top-tip'
-  import { mapGetters, mapActions } from 'vuex'
+  import scroll from '@/base/scroll/scroll'
+  import {
+    mapGetters,
+    mapActions
+  } from 'vuex'
   import {
     searchMixin
   } from '@/common/js/mixin'
@@ -45,6 +56,7 @@
         showSinger: false,
         currentIndex: 0,
         placeholder: '搜索歌曲',
+        probeType: 3,
         switchesList: [{
           name: '最近播放'
         }, {
@@ -57,28 +69,29 @@
         'playHistory',
       ])
     },
-
+  
     methods: {
       hide() {
         this.showFlag = false
       },
       show() {
         this.showFlag = true
-       // console.log(this.playHistory)
+        // console.log(this.playHistory)
       },
-      switchAnother() {
-        
-      },
+    selectSuggest() {
+      this.saveSearch()
+      this.$refs.topTip.show()
+    },
       selectSong(song, index) {
         if (this.index !== 0) {
           this.insertSong(song, index)
           this.$refs.topTip.show()
         }
-        
+  
       },
-     ...mapActions([
-       'insertSong',
-     ])
+      ...mapActions([
+        'insertSong',
+      ])
     },
     components: {
       searchBox,
@@ -86,6 +99,7 @@
       switches,
       songList,
       topTip,
+      scroll,
     }
   }
 </script>
@@ -97,6 +111,7 @@
     top: 0;
     width: 100%;
     height: 100%;
+    z-index: 200;
     background-color: $color-background;
     &.slide-enter-active,
     &.slide-leave-active {
@@ -129,8 +144,11 @@
       .list-wrap {
         position: absolute;
         top: 16rem;
-        left: 0;
+        bottom: 0;
         width: 100%;
+        .list-scroll {
+          height: 100%;
+          overflow: hidden;
         .list-inner {
           padding: 2rem;
           .item {
@@ -147,6 +165,7 @@
           }
         }
       }
+      }
     }
     .search-result {
       position: fixed;
@@ -155,6 +174,12 @@
       bottom: 0;
       background-color: $color-background;
     }
+      .text {
+        @include fs(1.3rem);
+        .icon {
+        @include fs(1.3rem);
+      }
+      }
   }
 </style>
 

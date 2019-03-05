@@ -146,9 +146,9 @@
    top: 0;
    right:0;
    bottom: 0;
-    z-index: 200;
-   color: $color-text-l;
-       background-color: $color-background-d;
+  z-index: 200;
+  color: $color-text-l;
+  background-color: $color-background-d;
     .list-inner {
  position: absolute;
     left: 0;
