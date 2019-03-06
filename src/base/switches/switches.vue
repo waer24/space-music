@@ -30,7 +30,7 @@
 
 <style lang="scss" scoped>
   .switches {
-    border: 1px solid #C4C4C4;
+    border: 1px solid $color-disc-border;
     border-radius: 0.5rem;
     font-size: 1.4rem;
     width: 24rem;

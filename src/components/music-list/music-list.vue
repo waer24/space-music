@@ -7,7 +7,7 @@
     <div class="bg-img" ref="bgImg" :style="bgStyle">
       <div class="filter" ref="filter"></div>
       <div class="play-wrap" @click="randomPlay">
-        <div class="play" ref="playBtn" >
+        <div class="play-btn" ref="playBtn" >
           <i class="icon icon-play"></i>
           <span class="text">随机播放全部</span>
         </div>
@@ -220,7 +220,7 @@
         left: 0;
         right: 0;
         text-align: center;
-        .play {
+        .play-btn {
           box-sizing: border-box;
           width: 13.5rem;
           margin: 0 auto;
