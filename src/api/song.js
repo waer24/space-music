@@ -20,12 +20,12 @@ return axios.get(url,{
 })
 } 
 
-/* old api:
+// old api:
  export function getSongsUrl(songs) {
   const url = debug ? '/api/getPurlUrl' : 'http://ustbhuangyi.com/music/api/getPurlUrl'
   let mids = []
   let types = []
-  songs.forEach((song) => {
+  Array.from(songs).forEach((song) => {
     mids.push(song.mid)
     types.push(0)
   })
@@ -78,4 +78,3 @@ return axios.get(url,{
     request()
   })
 }
- */

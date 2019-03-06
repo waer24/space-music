@@ -57,6 +57,12 @@ const rankList = (resolve) => {
   })
 }
 
+const userCenter = ( resolve ) => {
+  import ( '@/components/user-center/user-center').then((module) => {
+    resolve(module)
+  })
+}
+
 
 const router = new Router({
   mode: 'hash',
@@ -102,9 +108,19 @@ const router = new Router({
     },
     {
       path: '/search',
-      name: 'search',
-      component: search
+     // name: 'search',
+      component: search,
+      children: [
+        {
+          path: ':id',
+          component: singerDetail
+        }
+      ]
     },
+    {
+      path: '/user',
+      component: userCenter,
+    }
   ]
 })
 

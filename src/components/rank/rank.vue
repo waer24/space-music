@@ -1,6 +1,6 @@
 <template>
-  <div class="rank-wrap">
-    <scroll :scroll-data="topList" :probe-type="probeType" class="toplist">
+  <div class="rank-wrap" ref="rank">
+    <scroll :scroll-data="topList" :probe-type="probeType" class="toplist" ref="scroll">
     <ul>
       <li class="rank-item" v-for="(item,index) in topList" :key="index" @click="selectItem(item)">
         <div>
@@ -30,8 +30,10 @@ import { mapMutations } from 'vuex'
   import {
     ERR_OK
   } from '@/api/config'
+  import { playlistMixin } from '@/common/js/mixin'
   
   export default {
+    mixins: [playlistMixin],
     data() {
       return {
         topList: [],
@@ -44,6 +46,11 @@ import { mapMutations } from 'vuex'
     },
   
     methods: {
+      handlePlaylist(playlist) {
+        const bottom = playlist.length > 0 ? '6rem' : ''
+        this.$refs.rank.style.bottom = bottom
+        this.$refs.scroll.refresh()
+      },
       _getTopList() {
         topList().then((res) => {
           if (res.code === ERR_OK) {

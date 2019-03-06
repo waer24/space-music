@@ -26,24 +26,32 @@ import Bscroll from 'better-scroll'
         type: Boolean,
         default: true,
       },
-      beforeScroll: {
+      beforeScrollStart: { // 用于搜索页面
         type: Boolean,
         default: false
       },
+      scrollEnd: {
+        type: Boolean,
+        default: false
+      },
+
       refreshDelay: {
         type: Number,
         default: 20,
       },
-       pullup: { // 是否滚动到底
+       pullingUp: { // 是否滚动到底 用于搜索页面
         type: Boolean,
         default: false
       },
     },
 
     mounted() { 
-      this.$nextTick(() => { // 在新的dom更新之后初始化scroll
+      setTimeout(() => {
         this._initScroll()
-      })
+      }, 20)
+     /*  this.$nextTick(() => { // 在新的dom更新之后初始化scroll
+        this._initScroll()
+      }) */
     },
 
     methods: {
@@ -67,12 +75,26 @@ import Bscroll from 'better-scroll'
           me.$emit('scroll', pos)
         })
       }
-
-      /* if(this.beforeScroll) { 
-        this.scroll.on('beforeScrollStart', () => {
-          this.$emit('beforeScroll')
+ 
+       if(this.beforeScrollStart) { 
+        this.scroll.on('beforeScrollStart', () => { // 触发beforeScrollStart事件
+          this.$emit('beforeScroll') // 传递出去
+          // console.log(22) // 表明已触发
         })
-      } */
+      }
+
+      if (this.pullingUp) { // 如果出发了pullup 就绑定scrollend事件
+        /* this.scroll.on('scrollEnd', () => { 
+          this.$emit('scrollEndEvent') 
+        }) */
+        this.scroll.on('scrollEnd', () => {
+          if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+            this.$emit('scrollEndEvent') // 这只是名称，传递出去
+          }
+        })
+      }
+
+
     },
 
     scrollTo() {

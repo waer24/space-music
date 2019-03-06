@@ -9,15 +9,13 @@
 </template>
 
 <script>
+
+import { searchMixin} from '@/common/js/mixin'
 import { debounce } from '@/common/js/utils'
 
   export default {
-    data() {
-      return {
-        query: '',
-      }
-    },
-
+    mixins: [searchMixin],
+  
     props: {
       placeholder: {
         type: String,
@@ -25,11 +23,11 @@ import { debounce } from '@/common/js/utils'
       }
     },
 
-    created() { // 监控输入到input框的值
-      this.$watch('query', debounce((newQuery) => {
-        this.$emit('query', newQuery)
-      }, 200))
-    },
+  created() { // 监控输入到input框的值
+    this.$watch('query', debounce((newQuery) => {
+      this.$emit('query', newQuery) // 组件当中引用query,把query能够暴露出去
+    }, 200))
+  },
 
     methods: {
       blur() {
@@ -55,6 +53,7 @@ import { debounce } from '@/common/js/utils'
       .icon {
         vertical-align: middle;
         line-height: 3.2rem;
+        padding-left: 0.3rem;
       }
       .ipt {
         line-height: 3rem;

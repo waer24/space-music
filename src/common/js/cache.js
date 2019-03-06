@@ -27,6 +27,7 @@ function deleteFromArray(arr, compare){
   const index = arr.findIndex(compare)
   if (index > -1) {
     arr.splice(index, 1)
+    
   }
 }
 
@@ -37,6 +38,7 @@ export function loadSearch() {
 
 // 存储搜索历史
 export function saveSearch(query) {
+  console.log(query)
   let searches = storage.get(SEARCH_KEY, [])
   insertArray(searches, query, (item) => {
     return item === query
@@ -46,7 +48,7 @@ export function saveSearch(query) {
 }
 
 export function deleteSearch(query) {
-  let searches = storage.get(SEARCY_KEY, [])
+  let searches = storage.get(SEARCH_KEY, [])
   deleteFromArray(searches, (item) => {
     return item === query
   })
@@ -60,11 +62,12 @@ export function clearSearch() {
 }
 
 export function savePlay(song) {
-  let songs = storage.get(PALY_KEY, [])
+  let songs = storage.get(PLAY_KEY, [])
   insertArray(songs, song, (item) => {
     return song.id === item.id
   },PLAY_MAX_LEN)
-  storage.set(PLAY_LEY, songs)
+  storage.set(PLAY_KEY, songs)
+  console.log(storage) // 相关的storage信息
   return songs
 }
 

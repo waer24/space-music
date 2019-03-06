@@ -1,5 +1,5 @@
 <template>
-  <div class='wrap'>
+  <div class='header-wrap'>
     <div class='header'>
       <div class="logo"></div>
       <h4 class='fc'>Space Music</h4>
@@ -12,7 +12,7 @@
 
 <style lang='scss'>
   @import '../../common/style/fonts.css';
-  .wrap {
+  .header-wrap {
     .header {
       padding-top: 0.5rem;
       text-align: center;
@@ -23,7 +23,6 @@
         @include ib;
         @include bg-img('./logo');
         background-size: 100% 100%;
-        ;
         margin-right: 1rem;
       }
       .fc {

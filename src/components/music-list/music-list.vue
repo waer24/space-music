@@ -7,7 +7,7 @@
     <div class="bg-img" ref="bgImg" :style="bgStyle">
       <div class="filter" ref="filter"></div>
       <div class="play-wrap" @click="randomPlay">
-        <div class="play" ref="playBtn" >
+        <div class="play-btn" ref="playBtn" >
           <i class="icon icon-play"></i>
           <span class="text">随机播放全部</span>
         </div>
@@ -220,7 +220,7 @@
         left: 0;
         right: 0;
         text-align: center;
-        .play {
+        .play-btn {
           box-sizing: border-box;
           width: 13.5rem;
           margin: 0 auto;
@@ -241,7 +241,7 @@
       }
     }
     .list {
-      position: fixed;
+      position: absolute; // fixed; 会导致页面一直被占据再
       top: 0;
       bottom: 0;
       width: 100%;
