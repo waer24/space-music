@@ -9,13 +9,29 @@
       </div>
       <search-box @query="onQueryChange" :placeholder="placeholder"></search-box>
       <div class="shortcut">
-        <switches :list="switchesList" @switch="" :currentIndex="currentIndex"></switches>
+        <switches :list="switchesList" @switch="switchItem" :currentIndex="currentIndex"></switches>
         <div class="list-wrap">
-          <scroll :scroll-data="playHistory" :probe-type="probeType" class="list-scroll">
+          <!-- 最近播放 -->
+          <scroll :scroll-data="playHistory" 
+                  :probe-type="probeType" 
+                  class="list-scroll" 
+                  v-if="currentIndex===0">
+
           <div class="list-inner">
             <song-list :is-songs="playHistory" @select="selectSong"></song-list>
           </div>
            </scroll>
+
+           <!-- 搜索历史 -->
+            <scroll :scroll-data="searchHistory" class="list-scroll"
+                    v-if="currentIndex===1">
+              <div class="list-inner">
+                  <search-list :searches="searchHistory"
+                  @deleteHistory="deleteItem"
+                  ></search-list>
+              </div>
+            </scroll>
+
         </div>
       </div>
       <!-- result -->
@@ -39,6 +55,7 @@
   import songList from '@/base/song-list/song-list'
   import topTip from '@/base/top-tip/top-tip'
   import scroll from '@/base/scroll/scroll'
+  import searchList from '@/base/search-list/search-list'
   import {
     mapGetters,
     mapActions
@@ -65,8 +82,10 @@
       }
     },
     computed: {
+      
       ...mapGetters([
         'playHistory',
+        'searchHistory'
       ])
     },
   
@@ -89,8 +108,22 @@
         }
   
       },
+      deleteItem(item) {
+       this.deleteSearchHistory(item)
+      },
+      switchItem() {
+       
+        if(this.currentIndex === 0) {
+          console.log(this.currentIndex)
+          this.currentIndex = 1
+        } else {
+          this.currentIndex = 0
+        }
+      },
+      
       ...mapActions([
         'insertSong',
+        'deleteSearchHistory',
       ])
     },
     components: {
@@ -100,6 +133,7 @@
       songList,
       topTip,
       scroll,
+      searchList,
     }
   }
 </script>
@@ -150,7 +184,8 @@
           height: 100%;
           overflow: hidden;
         .list-inner {
-          padding: 2rem;
+          padding: 1rem 3rem;
+         
           .item {
             @include fs(1.4rem);
             padding: 0.5rem;
@@ -163,6 +198,7 @@
               color: $color-text-self;
             }
           }
+        
         }
       }
       }

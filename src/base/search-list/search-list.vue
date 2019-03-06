@@ -1,5 +1,5 @@
 <template>
-  <div class="list-wrap" v-show="searches.length">
+  <div class="search-list" v-show="searches.length">
     <ul>
       <li class="list-item" v-for="item in searches" :key="item"
           @click="select(item)">
@@ -32,6 +32,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.search-list {
+
+
 .list-item {
         display: flex;
         padding-bottom: 0.5rem;
@@ -45,6 +48,7 @@ export default {
            @include fs(1.2rem);
           padding: 0.2rem 0.4rem;
         }
+      }
       }
 </style>
 
