@@ -29,6 +29,9 @@
         <div class="list-inner">
           <song-list :is-songs="playHistory" @select="selectItem"></song-list>
         </div>
+        <div class="no-result-wrap" >
+          <no-result ></no-result>
+        </div>
       </scroll>
     </div>
     <!-- mini player -->
@@ -42,6 +45,7 @@
   import scroll from '@/base/scroll/scroll'
   import songList from '@/base/song-list/song-list'
   import Song from '@/common/js/song'
+  import noResult from '@/base/no-result/no-result'
   import { playlistMixin } from '@/common/js/mixin'
   import {
     mapGetters,
@@ -67,6 +71,14 @@
       ])
     },
     methods: {
+      noResult() {
+        if (!playHistory.length) {
+          return '暂无收藏'
+        }
+        if(!favoriteList.length) {
+          return '最近没听什么～'
+        }
+      },
       back() {
         this.$router.back()
       },
@@ -111,6 +123,7 @@
       switches,
       scroll,
       songList,
+      noResult,
     }
   }
 </script>
