@@ -770,6 +770,7 @@
       position: fixed;
       bottom: 0;
       left: 0;
+       z-index: 100; // 有了它才能显示
       width: 100%;
       .mini-play-inner {
         flex: 0 0 4rem;

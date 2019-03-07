@@ -12,8 +12,7 @@
         <switches :list="switchesList" @switch="switchItem" :currentIndex="currentIndex"></switches>
         <div class="list-wrap">
           <!-- 最近播放 -->
-          <scroll :scroll-data="playHistory" 
-                  :probe-type="probeType" 
+          <scroll :scroll-data="playHistory"
                   class="list-scroll" 
                   v-if="currentIndex===0">
 
@@ -73,7 +72,6 @@
         showSinger: false,
         currentIndex: 0,
         placeholder: '搜索歌曲',
-        probeType: 3,
         switchesList: [{
           name: '最近播放'
         }, {
@@ -111,14 +109,15 @@
       deleteItem(item) {
        this.deleteSearchHistory(item)
       },
-      switchItem() {
-       
-        if(this.currentIndex === 0) {
+      switchItem(index) {
+       // 更优写法
+       this.currentIndex = index
+        /* if(this.currentIndex === 0) {
           console.log(this.currentIndex)
           this.currentIndex = 1
         } else {
           this.currentIndex = 0
-        }
+        } */
       },
       
       ...mapActions([
