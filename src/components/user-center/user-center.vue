@@ -64,6 +64,9 @@
         currentIndex: 0,
       }
     },
+    created() {
+      this.noResult()
+    },
     computed: {
       ...mapGetters([
         'playHistory',
@@ -72,10 +75,10 @@
     },
     methods: {
       noResult() {
-        if (!playHistory.length) {
+        if (!this.playHistory.length) {
           return '暂无收藏'
         }
-        if(!favoriteList.length) {
+        if(!this.favoriteList.length) {
           return '最近没听什么～'
         }
       },

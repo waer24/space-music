@@ -44,9 +44,11 @@ methods: {
     this.showFlag = false
   },
   cancel() {
+    this.hide()
     this.$emit('cancel')
   },
   confirm() {
+    this.hide()
     this.$emit('confirm')
   }
 }

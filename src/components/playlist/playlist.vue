@@ -24,7 +24,7 @@
       </scroll>
       <div class="add-button" @click="addSong">
         <i class="icon">+</i>
-        <span class="add" @click="showSongList">添加歌曲到队列</span>
+        <span class="add" @click="showSongList">添加歌曲到队列</span>1
       </div>
       <div class="close" @click="hide">
         <span class="close-text">关闭</span>
@@ -33,6 +33,7 @@
     <add-song ref="addSong"></add-song>
     <confirm ref="confirm"
              contentText="是否清空所有搜索历史"
+             sureText="清空"
              @cancel="cancelClear"
              @confirm="confirmClear"></confirm>
   </div>
@@ -116,11 +117,11 @@
 
       cancelClear() {
         this.$refs.confirm.hide()
+        
       },
-
       confirmClear() {
         this.deleteSongList()
-        this.hide()
+        this.$refs.confirm.hide()
       },
       // 打开添加歌曲列表
       showSongList() {
