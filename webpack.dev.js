@@ -62,7 +62,7 @@ module.exports = merge(common, {
     在浏览器创建XMLHttpRequest对象，从node.js创建http请求 */
     before(app) {
     // disc  
-     app.get('/api/getdisclist', (req, res) => { // 地址要小写
+     app.get('/api/getDiscList', (req, res) => { // 地址要小写
         let url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
        // 这里的路径是给前端发送请求的url,axios发送get请求，可以自己配置config
         axios.get(url, {

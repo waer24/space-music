@@ -17,17 +17,18 @@ export function getWallSwiper() {
 
 // old api: 获取歌单 
 export function getDiscList() {
-  const url = '/api/getdisclist'
+  const url = '/api/getDiscList'
   const data = Object.assign({}, commonParams, {
     platform: 'yqq',
-    uin: 0,
+    hostUin: 0,
     sin: 0,
     ein: 29,
     sortId: 5,
     needNewCode: 0,
     categoryId: 10000000,
     rnd: Math.random(),
-    format: 'json'
+    format: 'json',
+    notice: 0
   })
   // 不用这个是因为返回的格式不是jsonp的格式，是一个json对象
   // return jsonp(url, data, options) 
