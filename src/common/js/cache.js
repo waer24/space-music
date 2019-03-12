@@ -57,7 +57,7 @@ export function deleteSearch(query) {
 }
 
 export function clearSearch() {
-  storage.get(SEARCH_KEY)
+  storage.remove(SEARCH_KEY) // 清除之后再刷新不会有数据
   return []
 }
 

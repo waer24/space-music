@@ -80,9 +80,6 @@ import { searchMixin, playlistMixin } from '@/common/js/mixin'
       handlePlaylist(playlist) {
         const bottom = playlist.length > 0 ? '6rem' : ''
         this.$refs.searchResult.style.bottom = bottom
-        /* this.$refs.suggest.refresh()
-        this.$refs.searchWrap.style.bottom = bottom
-        this.$refs.searchWrap.refresh() */
       },
       ...mapActions([
         'clearSearchHistory',

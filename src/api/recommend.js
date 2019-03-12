@@ -46,7 +46,7 @@ return axios.get(url,{
 // old api: 获取歌单中的所有曲目
 // disstid 是从每个歌单点击进去，由dissid的参数传递的
 export function getSongList(disstid) {
-  const url = '/api/getsonglist'
+  const url = '/api/getsongList'
   const data = Object.assign({}, commonParams, {
     disstid,
     type: 1,
@@ -55,17 +55,20 @@ export function getSongList(disstid) {
     onlysong: 0,
     platform: 'yqq',
     hostUin: 0,
+    loginUin: 0,
+    notice: 0,
     needNewCode: 0,
+    format: 'json',
     g_tk: 377121566
   })
-   return jsonp(url, data, options)
+  // return jsonp(url, data, options)
   // 现在不能用jsonp的方式返回了，会提示Uncaught ReferenceError: jp1 is not defined
  // jp1 是个默认的回调名称，自增1，jp2 ，jp3，因此最好用axios代理，或者修改第三方库jsonp
   
-   /* return axios.get(url, {
+    return axios.get(url, {
     params: data
   }).then((res) => {
-    console.log(res.data)
+    // console.log(res.data)
     return Promise.resolve(res.data)
-  }) */
+  }) 
 }

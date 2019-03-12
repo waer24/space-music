@@ -63,11 +63,11 @@ export function filterSinger(singer){
   return ret.join('/')
 }
 
-export function isValidMusic(musicData) {
+export function isValidMusic(musicData) { // 判断是否为有效歌曲（新增了判断收费歌曲）
   return musicData.songid && musicData.albummid && (!musicData.pay || musicData.pay.payalbumprice === 0)
 }
 
-export function processSongsUrl(songs) {
+/* export function processSongsUrl(songs) {
   if (!songs.length) {
     return Promise.resolve(songs)
   }
@@ -81,7 +81,7 @@ export function processSongsUrl(songs) {
     }
     return songs
   })
-}
+} */
 
 
 

@@ -24,6 +24,7 @@
         @include bg-img('./logo');
         background-size: 100% 100%;
         margin-right: 1rem;
+        border-radius: 50%;
       }
       .fc {
         @include ib;

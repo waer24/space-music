@@ -7,6 +7,7 @@ import store from './store'
 import router from './router' // 引用 router 配置
 import fastClick from 'fastclick'  // 引入页面公共js
 import VueLazyload from 'vue-lazyload'
+import vConsole from '@/common/js/vconsole'
 
 // 引入公共的样式
 import '@/common/style/base.scss'

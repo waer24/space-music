@@ -86,7 +86,7 @@
       </div>
     </transition>
     <playlist ref="playlist"></playlist>
-    <audio ref="audio" :src="currentSong.url" @timeupdate="timeupdate" @ended="end" @error="error" @play="ready"></audio>
+    <audio ref="audio" id="playAudio" :src="currentSong.url" @timeupdate="timeupdate" @ended="end" @error="error" @play="ready"></audio>
   </div>
 </template>
 
@@ -138,20 +138,30 @@
     },
   
     created() {
-      this.touch = {}
+      this.touch = {},
+       //当初始的HTML 文档被完全加载和解析完成之后，DOMContentLoaded 事件被触发，而无需等待样式表、图像和子框架的完成加载。
+       //用于ios下无法自动播放音乐的问题
+      document.addEventListener('DOMContentLoaded', function() {
+        function audioAutoPlay() {
+          var musicEle = document.getElementById('playAudio')
+          musicEle.play()
+        }
+        audioAutoPlay()
+      })
+      
+      // 触摸屏幕就自动播放歌曲，用于ios下无法自动播放音乐的问题
+      /* document.addEventListener('touchstart', function () {
+       function audioAutoPlay() {
+          var musicEle = document.getElementById('playAudio')
+          musicEle.play()
+        }
+        audioAutoPlay()
+      }) */
+      
     },
+    
     computed: {
-      ...mapGetters([ // 都是从getter.js中获得
-        'fullScreen',
-        'playList',
-        'currentSong',
-        'playing',
-        'currentIndex',
-        'singer',
-        'mode',
-        'sequenceList'
-  
-      ]),
+     
       playIcon() {
         return this.playing ? 'icon-play' : 'icon-pause'
       },
@@ -171,9 +181,18 @@
       iconMode() { // 更换icon
         return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
       },
-      // middleListShow(){
-      // return this.middleShow === "cd" ? this.$refs.cdWrapper.show() : this.$refs.lyriclist.show()
-      //}
+      
+       ...mapGetters([ // 都是从getter.js中获得
+        'fullScreen',
+        'playList',
+        'currentSong',
+        'playing',
+        'currentIndex',
+        'singer',
+        'mode',
+        'sequenceList'
+  
+      ]),
     },
   
   
@@ -482,6 +501,7 @@
         this.$refs.middleLf.style[transitionDuration] = `${time}ms`
         this.touch.initiated = false
       },
+     
   
       _getPosAndScale() {
         const targetWidth = 40
