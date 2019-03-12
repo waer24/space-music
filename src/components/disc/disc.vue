@@ -25,10 +25,11 @@
   
     computed: {
       title() {
-        return this.disc.name
+        // console.log(this.disc)
+        return this.disc.dissname
       },
       bgImg() {
-        return this.disc.pic
+        return this.disc.imgurl
       },
       ...mapGetters(['disc']) // 获取磁盘的数据
     },
@@ -46,12 +47,13 @@
           this.$router.push('/recommend')
           return
         }
-        getSongList(this.disc.dissid).then((res) => {
+        getSongList(this.disc.dissid).then((res) => { // 推荐列表点击进去的各个歌曲列表
           if (res.code === ERR_OK) {
-              console.log(res)
-              processSongsUrl(this._normalizeSongs(res.cdlist[0].songlist)).then((songs) => {
+               console.log(res)
+              this.songs = this._normalizeSongs(res.cdlist[0].songlist)
+             /*  processSongsUrl(this._normalizeSongs(res.cdlist[0].songlist)).then((songs) => {
               this.songs = songs
-            })
+            }) */
           }
         })
       }, 
@@ -59,7 +61,7 @@
         let ret = []
         Array.from(list).forEach((musicData) => {
           if (isValidMusic(musicData)) {
-            ret.push(createSong(musicData))
+            ret.push(createSongs(musicData))
           }
         })
         return ret

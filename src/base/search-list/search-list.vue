@@ -1,5 +1,5 @@
 <template>
-  <div class="search-list" v-show="searches.length">
+  <div class="search-list"  v-show="searches.length">
     <ul>
       <li class="list-item" v-for="item in searches" :key="item"
           @click="select(item)">
@@ -26,7 +26,8 @@ export default {
     },
     select (item) {
       this.$emit('selectHistory', item)
-    }
+    },
+    
   }
 }
 </script>

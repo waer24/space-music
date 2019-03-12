@@ -17,17 +17,18 @@ export function getWallSwiper() {
 
 // old api: 获取歌单 
 export function getDiscList() {
-  const url = '/api/getdisclist'
+  const url = '/api/getDiscList'
   const data = Object.assign({}, commonParams, {
     platform: 'yqq',
-    uin: 0,
+    hostUin: 0,
     sin: 0,
     ein: 29,
     sortId: 5,
     needNewCode: 0,
     categoryId: 10000000,
     rnd: Math.random(),
-    format: 'json'
+    format: 'json',
+    notice: 0
   })
   // 不用这个是因为返回的格式不是jsonp的格式，是一个json对象
   // return jsonp(url, data, options) 
@@ -45,7 +46,7 @@ return axios.get(url,{
 // old api: 获取歌单中的所有曲目
 // disstid 是从每个歌单点击进去，由dissid的参数传递的
 export function getSongList(disstid) {
-  const url = '/api/getsonglist'
+  const url = '/api/getsongList'
   const data = Object.assign({}, commonParams, {
     disstid,
     type: 1,
@@ -54,17 +55,20 @@ export function getSongList(disstid) {
     onlysong: 0,
     platform: 'yqq',
     hostUin: 0,
+    loginUin: 0,
+    notice: 0,
     needNewCode: 0,
+    format: 'json',
     g_tk: 377121566
   })
-   return jsonp(url, data, options)
+  // return jsonp(url, data, options)
   // 现在不能用jsonp的方式返回了，会提示Uncaught ReferenceError: jp1 is not defined
  // jp1 是个默认的回调名称，自增1，jp2 ，jp3，因此最好用axios代理，或者修改第三方库jsonp
   
-   /* return axios.get(url, {
+    return axios.get(url, {
     params: data
   }).then((res) => {
-    console.log(res.data)
+    // console.log(res.data)
     return Promise.resolve(res.data)
-  }) */
+  }) 
 }

@@ -62,7 +62,7 @@ module.exports = merge(common, {
     在浏览器创建XMLHttpRequest对象，从node.js创建http请求 */
     before(app) {
     // disc  
-     app.get('/api/getdisclist', (req, res) => { // 地址要小写
+     app.get('/api/getDiscList', (req, res) => { // 地址要小写
         let url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
        // 这里的路径是给前端发送请求的url,axios发送get请求，可以自己配置config
         axios.get(url, {
@@ -74,7 +74,7 @@ module.exports = merge(common, {
           //  params是即将与请求一起发送的url参数，无格式对象/URLSearchParams对象
           params: req.query
         }).then((response) => {
-          res.json(response.data)  //返回数据
+          res.json(response.data)  // axios 返回的数据在 response.data，要把数据透传到我们自定义的接口里面 res.json(response.data)
          // console.log(response.data)
         }).catch((error) => {
           console.log(error)
@@ -82,7 +82,7 @@ module.exports = merge(common, {
       }) 
       
       //在node层做转发层 获取歌单的所有曲目，用axios获取
-      app.get('/api/getsonglist', (req, res) => {
+       app.get('/api/getSongList', (req, res) => {
         let url ='https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
         axios.get(url, {
           headers: {
@@ -91,13 +91,13 @@ module.exports = merge(common, {
           },
           params: req.query
         }).then((response) => {
-          if (typeof response.data  === 'String') {
+           if (typeof response.data  === 'String') {
             var reg = /^\w+\(({[^()]+})\)$/  //jsoncallback({.....})
             var matches = response.data.match(reg)
             if (matches) {
               response.data = JSON.parse(matches[1])
             }
-          }
+          } 
           res.json(response.data)
         }).catch((e) => {
           console.log(e)

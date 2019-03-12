@@ -1,7 +1,7 @@
 <template>
   <div class='search' >
   <search-box ref="searchBox" @query="onQueryChange"></search-box>
-    <div class="serh-wrap" ref="serhWrap" v-show="!query">
+    <div class="serh-wrap" ref="searchWrap" v-show="!query">
       <div>
         <div class="serh-hot" ref="searchHot">
           <h1 class="title">热门搜索</h1>
@@ -11,19 +11,26 @@
             </li>
           </ul>
         </div>
-        <div class="serh-history" v-show="searchHistory.length">
+        <div class="serh-history" v-show="searchHistory.length" ref="searchHistory">
           <h2 class="title">
             <span class="text">搜索历史</span>
-            <span class="icon-trash-wrap">
+            <span class="icon-trash-wrap" @click="showConfirm">
               <i class="icon-clear"></i>
             </span>
           </h2>
-          <search-list :searches="searchHistory" @deleteHistory="deleteSearchHistory"></search-list>
+          <search-list ref="searchList" :searches="searchHistory" @deleteHistory="deleteSearchHistory"></search-list>
         </div>
       </div>
     </div>
-    <div class="search-result" v-show="query">
-      <suggest :query="query" @listScroll="blurInput" @searchItem="saveSearch"></suggest>
+    <div class="search-result" v-show="query" ref="searchResult">
+      <suggest ref="suggest" :query="query" @listScroll="blurInput" @searchItem="saveSearch"></suggest>
+    </div>
+    <div class="confirm">
+      <confirm ref="confirm" 
+             contentText="是否清空所有搜索历史"
+             sureText="清空"
+             @cancel="cancelClear"
+             @confirm="clearSearchHistory"></confirm>
     </div>
     <router-view></router-view>
   </div>
@@ -35,31 +42,34 @@ import {hotKey} from '@/api/search'
 import {ERR_OK} from '@/api/config'
 import suggest from '@/components/suggest/suggest'
 import searchList from '@/base/search-list/search-list'
+import confirm from '@/base/confirm/confirm'
 import { mapGetters, mapActions } from 'vuex';
-import { searchMixin} from '@/common/js/mixin'
+import { searchMixin, playlistMixin } from '@/common/js/mixin'
 
   export default {
-    mixins: [searchMixin],
+    mixins: [searchMixin, playlistMixin],
     data() {
       return {
         hotkey: [], 
       }
     },
-    computed: {
-      ...mapGetters([
-        'searchHistory'
-      ])
-    },
     created() {
       this._getHotKey()
     },
     methods: {
+     
       selectHistory(item) {
        this.$refs.searchBox.setQuery(item)
       },
-     /*  deleteSearch() { 删除的时候不需要再创建一个函数
+     /*  deleteSearch() { 删除的时候不需要再创建一个函数,为什么呢？
         this.deleteSearchHistory()
       }, */
+     showConfirm() {
+       this.$refs.confirm.show()
+     },
+      cancelClear() {
+        this.$refs.confirm.hide()
+      },
       _getHotKey() {
         hotKey().then((res) => {
           if (res.code === ERR_OK) {
@@ -67,15 +77,19 @@ import { searchMixin} from '@/common/js/mixin'
           }
         })
       },
+      handlePlaylist(playlist) {
+        const bottom = playlist.length > 0 ? '6rem' : ''
+        this.$refs.searchResult.style.bottom = bottom
+      },
       ...mapActions([
-        'saveSearchHistory',
-        'deleteSearchHistory'
+        'clearSearchHistory',
       ])
      },
      components: {
        searchBox,
        suggest,
        searchList,
+       confirm,
      }
   
   }
@@ -115,6 +129,12 @@ import { searchMixin} from '@/common/js/mixin'
       width: 100%;
       top: 17rem;
       bottom: 0;
+    }
+    .confirm {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%)
     }
   }
 </style>
