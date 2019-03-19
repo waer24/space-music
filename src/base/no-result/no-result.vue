@@ -7,9 +7,10 @@
 
 <script>
 export default {
-  data() {
-    return {
-      title: '抱歉，暂无搜索结果'
+  props: {
+    title: {
+      type: String,
+      default: ''
     }
   }
 }

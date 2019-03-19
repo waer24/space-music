@@ -29,10 +29,11 @@
         <div class="list-inner">
           <song-list :is-songs="playHistory" @select="selectItem"></song-list>
         </div>
-        <div class="no-result-wrap" >
-          <no-result ></no-result>
-        </div>
+       
       </scroll>
+       <div class="no-result-wrap" v-show="noResult">
+          <no-result :title="noResultTitle"></no-result>
+        </div>
     </div>
     <!-- mini player -->
 
@@ -64,35 +65,26 @@
         currentIndex: 0,
       }
     },
-    created() {
-      this.noResult()
-    },
     computed: {
+       noResult() {
+         
+        return this.currentIndex === 0 ? !this.favoriteList.length : !this.playHistory.length
+      },
+      noResultTitle () {
+        return this.currentIndex === 0 ? '咩收藏歌啦～' : '你还没听过歌曲哟～'
+      },
       ...mapGetters([
         'playHistory',
         'favoriteList',
       ])
     },
     methods: {
-      noResult() {
-        if (!this.playHistory.length) {
-          return '暂无收藏'
-        }
-        if(!this.favoriteList.length) {
-          return '最近没听什么～'
-        }
-      },
       back() {
+        this.playHistory.length = 0
         this.$router.back()
       },
       switchItem(index) {
-        // 更优写法
         this.currentIndex = index
-        /* if (this.currentIndex === 0) {
-          this.currentIndex = 1
-        } else {
-          this.currentIndex = 0
-        } */
       },
       selectItem(song) {
         this.insertSong(new Song(song)) // 为什么是new Song？
@@ -182,6 +174,12 @@
         .list-inner {
           padding: 0 3rem;
         }
+      }
+      .no-result-wrap {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -100%)
       }
     }
    

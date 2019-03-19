@@ -105,8 +105,8 @@ var config = {
     }),
 
     new OpenBrowserPlugin({
-        url: 'http://172.20.10.2:8080'
-       // url: 'http://localhost:8080'
+      //url: 'http://172.20.10.2:8080'
+        url: 'http://localhost:8080'
     }),
 
     // 使用 HotModuleReplacementPlugin 插件 实时编译和刷新浏览器
@@ -128,7 +128,7 @@ var config = {
   contentBase: __dirname,
   inline: true,
   hot: true,
-  host: '0.0.0.0', // 加了这个，才能使用ip指代网址
+  // host: '0.0.0.0', // 加了这个，才能使用ip指代网址
   }
 }
 
