@@ -8,3 +8,6 @@ svg 不能带class,只能用circle来制定transform-origin
 
 2. methods和computed的区别？
 数据量大，需要缓存的时候用computed；每次确实需要重新加载，不需要缓存时用methods
+
+3. 项目从gitee迁移到github中，重启“”npm run start"报错
+4. 先看报错信息：有一条是node_modules/node-sass，node升级到v8以后，和node-sass现有的项目版本不兼容。解决方案：npm i node-sass -D即可

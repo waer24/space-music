@@ -20,7 +20,7 @@
                 <img class="disc" alt="" :src="currentSong.image">
               </div>
             </div>
-            <div class="lyrics-wrap">
+            <div class="lyrics-wrap" ref="playerLyricsWrapper">
               <p class="lyrics">{{playingLyric}}</p>
             </div>
           </div>
@@ -86,7 +86,7 @@
       </div>
     </transition>
     <playlist ref="playlist"></playlist>
-    <audio ref="audio" id="playAudio" :src="currentSong.url" @timeupdate="timeupdate" @ended="end" @error="error" @play="ready"></audio>
+    <audio ref="audio" :src="currentSong.url" @timeupdate="timeupdate" @ended="end" @error="error" @play="ready"></audio>
   </div>
 </template>
 
@@ -118,7 +118,7 @@
   import {
     playerMixin
   } from '@/common/js/mixin'
-  
+  import { isIphoneX } from '@/common/js/utils'
   
   const transform = prefixStyle('transform')
   const transitionDuration = prefixStyle('transitionDuration')
@@ -138,26 +138,30 @@
     },
   
     created() {
-      this.touch = {},
+      this.touch = {}
        //当初始的HTML 文档被完全加载和解析完成之后，DOMContentLoaded 事件被触发，而无需等待样式表、图像和子框架的完成加载。
        //用于ios下无法自动播放音乐的问题
-      document.addEventListener('DOMContentLoaded', function() {
-        function audioAutoPlay() {
-          var musicEle = document.getElementById('playAudio')
-          musicEle.play()
-        }
-        audioAutoPlay()
-      })
+     
       
       // 触摸屏幕就自动播放歌曲，用于ios下无法自动播放音乐的问题
-      /* document.addEventListener('touchstart', function () {
+     /*  document.addEventListener('touchstart', function () {
        function audioAutoPlay() {
           var musicEle = document.getElementById('playAudio')
           musicEle.play()
         }
         audioAutoPlay()
       }) */
-      
+    
+    },
+    mounted() {
+       /* document.addEventListener('DOMContentLoaded', function ()  {
+        function audioAutoPlay() {
+          this.$refs.audio.play()
+        }
+        audioAutoPlay()
+      }) */
+      this.$refs.cdWrapper.style.top = isIphoneX() ? '2.5rem' : 0
+      this.$refs.playerLyricsWrapper.style.marginTop = isIphoneX() ? '10rem' : '3rem'
     },
     
     computed: {
@@ -424,13 +428,11 @@
           this.playingLyric = ''
         })
       },
-      lyricHandle({
-        lineNum,
-        txt
-      }) { // 歌词滚动
+      lyricHandle({lineNum, txt}) { // 歌词滚动
         this.currentLineNum = lineNum
+        let middleLine = isIphoneX() ? 7 : 5 // iphoneX 放在第7行高亮
         if (lineNum > 5) {
-          let lineEl = this.$refs.lyricLine[lineNum - 5] // 保证当前的歌词位于手机中间
+          let lineEl = this.$refs.lyricLine[lineNum - middleLine] // 保证当前的歌词位于手机中间
           this.$refs.lyriclist.scrollToElement(lineEl, 1000) // 有就跳到那个元素
         } else {
           this.$refs.lyriclist.scrollTo(0, 0, 1000) // 没有就滚动到第一行
@@ -562,6 +564,7 @@
         })
       },
     },
+    
     components: {
       progressBar,
       progressCircle,

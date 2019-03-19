@@ -12,6 +12,14 @@ export function shuffle(arr) {
     }
     return _arr
 }
+export function isIphoneX() {
+    return /iphone/gi.test(window.navigator.userAgent) && ( screen.width === 375 && screen.height === 812 )
+    var isIPhoneX = /iphone/gi.test(window.navigator.userAgent) && window.devicePixelRatio && window.devicePixelRatio === 3 && window.screen.width === 375 && window.screen.height === 812;
+// iPhone XS Max
+var isIPhoneXSMax = /iphone/gi.test(window.navigator.userAgent) && window.devicePixelRatio && window.devicePixelRatio === 3 && window.screen.width === 414 && window.screen.height === 896;
+// iPhone XR
+var isIPhoneXR = /iphone/gi.test(window.navigator.userAgent) && window.devicePixelRatio && window.devicePixelRatio === 2 && window.screen.width === 414 && window.screen.height === 896;
+}
 /* 函数柯里化 一个函数返回另一个函数，包含多个参数，最终被外面的函数包裹，只显示单个函数，*/
 // export function debounce(func, delay) { // 包含一个定时器，用于截流，降低搜索的请求次数，在规定delay的时间中，忽略过快的搜索，删除操作
 export function debounce(func, delay) {
