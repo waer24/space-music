@@ -117,7 +117,7 @@ var config = {
 
     
 
-    // 定义全局变量用于生产环境和开发环境的调优
+    // 定义全局变量用于生产环境和开发环境的调优 设置它，就可以忘记开发环境和生产环境构建的规则。
     new webpack.DefinePlugin({
       __DEV__: JSON.stringify(JSON.parse((process.env.NODE_ENV == 'dev') || 'false'))
     })
